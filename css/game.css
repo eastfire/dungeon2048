@@ -1,0 +1,162 @@
+.main-window {
+    height: 600px;
+    width: 600px;
+    margin: auto;
+}
+
+.map {
+    height: 600px;
+    width: 600px;
+    position: relative;
+}
+
+.map-block {
+    border:solid 1px grey;
+}
+
+.hero, .monster {
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.hero.warrior.d0 {
+    background-image: url("../img/warrior0-0.png");
+}
+.hero.warrior.d0.moving0 {
+    background-image: url("../img/warrior0-1.png");
+}
+.hero.warrior.d0.moving1 {
+    background-image: url("../img/warrior0-2.png");
+}
+.hero.warrior.d0.attacking0 {
+    background-image: url("../img/warrior0-3.png");
+}
+.hero.warrior.d0.attacking1 {
+    background-image: url("../img/warrior0-4.png");
+}
+
+.hero.warrior.d1 {
+    background-image: url("../img/warrior1-0.png");
+}
+.hero.warrior.d1.moving0 {
+    background-image: url("../img/warrior1-1.png");
+}
+.hero.warrior.d1.moving1 {
+    background-image: url("../img/warrior1-2.png");
+}
+.hero.warrior.d1.attacking0 {
+    background-image: url("../img/warrior1-3.png");
+}
+.hero.warrior.d1.attacking1 {
+    background-image: url("../img/warrior1-4.png");
+}
+
+.hero.warrior.d2 {
+    background-image: url("../img/warrior2-0.png");
+}
+.hero.warrior.d2.moving0 {
+    background-image: url("../img/warrior2-1.png");
+}
+.hero.warrior.d2.moving1 {
+    background-image: url("../img/warrior2-2.png");
+}
+.hero.warrior.d2.attacking0 {
+    background-image: url("../img/warrior2-3.png");
+}
+.hero.warrior.d2.attacking1 {
+    background-image: url("../img/warrior2-4.png");
+}
+
+.hero.warrior.d3 {
+    background-image: url("../img/warrior3-0.png");
+}
+.hero.warrior.d3.moving0 {
+    background-image: url("../img/warrior3-1.png");
+}
+.hero.warrior.d3.moving1 {
+    background-image: url("../img/warrior3-2.png");
+}
+.hero.warrior.d3.attacking0 {
+    background-image: url("../img/warrior3-3.png");
+}
+.hero.warrior.d3.attacking1 {
+    background-image: url("../img/warrior3-4.png");
+}
+
+.monster.slime.d0 {
+    background-image: url("../img/slime2-0.png");
+}
+.monster.slime.d1 {
+    background-image: url("../img/slime2-0.png");
+}
+.monster.slime.d2 {
+    background-image: url("../img/slime2-0.png");
+}
+.monster.slime.d3 {
+    background-image: url("../img/slime2-0.png");
+}
+
+.monster.skeleton.d0 {
+    background-image: url("../img/skeleton2-0.png");
+}
+.monster.skeleton.d1 {
+    background-image: url("../img/skeleton2-0.png");
+}
+.monster.skeleton.d2 {
+    background-image: url("../img/skeleton2-0.png");
+}
+.monster.skeleton.d3 {
+    background-image: url("../img/skeleton2-0.png");
+}
+
+.monster.kobold.d0 {
+    background-image: url("../img/kobold2-0.png");
+}
+.monster.kobold.d1 {
+    background-image: url("../img/kobold2-0.png");
+}
+.monster.kobold.d2 {
+    background-image: url("../img/kobold2-0.png");
+}
+.monster.kobold.d3 {
+    background-image: url("../img/kobold2-0.png");
+}
+
+.monster.goblin.d0 {
+    background-image: url("../img/goblin2-0.png");
+}
+.monster.goblin.d1 {
+    background-image: url("../img/goblin2-0.png");
+}
+.monster.goblin.d2 {
+    background-image: url("../img/goblin2-0.png");
+}
+.monster.goblin.d3 {
+    background-image: url("../img/goblin2-0.png");
+}
+
+.monster-level {
+    display: block;
+    font-size: 21px;
+    font-weight: bolder;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    color: red;
+    bottom: 0;
+    position:absolute;
+}
+
+.hero-label {
+    font-size:20px;
+    margin: 10px;
+}
+
+
+.game-over {
+    font-size:50px;
+    margin:auto;
+    position:absolute;
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
