@@ -28,8 +28,31 @@ define(function(require,exports,module){
     }
 
     var calculateBlockSize = function(){
-        window.windowDirection = "landscape";//portrait
-        return {width:100, height:100}
+        var winW = 630, winH = 460;
+        if (document.body && document.body.offsetWidth) {
+            winW = document.body.offsetWidth;
+            winH = document.body.offsetHeight;
+        }
+        if (document.compatMode=='CSS1Compat' &&
+            document.documentElement &&
+            document.documentElement.offsetWidth ) {
+            winW = document.documentElement.offsetWidth;
+            winH = document.documentElement.offsetHeight;
+        }
+        if (window.innerWidth && window.innerHeight) {
+            winW = window.innerWidth;
+            winH = window.innerHeight;
+        }
+        console.log("winW:"+winW+" winH:"+winH);
+        var blockW,blockH;
+        if ( winW > winH ) {
+            window.windowOriention = "landscape";
+            blockW = blockH = (winH-mapWidth)/mapWidth;
+        } else {
+            window.windowOriention = "portrait";
+            blockW = blockH = (winW-mapWidth)/mapWidth;
+        }
+        return {width:blockW, height:blockH}
     }
 
     var calculateMonsterStatus = function(type, level){
@@ -122,6 +145,20 @@ define(function(require,exports,module){
     var renderMap = function () {
         $("body").html(mainTemplate());
         mapEl = $(".map");
+        mapEl.css({
+            width:mapWidth*blockSize.width,
+            height:mapHeight*blockSize.height
+        })
+        if ( windowOriention == "portrait") {
+            $(".main-window").css({
+                width:mapWidth*blockSize.width
+            })
+        } else {
+            $(".main-window").css({
+                height:mapHeight*blockSize.height
+            })
+        }
+        $(".main-window").addClass(window.windowOriention);
         for ( var i = 0 ; i < mapWidth; i++){
             for ( var j = 0 ; j < mapHeight; j++){
                 mapEl.append(renderMapBlock(map[i][j]));

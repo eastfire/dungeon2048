@@ -1,12 +1,21 @@
 .main-window {
-    height: 600px;
-    width: 600px;
+    height: auto;
+    width: auto;
     margin: auto;
 }
 
+.main-window.landscape .hero-status {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.main-window.landscape .map {
+    display: inline-block;
+    vertical-align: top;
+}
 .map {
-    height: 600px;
-    width: 600px;
+    height: auto;
+    width: auto;
     position: relative;
 }
 
@@ -143,7 +152,7 @@
     vertical-align: middle;
     width: 100%;
     color: red;
-    bottom: 0;
+    bottom: -4px;
     position:absolute;
 }
 
@@ -152,6 +161,9 @@
     margin: 10px;
 }
 
+.main-window.landscape .hero-label {
+    display: block;
+}
 
 .game-over {
     font-size:50px;

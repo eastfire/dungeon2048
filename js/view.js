@@ -210,7 +210,6 @@ define(function(require,exports,module){
 
     exports.HeroStatusView = Backbone.View.extend({
         initialize:function(){
-            this.$el.addClass(window.windowDirection);
             this.type = this.$(".hero-type");
             this.hp = this.$(".hero-hp");
             this.level = this.$(".hero-level");
