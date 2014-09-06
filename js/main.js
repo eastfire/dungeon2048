@@ -325,25 +325,6 @@ define(function(require,exports,module){
         },4*TIME_SLICE);
     }
 
-    window.blockSize = calculateBlockSize();
-
-    window.map = initMap();
-
-    hero = new Model.Hero();
-    heroView = new View.HeroView({model:hero});
-    renderMap();
-    mapEl.append(heroView.render().$el);
-
-    heroStatusView = new View.HeroStatusView({el:$(".hero-status"), model:hero})
-    heroStatusView.render();
-
-    initEvent();
-
-    var block = map[hero.get("position").x][hero.get("position").y];
-    block.type = "hero";
-    block.model = hero;
-    block.view = heroView;
-
     var heroAttack = function(){
         var direction = window.moveDirection;
         var pass = heroView.attack(direction);
@@ -399,5 +380,26 @@ define(function(require,exports,module){
         },TIME_SLICE);
     }
 
-    setTimeout(generateMonster, TIME_SLICE);
+    require("./preload").preload(function(){
+        window.blockSize = calculateBlockSize();
+
+        window.map = initMap();
+
+        hero = new Model.Hero();
+        heroView = new View.HeroView({model:hero});
+        renderMap();
+        mapEl.append(heroView.render().$el);
+
+        heroStatusView = new View.HeroStatusView({el:$(".hero-status"), model:hero})
+        heroStatusView.render();
+
+        initEvent();
+
+        var block = map[hero.get("position").x][hero.get("position").y];
+        block.type = "hero";
+        block.model = hero;
+        block.view = heroView;
+
+        setTimeout(generateMonster, TIME_SLICE);
+    })
 });

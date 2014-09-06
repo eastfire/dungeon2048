@@ -4,6 +4,11 @@
     margin: auto;
 }
 
+.loading-label {
+    display: block;
+    text-align: center;
+}
+
 .main-window.landscape .hero-status {
     display: inline-block;
     vertical-align: top;
