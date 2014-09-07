@@ -35,7 +35,6 @@ define(function(require,exports,module){
             var y2 = y1*blockSize.height;
             //console.log(this.model.get("type")+" move to "+x1+" "+y1);
             this.$el.css({transition: "all "+(TIME_SLICE/1000)*movement+"s ease-in-out 0s", left:x2, top:y2});
-
             var oldblock = map[oldx][oldy];
             oldblock.type = "blank";
             oldblock.view = null;
@@ -47,15 +46,19 @@ define(function(require,exports,module){
                 self.onMoveComplete.call(self, oldblock, newblock);
             },1+TIME_SLICE*movement)
         },
-        render:function(){
+        render:function() {
             this.$el.css({
-                position:"absolute",
+                position: "absolute",
                 width: blockSize.width,
                 height: blockSize.height,
-                left:this.model.get("position").x*blockSize.width,
-                top:this.model.get("position").y*blockSize.height
+                left: this.model.get("position").x * blockSize.width,
+                top: this.model.get("position").y * blockSize.height
             }).addClass(this.model.get("type"))
             this.renderDirection();
+            if (!this.effecQueue) {
+                this.effecQueue = new EffectQueue();
+                this.$el.append(this.effecQueue.render().el);
+            }
             return this;
         },
         renderDirection:function(){
@@ -109,7 +112,10 @@ define(function(require,exports,module){
         },
         takeDamage:function(attack){
             var realDamage = attack - this.model.get("defend");
-            this.model.set("hp",this.model.get("hp") - attack);
+            if ( realDamage > 0 ){
+                this.effecQueue.add("♥"+(-realDamage));
+                this.model.set("hp",this.model.get("hp")-realDamage);
+            }
         }
     })
 
@@ -218,13 +224,52 @@ define(function(require,exports,module){
         },
         render:function(){
             this.type.html(this.model.get("typeDisplayName"))
-            this.hp.html("HP:"+this.model.get("hp")+"/"+this.model.get("maxHp"));
-            this.level.html("LV:"+this.model.get("level"));
+            this.hp.html("<span class='hp-symbol'>♥</span>"+this.model.get("hp")+"/"+this.model.get("maxHp"));
+            this.level.html("Level:"+this.model.get("level"));
             this.exp.html("EXP:"+this.model.get("exp")+"/"+this.model.get("maxExp"));
             if ( this.model.get("hp") <= 0 ) {
                 //die
                 gameOver();
             }
+            return this;
+        }
+    })
+
+    var EffectQueue = Backbone.View.extend({
+        queue:[],
+        add:function(string){
+            this.queue.push(string);
+            if ( !this.isRunning ){
+                this.start();
+            }
+        },
+        start:function(){
+            this.isRunning = true;
+            var str = this.queue.shift();
+            if ( !str ) {
+                this.isRunning = false;
+                return;
+            }
+
+            var el = $("<label class='effect-label'>"+str+"</label>");
+
+            this.$el.append(el);
+            setTimeout(function(){
+                el.css({
+                    "margin-top": "-40%"
+                });
+            },50)
+            var self = this;
+            setTimeout(function(){
+                el.remove();
+            }, 600);
+            setTimeout(function(){
+                self.start.call(self);
+            }, 200);
+        },
+        isRunning : false,
+        render:function(){
+            this.$el.addClass("effect-queue");
             return this;
         }
     })
