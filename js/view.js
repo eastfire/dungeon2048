@@ -73,12 +73,22 @@ define(function(require,exports,module){
         }
     });
     exports.HeroView = MovableView.extend({
+        initialize:function(){
+            MovableView.prototype.initialize.call(this);
+            this.model.on("change:level",this.levelUp,this);
+        },
         render:function(){
             this.$el = $("<div class='hero'></div>")
             MovableView.prototype.render.call(this);
             return this;
         },
+        levelUp:function(){
+            this.effecQueue.add("Level Up");
+        },
         onMoveComplete:function(oldblock, newblock){
+            if ( newblock.type == "item" ) {
+                newblock.view.beTaken();
+            }
             newblock.view = this;
             newblock.type = "hero";
             newblock.model = this.model;
@@ -110,11 +120,31 @@ define(function(require,exports,module){
                 return true;
             }
         },
+        takeItem:function(direction){
+            var x = this.model.get("position").x;
+            var y = this.model.get("position").y;
+            x += increment[direction].x;
+            y += increment[direction].y;
+            var block = getMapBlock(x,y);
+            if ( block && block.type == "item" ){
+                this.move(1, direction);
+                return false;
+            } else {
+                return true;
+            }
+        },
         takeDamage:function(attack){
             var realDamage = attack - this.model.get("defend");
             if ( realDamage > 0 ){
-                this.effecQueue.add("♥"+(-realDamage));
+                this.effecQueue.add("♥-"+realDamage);
                 this.model.set("hp",this.model.get("hp")-realDamage);
+            }
+        },
+        getHp:function(hp){
+            var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
+            if ( realHeal > 0 ){
+                this.effecQueue.add("♥+"+realHeal);
+                this.model.set("hp",this.model.get("hp")+realHeal);
             }
         }
     })
@@ -174,6 +204,7 @@ define(function(require,exports,module){
                 window.hero.getExp(this.model.get("exp"));
                 this.model.destroy();
                 clearMapBlock(this.model.get("position").x, this.model.get("position").y);
+                generateItem(this.model.get("position").x, this.model.get("position").y);
                 return false;
             }
             return true;
@@ -214,6 +245,47 @@ define(function(require,exports,module){
         }
     })
 
+    exports.ItemView = MovableView.extend({
+        initialize:function(){
+            MovableView.prototype.initialize.call(this);
+            this.model.on("destroy",this.remove,this);
+            this.model.on("change:level",this.renderLevel,this);
+        },
+        render:function(){
+            this.$el = $("<div class='item'><lable class='item-level'>lv"+this.model.get("level")+"</lable></div>")
+            MovableView.prototype.render.call(this);
+            this.levelEl = this.$(".item-level");
+            //this.levelEl.css({"line-height":window.blockSize.height+"px"});
+            return this;
+        },
+        renderLevel:function(){
+            this.levelEl.html("lv"+this.model.get("level"));
+        },
+        onMoveComplete:function(oldblock, newblock){
+            var merge = oldblock.merge;
+            if ( merge ) {
+                var mergeToModel = oldblock.mergeTo;
+                if ( mergeToModel ) {
+                    mergeToModel.setToLevel(this.model.get("level")+mergeToModel.get("level"));
+                }
+                this.model.destroy();
+            } else {
+                newblock.view = this;
+                newblock.type = "item";
+                newblock.model = this.model;
+                this.model.set("position",{x:newblock.x,y:newblock.y});
+            }
+        },
+        beTaken:function(){
+            this.model.effectHappen();
+            var self = this;
+            this.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", "margin-top":-blockSize.height/2,opacity:0.4});
+            setTimeout(function(){
+                self.model.destroy();
+            },TIME_SLICE);
+        }
+    });
+
     exports.HeroStatusView = Backbone.View.extend({
         initialize:function(){
             this.type = this.$(".hero-type");
@@ -225,8 +297,13 @@ define(function(require,exports,module){
         render:function(){
             this.type.html(this.model.get("typeDisplayName"))
             this.hp.html("<span class='hp-symbol'>♥</span>"+this.model.get("hp")+"/"+this.model.get("maxHp"));
-            this.level.html("Level:"+this.model.get("level"));
+            this.level.html("Lv:"+this.model.get("level"));
             this.exp.html("EXP:"+this.model.get("exp")+"/"+this.model.get("maxExp"));
+            if ( window.windowOriention == "landscape") {
+                this.$el.css({
+                    width:blockSize.width*1.5
+                })
+            }
             if ( this.model.get("hp") <= 0 ) {
                 //die
                 gameOver();

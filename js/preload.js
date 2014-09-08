@@ -23,7 +23,9 @@ define(function(require,exports,module) {
         "./img/slime2-0.png",
         "./img/skeleton2-0.png",
         "./img/kobold2-0.png",
-        "./img/goblin2-0.png"
+        "./img/goblin2-0.png",
+
+        "./img/potion.png",
     ];
 
     var imgLoad = function (url, callback) {
