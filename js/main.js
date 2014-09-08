@@ -10,7 +10,7 @@ define(function(require,exports,module){
     window.PHASE_GENERATE = 0;
     window.PHASE_USER = 1;
     window.PHASE_MOVE = 2;
-    window.PHASE_MOVE_STARTED = 2.1;
+    window.PHASE_HERO_TAKE_ITEM = 2.5;
     window.PHASE_HERO_ATTACK = 3;
     window.PHASE_MONSTER_ATTACK = 4;
     window.PHASE_GAME_OVER = 10;
@@ -24,7 +24,8 @@ define(function(require,exports,module){
         phase: 0,
         turn : 0,
         currentMonsterTypes : ["slime","skeleton"],//,"kobold","goblin"],
-        generateMonsterNumber : 1
+        generateMonsterNumber : 1,
+        generateItemRate: 0.1
     }
 
     var calculateBlockSize = function(){
@@ -66,6 +67,27 @@ define(function(require,exports,module){
         return gameStatus.currentMonsterTypes[ Math.floor(Math.random()*gameStatus.currentMonsterTypes.length)];
     }
 
+    window.generateItem = function(x,y){
+        if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
+            if ( Math.random() > gameStatus.generateItemRate )
+                return;
+
+            var block = map[x][y];
+            block.model = new Model.Item({
+                type:"potion",
+                position:{
+                    x: x,
+                    y: y
+                }
+            });
+            var itemView = new View.ItemView({model:block.model});
+            mapEl.append(itemView.render().$el);
+
+            block.view = itemView;
+            block.type = "item";
+        }
+    }
+
     var generateOneMonster = function(){
         if ( checkAllFill() )
             return;
@@ -99,7 +121,7 @@ define(function(require,exports,module){
 
         setTimeout(function(){
             gameStatus.phase = PHASE_USER;
-        },TIME_SLICE);
+        },TIME_SLICE+1);
     }
 
     var checkAllFill = function(){
@@ -228,7 +250,7 @@ define(function(require,exports,module){
             var curblock = window.map[curx][cury];
             if ( curblock.type == "blank" ) {
                 movement ++;
-            } else if ( mytype == "monster" && curblock.type == "monster" ){
+            } else if ( mytype == curblock.type ){
                 if ( mymodel.get("type") == curblock.model.get("type") ) {
                     //can merge
                     movement += (curblock.movement + 1);
@@ -243,10 +265,7 @@ define(function(require,exports,module){
                     movement += curblock.movement;
                     break;
                 }
-            } else if ( mytype == "hero" && curblock.type == "monster" ) {
-                movement += curblock.movement;
-                break;
-            } else if ( mytype == "monster" && curblock.type == "hero" ) {
+            } else if ( mytype != curblock.type ) {
                 movement += curblock.movement;
                 break;
             }
@@ -307,6 +326,7 @@ define(function(require,exports,module){
     }
 
     var startMove = function(direction){
+        var maxMovement = 0;
         for ( var i = 0 ; i < mapWidth; i++){
             for ( var j = 0 ; j < mapHeight; j++){
                 var block = map[i][j];
@@ -314,15 +334,26 @@ define(function(require,exports,module){
                     block.model.set("direction",direction);
                 }
                 if ( block.movement > 0 && block.view != null ){
+                    if ( block.movement > maxMovement )
+                        maxMovement = block.movement;
                     block.view.move(block.movement,direction);
                 }
             }
         }
 
         setTimeout(function(){
+            gameStatus.phase = PHASE_HERO_TAKE_ITEM;
+            heroTakeItem();
+        },maxMovement*TIME_SLICE+1);
+    }
+
+    var heroTakeItem = function(){
+        var direction = window.moveDirection;
+        var pass = heroView.takeItem(direction);
+        setTimeout(function(){
             gameStatus.phase = PHASE_HERO_ATTACK;
             heroAttack();
-        },4*TIME_SLICE);
+        },pass ? 1 : 2*TIME_SLICE+1);
     }
 
     var heroAttack = function(){
@@ -331,7 +362,7 @@ define(function(require,exports,module){
         setTimeout(function(){
             gameStatus.phase = PHASE_MONSTER_ATTACK;
             monsterAttack();
-        },pass ? 0 : 4*TIME_SLICE);
+        },pass ? 1 : 4*TIME_SLICE+1);
     }
 
     var monsterAttack = function(){
@@ -346,7 +377,7 @@ define(function(require,exports,module){
         setTimeout(function(){
             if ( gameStatus.phase != PHASE_GAME_OVER )
                 nextTurn();
-        },TIME_SLICE);
+        },TIME_SLICE+1);
     }
 
     var nextTurn = function(){

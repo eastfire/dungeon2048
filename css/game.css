@@ -28,7 +28,7 @@
     border:solid 1px grey;
 }
 
-.hero, .monster {
+.hero, .monster, .item {
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -149,6 +149,10 @@
     background-image: url("../img/goblin2-0.png");
 }
 
+.item.potion {
+    background-image: url("../img/potion.png");
+}
+
 .effect-queue {
     position:relative;
     text-align: center;
@@ -165,7 +169,7 @@
     width: 100%;
 }
 
-.monster-level {
+.monster-level , .item-level{
     display: block;
     font-size: 21px;
     font-weight: bolder;

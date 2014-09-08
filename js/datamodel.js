@@ -89,4 +89,33 @@ define(function(require,exports,module){
             return level;
         }
     })
+
+    exports.Item = Backbone.Model.extend({
+        defaults: function () {
+            return {
+                type: "potion",
+                level: 1,
+                effect: 1,
+                position: {
+                    x: 0,
+                    y: 0
+                },
+                direction: 2
+            }
+        },
+        initialize: function () {
+
+        },
+        setToLevel: function (level) {
+            this.set({
+                level: level,
+                effect : level * 2 + 1
+            })
+        },
+        effectHappen:function(){
+            if ( this.get("type") == "potion" ) {
+                window.heroView.getHp(this.get("effect"));
+            }
+        }
+    })
 });
