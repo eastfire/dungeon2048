@@ -13,8 +13,8 @@ define(function(require,exports,module){
                level:1,
                exp:0,
                maxExp:10,
-               hp : 15,
-               maxHp:15,
+               hp : 10,
+               maxHp:10,
                attack : 1,
                defend : 0,
                direction: 2,
@@ -52,7 +52,7 @@ define(function(require,exports,module){
            return lv*10;
        },
        calMaxHp:function(lv){
-           return lv*5+10;
+           return lv*10;
        }
    })
 
@@ -109,7 +109,7 @@ define(function(require,exports,module){
         setToLevel: function (level) {
             this.set({
                 level: level,
-                effect : level * 2 + 1
+                effect : level * (level-1)
             })
         },
         effectHappen:function(){

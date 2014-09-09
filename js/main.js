@@ -20,12 +20,14 @@ define(function(require,exports,module){
     window.mapWidth = 5;
     window.mapHeight = 5;
 
-    window.gameStatus = {
-        phase: 0,
-        turn : 0,
-        currentMonsterTypes : ["slime","skeleton"],//,"kobold","goblin"],
-        generateMonsterNumber : 1,
-        generateItemRate: 0.1
+    var initGameStatus = function() {
+        window.gameStatus = {
+            phase: PHASE_GENERATE,
+            turn: 0,
+            currentMonsterTypes: ["slime", "skeleton"],//,"kobold","goblin"],
+            generateMonsterNumber: 1,
+            generateItemRate: 0.1
+        }
     }
 
     var calculateBlockSize = function(){
@@ -67,9 +69,9 @@ define(function(require,exports,module){
         return gameStatus.currentMonsterTypes[ Math.floor(Math.random()*gameStatus.currentMonsterTypes.length)];
     }
 
-    window.generateItem = function(x,y){
+    window.generateItem = function(x,y, level){
         if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
-            if ( Math.random() > gameStatus.generateItemRate )
+            if ( Math.random() > gameStatus.generateItemRate*level )
                 return;
 
             var block = map[x][y];
@@ -381,6 +383,10 @@ define(function(require,exports,module){
     }
 
     var nextTurn = function(){
+        if ( checkAllFill() ) {
+            gameOver();
+            return;
+        }
         gameStatus.phase = PHASE_GENERATE;
         gameStatus.turn ++;
         if ( gameStatus.turn == 10 ) {
@@ -402,18 +408,22 @@ define(function(require,exports,module){
             return
         gameStatus.phase = PHASE_GAME_OVER;
         setTimeout(function(){
-            $(".map").append("<label class='game-over'>GAME OVER</label>");
+            $(".map").append("<label class='game-over'>GAME OVER</label>" +
+                "<button class='btn btn-primary restart-game'>再来一局</button>");
             $(".game-over").css({
                 width: blockSize.width * mapWidth,
                 height: blockSize.height * mapHeight,
-                "line-height":blockSize.height * mapHeight+"px"
+                "line-height":blockSize.height * mapHeight/3*2+"px"
             })
+            $(".restart-game").on("click",function(){
+                startGame();
+            });
         },TIME_SLICE);
     }
 
-    require("./preload").preload(function(){
-        window.blockSize = calculateBlockSize();
-
+    var startGame = function(){
+        $("body").empty();
+        initGameStatus();
         window.map = initMap();
 
         hero = new Model.Hero();
@@ -432,5 +442,11 @@ define(function(require,exports,module){
         block.view = heroView;
 
         setTimeout(generateMonster, TIME_SLICE);
+    }
+
+    require("./preload").preload(function(){
+        window.blockSize = calculateBlockSize();
+
+        startGame();
     })
 });
