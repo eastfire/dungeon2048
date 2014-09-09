@@ -201,3 +201,9 @@
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5);
     text-align: center;
 }
+
+.restart-game {
+    margin: 50% 41% 41%;
+    position: relative;
+    width: 18%
+}

@@ -201,10 +201,11 @@ define(function(require,exports,module){
         },
         checkLive:function(){
             if ( this.model.get("hp") <= 0 ) {
+                var level = this.model.get("level");
                 window.hero.getExp(this.model.get("exp"));
                 this.model.destroy();
                 clearMapBlock(this.model.get("position").x, this.model.get("position").y);
-                generateItem(this.model.get("position").x, this.model.get("position").y);
+                generateItem(this.model.get("position").x, this.model.get("position").y, level);
                 return false;
             }
             return true;
