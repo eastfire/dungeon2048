@@ -110,6 +110,13 @@
     background-image: url("../img/slime2-0.png");
 }
 
+.monster.slime.d0.attacking0, .monster.slime.d1.attacking0, .monster.slime.d2.attacking0, .monster.slime.d3.attacking0 {
+    background-image: url("../img/slime2-1.png");
+}
+.monster.slime.d0.attacking1, .monster.slime.d1.attacking1, .monster.slime.d2.attacking1, .monster.slime.d3.attacking1 {
+    background-image: url("../img/slime2-2.png");
+}
+
 .monster.skeleton.d0 {
     background-image: url("../img/skeleton2-0.png");
 }
@@ -121,6 +128,20 @@
 }
 .monster.skeleton.d3 {
     background-image: url("../img/skeleton2-0.png");
+}
+
+.monster.skeleton.d0.attacking0, .monster.skeleton.d1.attacking0 {
+    background-image: url("../img/skeleton2-3.png");
+}
+.monster.skeleton.d0.attacking1, .monster.skeleton.d1.attacking1 {
+    background-image: url("../img/skeleton2-4.png");
+}
+
+.monster.skeleton.d2.attacking0, .monster.skeleton.d3.attacking0 {
+    background-image: url("../img/skeleton3-3.png");
+}
+.monster.skeleton.d2.attacking1, .monster.skeleton.d3.attacking1 {
+    background-image: url("../img/skeleton3-4.png");
 }
 
 .monster.kobold.d0 {

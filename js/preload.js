@@ -21,7 +21,13 @@ define(function(require,exports,module) {
         "./img/warrior3-3.png",
         "./img/warrior3-4.png",
         "./img/slime2-0.png",
+        "./img/slime2-1.png",
+        "./img/slime2-2.png",
         "./img/skeleton2-0.png",
+        "./img/skeleton2-3.png",
+        "./img/skeleton2-4.png",
+        "./img/skeleton3-3.png",
+        "./img/skeleton3-4.png",
         "./img/kobold2-0.png",
         "./img/goblin2-0.png",
 
