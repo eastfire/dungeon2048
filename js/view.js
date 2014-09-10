@@ -219,11 +219,21 @@ define(function(require,exports,module){
                 var moveX = x  + increment[attackDirection].x * blockSize.width*0.35;
                 var moveY = y  + increment[attackDirection].y * blockSize.height*0.35;
                 this.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:moveX, top:moveY});
+                this.$el.addClass("attacking0");
                 var self = this;
                 setTimeout(function(){
                     heroView.takeDamage(self.model.get("attack"));
                     self.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
-                },TIME_SLICE)
+                },TIME_SLICE);
+                setTimeout(function(){
+                    self.$el.removeClass("attacking0").addClass("attacking1");
+                },TIME_SLICE/2);
+                setTimeout(function(){
+                    self.$el.removeClass("attacking1").addClass("attacking0");
+                },TIME_SLICE*3/2);
+                setTimeout(function(){
+                    self.$el.removeClass("attacking0");
+                },TIME_SLICE*2);
             }
         },
 
