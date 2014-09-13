@@ -73,7 +73,7 @@ define(function(require,exports,module){
             }
         },
         initialize:function(){
-
+            this.setToLevel(this.get("level"));
         },
         setToLevel:function(level){
             this.set({
@@ -89,6 +89,38 @@ define(function(require,exports,module){
             return level;
         }
     })
+
+    exports.Slime = exports.Monster.extend({
+        calAttack:function(level){
+            return Math.ceil(level/2);
+        }
+    })
+
+    exports.Skeleton = exports.Monster.extend({
+        calExp:function(level){
+            return Math.floor(level*3/2);
+        }
+    })
+
+    exports.Kobold = exports.Monster.extend({
+        calAttack:function(level){
+            return level*2;
+        },
+        calExp:function(level){
+            return level*(level-1)+1;
+        }
+    })
+
+    exports.Goblin = exports.Monster.extend({
+
+    })
+
+    exports.ModelMap = {
+        "slime":exports.Slime,
+        "skeleton":exports.Skeleton,
+        "kobold":exports.Kobold,
+        "goblin":exports.Goblin
+    }
 
     exports.Item = Backbone.Model.extend({
         defaults: function () {

@@ -58,13 +58,6 @@ define(function(require,exports,module){
         return {width:blockW, height:blockH}
     }
 
-    var calculateMonsterStatus = function(type, level){
-        var monsterStatus = clone(monsterStatusTemplate);
-        monsterStatus.type = type;
-        monsterStatus.level = level;
-        return monsterStatus;
-    }
-
     var getRandomMonsterType = function(){
         return gameStatus.currentMonsterTypes[ Math.floor(Math.random()*gameStatus.currentMonsterTypes.length)];
     }
@@ -102,15 +95,19 @@ define(function(require,exports,module){
         } while ( map[x][y].type != "blank" );
         var block = map[x][y];
         block.type = "monster";
-        var m = new Model.Monster({
-            type:getRandomMonsterType(),
+
+        var monsterType = getRandomMonsterType();
+        var TempView = View.ViewMap[monsterType]
+        var TempModel = Model.ModelMap[monsterType]
+        var m = new TempModel({
+            type:monsterType,
             position:{
                 x: x,
                 y: y
             }
         })
         block.model = m;
-        var monsterView = new View.MonsterView({model:m});
+        var monsterView = new TempView({model:m});
         mapEl.append(monsterView.render().$el);
 
         block.view = monsterView;
@@ -389,15 +386,13 @@ define(function(require,exports,module){
         }
         gameStatus.phase = PHASE_GENERATE;
         gameStatus.turn ++;
-        if ( gameStatus.turn == 10 ) {
+        if ( gameStatus.turn == 15 ) {
             gameStatus.currentMonsterTypes.push("kobold")
-        } else if ( gameStatus.turn == 50 ) {
+        } else if ( gameStatus.turn == 100 ) {
             gameStatus.currentMonsterTypes.push("goblin")
         }
-        if ( gameStatus.turn == 30 ) {
+        if ( gameStatus.turn == 35 ) {
             gameStatus.generateMonsterNumber = 2;
-        } else if ( gameStatus.turn == 100 ) {
-            gameStatus.generateMonsterNumber = 3;
         }
 
         generateMonster();
