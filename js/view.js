@@ -256,6 +256,29 @@ define(function(require,exports,module){
         }
     })
 
+    exports.SlimeView = exports.MonsterView.extend({
+
+    })
+
+    exports.SkeletonView = exports.MonsterView.extend({
+
+    })
+
+    exports.KoboldView = exports.MonsterView.extend({
+
+    })
+
+    exports.GoblinView = exports.MonsterView.extend({
+
+    })
+
+    exports.ViewMap = {
+        "slime":exports.SlimeView,
+        "skeleton":exports.SkeletonView,
+        "kobold":exports.KoboldView,
+        "goblin":exports.GoblinView
+    };
+
     exports.ItemView = MovableView.extend({
         initialize:function(){
             MovableView.prototype.initialize.call(this);
