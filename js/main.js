@@ -402,11 +402,14 @@ define(function(require,exports,module){
             gameStatus.currentMonsterTypes.push("ogre")
         } else if ( gameStatus.turn == 100 ) {
             gameStatus.currentMonsterLevels.push(1);
+            gameStatus.currentMonsterLevels.push(1);
             gameStatus.currentMonsterLevels.push(2);
             gameStatus.currentMonsterTypes.push("goblin")
         } else if ( gameStatus.turn == 120 ) {
             gameStatus.currentMonsterTypes.push("skeleton")
             gameStatus.currentMonsterTypes.push("ogre")
+        } else if ( gameStatus.turn == 150 ) {
+            gameStatus.currentMonsterLevels.push(2);
         }
 
         generateMonster();
