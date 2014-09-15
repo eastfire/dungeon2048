@@ -422,6 +422,10 @@ define(function(require,exports,module){
         },TIME_SLICE);
     }
 
+    document.ontouchmove = function(event){
+        event.preventDefault();
+    }
+
     var startGame = function(){
         $("body").empty();
         initGameStatus();
