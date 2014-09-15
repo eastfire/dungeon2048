@@ -264,7 +264,7 @@ define(function(require,exports,module){
 
     })
 
-    exports.KoboldView = exports.MonsterView.extend({
+    exports.OgreView = exports.MonsterView.extend({
 
     })
 
@@ -275,7 +275,7 @@ define(function(require,exports,module){
     exports.ViewMap = {
         "slime":exports.SlimeView,
         "skeleton":exports.SkeletonView,
-        "kobold":exports.KoboldView,
+        "ogre":exports.OgreView,
         "goblin":exports.GoblinView
     };
 

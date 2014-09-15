@@ -3,6 +3,12 @@ define(function(require,exports,module){
         return JSON.parse( JSON.stringify(obj) );
     }
 
+    window.getRandomItem = function(array){
+        if ( array.length == 0 )
+            return null;
+        return array[Math.floor(array.length*Math.random())];
+    }
+
     var Model = require("./datamodel");
     var View = require("./view");
     var mainTemplate = _.template(require("../layout/main_window.html"));
@@ -24,9 +30,11 @@ define(function(require,exports,module){
         window.gameStatus = {
             phase: PHASE_GENERATE,
             turn: 0,
-            currentMonsterTypes: ["slime", "skeleton"],//,"kobold","goblin"],
+            currentMonsterTypes: ["slime", "skeleton"],//,"ogre","goblin"],
+            currentMonsterLevels:[1],
             generateMonsterNumber: 1,
-            generateItemRate: 0.1
+            generateItemRate: 0.1,
+            currentItemTypes:["potion"]
         }
     }
 
@@ -46,7 +54,7 @@ define(function(require,exports,module){
             winW = window.innerWidth;
             winH = window.innerHeight;
         }
-        console.log("winW:"+winW+" winH:"+winH);
+        //console.log("winW:"+winW+" winH:"+winH);
         var blockW,blockH;
         if ( winW > winH ) {
             window.windowOriention = "landscape";
@@ -58,10 +66,6 @@ define(function(require,exports,module){
         return {width:blockW, height:blockH}
     }
 
-    var getRandomMonsterType = function(){
-        return gameStatus.currentMonsterTypes[ Math.floor(Math.random()*gameStatus.currentMonsterTypes.length)];
-    }
-
     window.generateItem = function(x,y, level){
         if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
             if ( Math.random() > gameStatus.generateItemRate*level )
@@ -69,7 +73,7 @@ define(function(require,exports,module){
 
             var block = map[x][y];
             block.model = new Model.Item({
-                type:"potion",
+                type:getRandomItem(gameStatus.currentItemTypes),
                 position:{
                     x: x,
                     y: y
@@ -96,11 +100,12 @@ define(function(require,exports,module){
         var block = map[x][y];
         block.type = "monster";
 
-        var monsterType = getRandomMonsterType();
+        var monsterType = getRandomItem(gameStatus.currentMonsterTypes);
         var TempView = View.ViewMap[monsterType]
         var TempModel = Model.ModelMap[monsterType]
         var m = new TempModel({
             type:monsterType,
+            level:getRandomItem(gameStatus.currentMonsterLevels),
             position:{
                 x: x,
                 y: y
@@ -167,6 +172,7 @@ define(function(require,exports,module){
         $("body").html(mainTemplate());
         mapEl = $(".map");
         mapEl.css({
+            "font-size":blockSize.height/5+"px",
             width:mapWidth*blockSize.width,
             height:mapHeight*blockSize.height
         })
@@ -387,11 +393,11 @@ define(function(require,exports,module){
         gameStatus.phase = PHASE_GENERATE;
         gameStatus.turn ++;
         if ( gameStatus.turn == 15 ) {
-            gameStatus.currentMonsterTypes.push("kobold")
+            gameStatus.currentMonsterTypes.push("ogre")
         } else if ( gameStatus.turn == 100 ) {
+            gameStatus.currentMonsterLevels.push([1,2]);
             gameStatus.currentMonsterTypes.push("goblin")
-        }
-        if ( gameStatus.turn == 35 ) {
+        } else if ( gameStatus.turn == 35 ) {
             gameStatus.generateMonsterNumber = 2;
         }
 
