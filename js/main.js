@@ -393,12 +393,20 @@ define(function(require,exports,module){
         gameStatus.phase = PHASE_GENERATE;
         gameStatus.turn ++;
         if ( gameStatus.turn == 15 ) {
+            gameStatus.currentMonsterTypes.push("slime")
+            gameStatus.currentMonsterTypes.push("skeleton")
             gameStatus.currentMonsterTypes.push("ogre")
-        } else if ( gameStatus.turn == 100 ) {
-            gameStatus.currentMonsterLevels.push([1,2]);
-            gameStatus.currentMonsterTypes.push("goblin")
         } else if ( gameStatus.turn == 35 ) {
             gameStatus.generateMonsterNumber = 2;
+        } else if ( gameStatus.turn == 50 ) {
+            gameStatus.currentMonsterTypes.push("ogre")
+        } else if ( gameStatus.turn == 100 ) {
+            gameStatus.currentMonsterLevels.push(1);
+            gameStatus.currentMonsterLevels.push(2);
+            gameStatus.currentMonsterTypes.push("goblin")
+        } else if ( gameStatus.turn == 120 ) {
+            gameStatus.currentMonsterTypes.push("skeleton")
+            gameStatus.currentMonsterTypes.push("ogre")
         }
 
         generateMonster();
