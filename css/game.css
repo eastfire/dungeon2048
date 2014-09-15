@@ -1,3 +1,4 @@
+
 .main-window {
     height: auto;
     width: auto;
@@ -144,17 +145,30 @@
     background-image: url("../img/skeleton3-4.png");
 }
 
-.monster.kobold.d0 {
-    background-image: url("../img/kobold2-0.png");
+.monster.ogre.d0 {
+    background-image: url("../img/ogre2-0.png");
 }
-.monster.kobold.d1 {
-    background-image: url("../img/kobold2-0.png");
+.monster.ogre.d1 {
+    background-image: url("../img/ogre2-0.png");
 }
-.monster.kobold.d2 {
-    background-image: url("../img/kobold2-0.png");
+.monster.ogre.d2 {
+    background-image: url("../img/ogre2-0.png");
 }
-.monster.kobold.d3 {
-    background-image: url("../img/kobold2-0.png");
+.monster.ogre.d3 {
+    background-image: url("../img/ogre2-0.png");
+}
+
+.monster.ogre.d0.attacking0, .monster.ogre.d3.attacking0 {
+    background-image: url("../img/ogre3-3.png");
+}
+.monster.ogre.d0.attacking1, .monster.ogre.d3.attacking1 {
+    background-image: url("../img/ogre3-4.png");
+}
+.monster.ogre.d2.attacking0, .monster.ogre.d1.attacking0 {
+    background-image: url("../img/ogre2-3.png");
+}
+.monster.ogre.d2.attacking1, .monster.ogre.d1.attacking1 {
+    background-image: url("../img/ogre2-4.png");
 }
 
 .monster.goblin.d0 {
@@ -182,7 +196,7 @@
 
 .effect-label{
     color: red;
-    font-size: 25px;
+    font-size: 1em;
     left: 0;
     position: absolute;
     text-align: center;
@@ -192,18 +206,18 @@
 
 .monster-level , .item-level{
     display: block;
-    font-size: 21px;
+    font-size: 1em;
     font-weight: bolder;
     text-align: center;
     vertical-align: middle;
     width: 100%;
     color: red;
-    bottom: -4px;
+    bottom: -5%;
     position:absolute;
 }
 
 .hero-label {
-    font-size:20px;
+    font-size:1.8em;
     margin: 10px;
 }
 
@@ -216,7 +230,7 @@
 }
 
 .game-over {
-    font-size:50px;
+    font-size:3em;
     margin:auto;
     position:absolute;
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5);

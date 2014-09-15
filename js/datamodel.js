@@ -102,7 +102,7 @@ define(function(require,exports,module){
         }
     })
 
-    exports.Kobold = exports.Monster.extend({
+    exports.Ogre = exports.Monster.extend({
         calAttack:function(level){
             return level*2;
         },
@@ -118,7 +118,7 @@ define(function(require,exports,module){
     exports.ModelMap = {
         "slime":exports.Slime,
         "skeleton":exports.Skeleton,
-        "kobold":exports.Kobold,
+        "ogre":exports.Ogre,
         "goblin":exports.Goblin
     }
 

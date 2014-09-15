@@ -28,7 +28,11 @@ define(function(require,exports,module) {
         "./img/skeleton2-4.png",
         "./img/skeleton3-3.png",
         "./img/skeleton3-4.png",
-        "./img/kobold2-0.png",
+        "./img/ogre2-0.png",
+        "./img/ogre2-3.png",
+        "./img/ogre2-4.png",
+        "./img/ogre3-3.png",
+        "./img/ogre3-4.png",
         "./img/goblin2-0.png",
 
         "./img/potion.png",
