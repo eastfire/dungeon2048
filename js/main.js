@@ -12,6 +12,7 @@ define(function(require,exports,module){
     var Model = require("./datamodel");
     var View = require("./view");
     var mainTemplate = _.template(require("../layout/main_window.html"));
+    var HelpView = require("./help").HelpView;
 
     window.PHASE_GENERATE = 0;
     window.PHASE_USER = 1;
@@ -33,8 +34,11 @@ define(function(require,exports,module){
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             generateMonsterNumber: 1,
-            generateItemRate: 0.1,
-            currentItemTypes:["potion"]
+            generateItemRate: 0,
+            currentItemTypes:["potion"],
+            tutorial:{
+                step:0
+            }
         }
     }
 
@@ -121,6 +125,24 @@ define(function(require,exports,module){
     var generateMonster = function(){
         for ( var i = 0; i < gameStatus.generateMonsterNumber; i++) {
             generateOneMonster();
+        }
+
+        if ( gameStatus.tutorial.step == 0 ) {
+            gameStatus.tutorial.step++;
+            var view = new HelpView({text:"滑动手指移动英雄和所有的怪物"});
+            $(".main-window").append(view.render().$el);
+        } else if ( gameStatus.tutorial.step == 1 ) {
+            gameStatus.tutorial.step++;
+            var view = new HelpView({text:"英雄移动完毕后会自动攻击并杀死面前的一个怪物"});
+            $(".main-window").append(view.render().$el);
+        } else if ( gameStatus.tutorial.step == 2 ) {
+            gameStatus.tutorial.step++;
+            var view = new HelpView({text:"英雄攻击完毕后，所有怪物能攻击英雄的怪物将会攻击英雄"});
+            $(".main-window").append(view.render().$el);
+        } else if ( gameStatus.tutorial.step == 3 ) {
+            gameStatus.tutorial.step++;
+            var view = new HelpView({text:"同种类的怪物移动时会合并并升级，等级越高的怪物经验值越多，但是相应地攻击力越高"});
+            $(".main-window").append(view.render().$el);
         }
 
         setTimeout(function(){
@@ -392,13 +414,14 @@ define(function(require,exports,module){
         }
         gameStatus.phase = PHASE_GENERATE;
         gameStatus.turn ++;
-        if ( gameStatus.turn == 5 ) {
+        if ( gameStatus.turn == 6 ) {
+            gameStatus.generateItemRate = 0.1;
             gameStatus.currentMonsterTypes.push("skeleton")
-        } else if ( gameStatus.turn == 15 ) {
+        } else if ( gameStatus.turn == 18 ) {
             gameStatus.currentMonsterTypes.push("slime")
             gameStatus.currentMonsterTypes.push("skeleton")
             gameStatus.currentMonsterTypes.push("ogre")
-        } else if ( gameStatus.turn == 35 ) {
+        } else if ( gameStatus.turn == 36 ) {
             gameStatus.generateMonsterNumber = 2;
         } else if ( gameStatus.turn == 50 ) {
             gameStatus.currentMonsterTypes.push("ogre")
