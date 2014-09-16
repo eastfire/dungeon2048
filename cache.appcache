@@ -59,5 +59,7 @@ CACHE MANIFEST
 /js/plugins.js
 /js/preload.js
 /js/view.js
-
+/js/help.js
+#layout
+/layout/main_window.html
 
