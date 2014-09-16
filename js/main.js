@@ -30,7 +30,7 @@ define(function(require,exports,module){
         window.gameStatus = {
             phase: PHASE_GENERATE,
             turn: 0,
-            currentMonsterTypes: ["slime", "skeleton"],//,"ogre","goblin"],
+            currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             generateMonsterNumber: 1,
             generateItemRate: 0.1,
@@ -392,7 +392,9 @@ define(function(require,exports,module){
         }
         gameStatus.phase = PHASE_GENERATE;
         gameStatus.turn ++;
-        if ( gameStatus.turn == 15 ) {
+        if ( gameStatus.turn == 5 ) {
+            gameStatus.currentMonsterTypes.push("skeleton")
+        } else if ( gameStatus.turn == 15 ) {
             gameStatus.currentMonsterTypes.push("slime")
             gameStatus.currentMonsterTypes.push("skeleton")
             gameStatus.currentMonsterTypes.push("ogre")
@@ -404,10 +406,11 @@ define(function(require,exports,module){
             gameStatus.currentMonsterLevels.push(1);
             gameStatus.currentMonsterLevels.push(1);
             gameStatus.currentMonsterLevels.push(2);
-            gameStatus.currentMonsterTypes.push("goblin")
+            gameStatus.currentMonsterTypes.push("archer")
         } else if ( gameStatus.turn == 120 ) {
             gameStatus.currentMonsterTypes.push("skeleton")
             gameStatus.currentMonsterTypes.push("ogre")
+            gameStatus.currentMonsterTypes.push("archer")
         } else if ( gameStatus.turn == 150 ) {
             gameStatus.currentMonsterLevels.push(2);
         }

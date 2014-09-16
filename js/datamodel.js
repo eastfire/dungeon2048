@@ -115,10 +115,20 @@ define(function(require,exports,module){
 
     })
 
+    exports.Archer = exports.Monster.extend({
+        calAttack:function(level){
+            return 1;
+        },
+        calExp:function(level){
+            return Math.floor(level*3/2);
+        }
+    })
+
     exports.ModelMap = {
         "slime":exports.Slime,
         "skeleton":exports.Skeleton,
         "ogre":exports.Ogre,
+        "archer":exports.Archer,
         "goblin":exports.Goblin
     }
 

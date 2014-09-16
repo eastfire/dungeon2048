@@ -33,8 +33,10 @@ define(function(require,exports,module) {
         "./img/ogre2-4.png",
         "./img/ogre3-3.png",
         "./img/ogre3-4.png",
-        "./img/goblin2-0.png",
-
+        "./img/archer3-0.png",
+        "./img/archer3-3.png",
+        "./img/archer3-4.png",
+        "./img/archer3-5.png",
         "./img/potion.png",
     ];
 
