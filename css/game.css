@@ -184,6 +184,29 @@
     background-image: url("../img/goblin2-0.png");
 }
 
+.monster.archer.d0 {
+    background-image: url("../img/archer3-0.png");
+}
+.monster.archer.d1 {
+    background-image: url("../img/archer3-0.png");
+}
+.monster.archer.d2 {
+    background-image: url("../img/archer3-0.png");
+}
+.monster.archer.d3 {
+    background-image: url("../img/archer3-0.png");
+}
+
+.monster.archer.d0.attacking0, .monster.archer.d1.attacking0, .monster.archer.d2.attacking0, .monster.archer.d3.attacking0 {
+    background-image: url("../img/archer3-3.png");
+}
+.monster.archer.d0.attacking1, .monster.archer.d1.attacking1, .monster.archer.d2.attacking1, .monster.archer.d3.attacking1 {
+    background-image: url("../img/archer3-4.png");
+}
+.monster.archer.d0.attacking2, .monster.archer.d1.attacking2, .monster.archer.d2.attacking2, .monster.archer.d3.attacking2 {
+    background-image: url("../img/archer3-5.png");
+}
+
 .item.potion {
     background-image: url("../img/potion.png");
 }

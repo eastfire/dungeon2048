@@ -272,10 +272,37 @@ define(function(require,exports,module){
 
     })
 
+    exports.ArcherView = exports.MonsterView.extend({
+        attack:function(){
+            var attackDirection = this.checkInRange();
+            if ( attackDirection != null ) {
+                this.$el.addClass("attacking0");
+                var self = this;
+                setTimeout(function(){
+                    heroView.takeDamage(self.model.get("attack"));
+                    self.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
+                },TIME_SLICE);
+                setTimeout(function(){
+                    self.$el.removeClass("attacking0").addClass("attacking1");
+                },TIME_SLICE/2);
+                setTimeout(function(){
+                    self.$el.removeClass("attacking1").addClass("attacking2");
+                },TIME_SLICE*3/2);
+                setTimeout(function(){
+                    self.$el.removeClass("attacking2");
+                },TIME_SLICE*2);
+            }
+        },
+        checkInRange:function(){
+            return 3;
+        }
+    })
+
     exports.ViewMap = {
         "slime":exports.SlimeView,
         "skeleton":exports.SkeletonView,
         "ogre":exports.OgreView,
+        "archer":exports.ArcherView,
         "goblin":exports.GoblinView
     };
 
