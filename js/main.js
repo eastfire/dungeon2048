@@ -162,6 +162,10 @@ define(function(require,exports,module){
                     my = hy - 1;
                 }
                 createOneMonster("slime", mx, my);
+            } else if (gameStatus.tutorial.step == 2) {
+                generateOneMonster();
+            } else if (gameStatus.tutorial.step == 3) {
+                generateOneMonster();
             }
         } else {
             for (var i = 0; i < gameStatus.generateMonsterNumber; i++) {
