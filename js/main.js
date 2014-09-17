@@ -37,8 +37,14 @@ define(function(require,exports,module){
             generateItemRate: 0,
             currentItemTypes:["potion"],
             tutorial:{
+                on:true,
                 step:0
             }
+        }
+
+        var store = localStorage.getItem("tutorial");
+        if ( store != null ){
+            gameStatus.tutorial.on = JSON.parse(store);
         }
     }
 
@@ -101,10 +107,22 @@ define(function(require,exports,module){
             x = Math.floor(Math.random()*window.mapWidth);
             y = Math.floor(Math.random()*window.mapHeight);
         } while ( map[x][y].type != "blank" );
-        var block = map[x][y];
-        block.type = "monster";
 
         var monsterType = getRandomItem(gameStatus.currentMonsterTypes);
+
+        createOneMonster(monsterType, x,y);
+
+        if ( !gameStatus.tutorial.on && !gameStatus.tutorial[monsterType] ) {
+            gameStatus.tutorial[monsterType] = true;
+            var description = View.monsterDescription[monsterType];
+            var view = new HelpView({text:description.text, imageClass:description.imageClass});
+            view.show();
+        }
+    }
+
+    var createOneMonster = function(monsterType, x, y){
+        var block = map[x][y];
+        block.type = "monster";
         var TempView = View.ViewMap[monsterType]
         var TempModel = Model.ModelMap[monsterType]
         var m = new TempModel({
@@ -123,26 +141,54 @@ define(function(require,exports,module){
     }
 
     var generateMonster = function(){
-        for ( var i = 0; i < gameStatus.generateMonsterNumber; i++) {
-            generateOneMonster();
+        if ( gameStatus.tutorial.on ) {
+            if (gameStatus.tutorial.step == 0) {
+                createOneMonster("slime", 3, 2);
+            } else if (gameStatus.tutorial.step == 1) {
+                var hx = hero.get("position").x;
+                var hy = hero.get("position").y;
+                var mx, my;
+                if (hx == 0) {
+                    mx = 1;
+                    my = hy - 1;
+                } else if (hx == mapWidth - 2) {
+                    mx = mapWidth - 3;
+                    my = hy - 1;
+                } else if (hy == 0) {
+                    mx = hx - 1;
+                    my = 1;
+                } else if (hy == mapHeight - 1) {
+                    mx = hx - 1;
+                    my = hy - 1;
+                }
+                createOneMonster("slime", mx, my);
+            }
+        } else {
+            for (var i = 0; i < gameStatus.generateMonsterNumber; i++) {
+                generateOneMonster();
+            }
         }
 
-        if ( gameStatus.tutorial.step == 0 ) {
-            gameStatus.tutorial.step++;
-            var view = new HelpView({text:"滑动手指移动英雄和所有的怪物"});
-            $(".main-window").append(view.render().$el);
-        } else if ( gameStatus.tutorial.step == 1 ) {
-            gameStatus.tutorial.step++;
-            var view = new HelpView({text:"英雄移动完毕后会自动攻击并杀死面前的一个怪物"});
-            $(".main-window").append(view.render().$el);
-        } else if ( gameStatus.tutorial.step == 2 ) {
-            gameStatus.tutorial.step++;
-            var view = new HelpView({text:"英雄攻击完毕后，所有怪物能攻击英雄的怪物将会攻击英雄"});
-            $(".main-window").append(view.render().$el);
-        } else if ( gameStatus.tutorial.step == 3 ) {
-            gameStatus.tutorial.step++;
-            var view = new HelpView({text:"同种类的怪物移动时会合并并升级，等级越高的怪物经验值越多，但是相应地攻击力越高"});
-            $(".main-window").append(view.render().$el);
+        if ( gameStatus.tutorial.on ) {
+            if (gameStatus.tutorial.step == 0) {
+                gameStatus.tutorial.step++;
+                var view = new HelpView({text: "向右滑动手指移动英雄和所有的怪物<br/>(PC上请用方向键)"});
+                view.show();
+            } else if (gameStatus.tutorial.step == 1) {
+                gameStatus.tutorial.step++;
+                var view = new HelpView({text: "英雄移动完毕后会自动攻击并杀死面前的一个怪物"});
+                view.show();
+            } else if (gameStatus.tutorial.step == 2) {
+                gameStatus.tutorial.step++;
+                var view = new HelpView({text: "英雄移动并攻击后，所有能攻击英雄的怪物将会攻击英雄"});
+                view.show();
+            } else if (gameStatus.tutorial.step == 3) {
+                gameStatus.tutorial.step++;
+                var view = new HelpView({text: "同种类的怪物移动时会合并后升级，等级越高的怪物经验值越多，但是相应地攻击力越高"});
+                view.show();
+                gameStatus.tutorial.on = false;
+                localStorage.setItem("tutorial", false);
+            }
         }
 
         setTimeout(function(){
@@ -225,21 +271,21 @@ define(function(require,exports,module){
 
     var initEvent = function(){
         var hammertime = Hammer($('.map')[0]).on("swipeup", function(event) {
-            if ( gameStatus.phase == PHASE_USER )
+            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingTutorial )
                 calMove(0);
         }).on("swiperight", function(event) {
-            if ( gameStatus.phase == PHASE_USER )
+            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingTutorial )
                 calMove(1);
         }).on("swipedown", function(event) {
-            if ( gameStatus.phase == PHASE_USER )
+            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingTutorial )
                 calMove(2);
         }).on("swipeleft", function(event) {
-            if ( gameStatus.phase == PHASE_USER )
+            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingTutorial )
                 calMove(3);
         });
 
         $(document).on("keydown",function(event){
-            if ( gameStatus.phase != PHASE_USER )
+            if ( gameStatus.phase != PHASE_USER || gameStatus.showingTutorial )
                 return;
             switch(event.keyCode){
                 case 38:

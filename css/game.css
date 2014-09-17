@@ -172,6 +172,7 @@
     background-image: url("../img/ogre2-4.png");
 }
 
+/*
 .monster.goblin.d0 {
     background-image: url("../img/goblin2-0.png");
 }
@@ -184,7 +185,7 @@
 .monster.goblin.d3 {
     background-image: url("../img/goblin2-0.png");
 }
-
+*/
 .monster.archer.d0 {
     background-image: url("../img/archer3-0.png");
 }
@@ -279,7 +280,7 @@
 
 .close-help {
     bottom: 0;
-    font-size: 2.5em;
+    font-size: 2em;
     margin: 5% 10%;
     position: absolute;
     text-align: center;
@@ -288,6 +289,29 @@
 
 .help-text {
     text-align: center;
-    font-size:2em;
-    margin:10%;
+    font-size:1.6em;
+    display: inline-block;
+    margin:10% 2%;
+    vertical-align: middle;
+}
+
+.help-image {
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: inline-block;
+    margin: 10% 2%;
+    vertical-align: middle;
+}
+
+.slime-help {
+    background-image: url("../img/slime2-0.png");
+}
+.skeleton-help {
+    background-image: url("../img/skeleton2-0.png");
+}
+.ogre-help {
+    background-image: url("../img/ogre2-0.png");
+}
+.archer-help {
+    background-image: url("../img/archer3-0.png");
 }
