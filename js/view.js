@@ -411,4 +411,23 @@ define(function(require,exports,module){
             return this;
         }
     })
+
+    exports.monsterDescription = {
+        "slime":{
+            text:"史莱姆<br/>攻击力：弱（为等级的1/2）<br/>经验值：低",
+            imageClass:"slime-help"
+        },
+        "skeleton":{
+            text:"骷髅<br/>攻击力：中（与等级相同）<br/>经验值：中",
+            imageClass:"skeleton-help"
+        },
+        "ogre":{
+            text:"食人魔<br/>攻击力：强（为等级的2倍）<br/>经验值：高",
+            imageClass:"ogre-help"
+        },
+        "archer":{
+            text:"骷髅弓箭手<br/>远程攻击<br/>攻击力：始终为1<br/>经验值：中",
+            imageClass:"archer-help"
+        }
+    }
 });
