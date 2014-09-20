@@ -418,8 +418,4 @@ define(function(require,exports,module){
             return this;
         }
     })
-
-    exports.SkillView = Backbone.View.extend({
-
-    })
 });

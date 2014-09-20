@@ -60,6 +60,7 @@ CACHE MANIFEST
 /js/preload.js
 /js/view.js
 /js/help.js
+/js/skill.js
 #layout
 /layout/main_window.html
 

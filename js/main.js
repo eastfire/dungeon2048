@@ -13,6 +13,7 @@ define(function(require,exports,module){
     var View = require("./view");
     var mainTemplate = _.template(require("../layout/main_window.html"));
     var Help = require("./help");
+    var Skill = require("./skill");
     var HelpView = Help.HelpView;
 
     window.PHASE_GENERATE = 0;
@@ -47,6 +48,10 @@ define(function(require,exports,module){
         if ( store != null ){
             gameStatus.tutorial.on = JSON.parse(store);
         }
+    }
+
+    var initSkillPool = function(){
+        window.gameStatus.skillPool = Skill.getCommonSkillPool();
     }
 
     var calculateBlockSize = function(){
