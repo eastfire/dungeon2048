@@ -134,11 +134,15 @@ define(function(require,exports,module){
             }
         },
         takeDamage:function(attack){
+            if ( Math.random() < this.model.get("dexterity")*0.05 ) {
+                return false;
+            }
             var realDamage = attack - this.model.get("defend");
             if ( realDamage > 0 ){
                 this.effecQueue.add("♥-"+realDamage);
                 this.model.set("hp",this.model.get("hp")-realDamage);
             }
+            return true;
         },
         getHp:function(hp){
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
@@ -222,7 +226,10 @@ define(function(require,exports,module){
                 this.$el.addClass("attacking0");
                 var self = this;
                 setTimeout(function(){
-                    heroView.takeDamage(self.model.get("attack"));
+                    var hit = heroView.takeDamage(self.model.get("attack"));
+                    if ( !hit ) {
+                        self.effecQueue.add("Miss!");
+                    }
                     self.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
                 },TIME_SLICE);
                 setTimeout(function(){
@@ -412,22 +419,7 @@ define(function(require,exports,module){
         }
     })
 
-    exports.monsterDescription = {
-        "slime":{
-            text:"史莱姆<br/>攻击力：弱（为等级的1/2）<br/>经验值：低",
-            imageClass:"slime-help"
-        },
-        "skeleton":{
-            text:"骷髅<br/>攻击力：中（与等级相同）<br/>经验值：中",
-            imageClass:"skeleton-help"
-        },
-        "ogre":{
-            text:"食人魔<br/>攻击力：强（为等级的2倍）<br/>经验值：高",
-            imageClass:"ogre-help"
-        },
-        "archer":{
-            text:"骷髅弓箭手<br/>远程攻击<br/>攻击力：始终为1<br/>经验值：中",
-            imageClass:"archer-help"
-        }
-    }
+    exports.SkillView = Backbone.View.extend({
+
+    })
 });

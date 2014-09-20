@@ -21,11 +21,16 @@ define(function(require,exports,module){
                position: {
                    x:2,
                    y:2
-               }
+               },
+               constitution:0,
+               cunning:0,
+               wisdom:0,
+               dexterity:0,
+               cooling:0
            }
        },
        initialize:function(){
-
+            this.on("change:constitution", this.onConstitutionChange, this);
        },
        getExp:function(exp){
            var currentExp = this.get("exp");
@@ -49,10 +54,17 @@ define(function(require,exports,module){
            })
        },
        calExpRequire:function(lv){
-           return lv*10;
+           return Math.ceil(lv*10*(1-0.05*this.get("cunning")));
+       },
+       onConstitutionChange:function(){
+           var maxHp = this.calMaxHp(this.get("level"));
+           this.set({
+               hp: ( this.get("constitution") - this.prev("constitution") ) * 5 + this.get("hp"),
+               maxHp: maxHp
+           });
        },
        calMaxHp:function(lv){
-           return lv*10;
+           return lv*10+this.get("constitution")*5;
        }
    })
 
@@ -158,6 +170,81 @@ define(function(require,exports,module){
             if ( this.get("type") == "potion" ) {
                 window.heroView.getHp(this.get("effect"));
             }
+        }
+    })
+
+    exports.Skill = Backbone.Model.extend({
+        defaults:function(){
+            return {
+                type:"constitution",
+                level:0,
+                maxLevel:5
+            }
+        }
+    })
+
+    exports.ConstitutionSkill = exports.Skill.extend({
+        defaults:function(){
+            return {
+                type:"constitution",
+                level:0,
+                maxLevel:5
+            }
+        },
+        onGet:function(){
+            window.hero.set("constitute", this.get("level"))
+        }
+    })
+
+    exports.CunningSkill = exports.Skill.extend({
+        defaults:function(){
+            return {
+                type:"cunning",
+                level:0,
+                maxLevel:5
+            }
+        },
+        onGet:function(){
+            window.hero.set("cunning", this.get("level"))
+        }
+    })
+
+    exports.CoolingSkill = exports.Skill.extend({
+        defaults:function(){
+            return {
+                type:"cooling",
+                level:0,
+                maxLevel:5
+            }
+        },
+        onGet:function(){
+            window.hero.set("cooling", this.get("level"))
+        }
+    })
+
+    exports.WisdomSkill = exports.Skill.extend({
+        defaults:function(){
+            return {
+                type:"wisdom",
+                level:0,
+                maxLevel:5
+            }
+        },
+        onGet:function(){
+            window.hero.set("wisdom", this.get("level"))
+        }
+    })
+
+    exports.DexteritySkill = exports.Skill.extend({
+        defaults:function(){
+            return {
+                type:"dexterity",
+                level:0,
+                maxLevel:5
+            }
+        },
+        onGet:function(){
+            window.hero.set("dexterity", this.get("level"))
         }
     })
 });

@@ -12,7 +12,8 @@ define(function(require,exports,module){
     var Model = require("./datamodel");
     var View = require("./view");
     var mainTemplate = _.template(require("../layout/main_window.html"));
-    var HelpView = require("./help").HelpView;
+    var Help = require("./help");
+    var HelpView = Help.HelpView;
 
     window.PHASE_GENERATE = 0;
     window.PHASE_USER = 1;
@@ -114,7 +115,7 @@ define(function(require,exports,module){
 
         if ( !gameStatus.tutorial.on && !gameStatus.tutorial[monsterType] ) {
             gameStatus.tutorial[monsterType] = true;
-            var description = View.monsterDescription[monsterType];
+            var description = Help.monsterDescription[monsterType];
             var view = new HelpView({text:description.text, imageClass:description.imageClass});
             view.show();
         }
