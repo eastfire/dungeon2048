@@ -317,3 +317,67 @@
 .archer-help {
     background-image: url("../img/archer3-0.png");
 }
+
+
+.levelup-body {
+    position:absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.85);
+    top:0;
+    left:0;
+}
+
+.levelup-body .skill {
+    height: auto;
+    width:90%;
+    margin:5% 5%;
+    border:1px solid #808080;
+    border-radius: 5px;
+}
+
+.levelup-body .skill-image-icon {
+    display: inline-block;
+    width: 20%;
+    margin:5% 5%;
+    vertical-align: middle;
+ }
+
+.levelup-body .skill-description {
+    display: inline-block;
+    width: 70%;
+    padding: 0% 10%;
+    vertical-align: middle;
+}
+
+.levelup-body .skill-level , .levelup-body .skill-text{
+     font-size:1.2em;
+ }
+
+.skill-image {
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+}
+.skill-image-constitution {
+    background-image: url("../img/skill-constitution.png");
+}
+.skill-image-cunning {
+    background-image: url("../img/skill-cunning.png");
+}
+.skill-image-wisdom {
+    background-image: url("../img/skill-wisdom.png");
+}
+.skill-image-dexterity {
+    background-image: url("../img/skill-dexterity.png");
+}
+.skill-image-cooling {
+    background-image: url("../img/skill-cooling.png");
+}
+.skill-image-recover {
+    background-image: url("../img/skill-recover.png");
+}
+.skill-image-treasurehunting {
+    background-image: url("../img/skill-treasurehunting.png");
+}

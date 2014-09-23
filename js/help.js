@@ -16,14 +16,14 @@ define(function(require,exports,module) {
 
             this.$el.on("click",function(){
                 self.remove();
-                window.gameStatus.showingTutorial = false;
+                window.gameStatus.showingDialog = false;
             })
         },
         render:function(){
             return this;
         },
         show:function(){
-            gameStatus.showingTutorial = true;
+            gameStatus.showingDialog = true;
             $(".main-window").append(this.render().$el);
         }
     });

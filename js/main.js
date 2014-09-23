@@ -9,6 +9,25 @@ define(function(require,exports,module){
         return array[Math.floor(array.length*Math.random())];
     }
 
+    window.getRandomItems = function(array, count){
+        if ( array.length == 0 )
+            return null;
+        var newArray = [];
+        for ( var item in array ){
+            newArray.push(array[item]);
+        }
+        if ( count >= array.length ) {
+            return newArray;
+        }
+
+        var outputArray = [];
+        for ( var i = 0; i < count ; i++) {
+            var index = Math.floor(newArray.length * Math.random());
+            outputArray.push(newArray.splice(index,1)[0]);
+        }
+        return outputArray;
+    }
+
     var Model = require("./datamodel");
     var View = require("./view");
     var mainTemplate = _.template(require("../layout/main_window.html"));
@@ -84,7 +103,7 @@ define(function(require,exports,module){
 
     window.generateItem = function(x,y, level){
         if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
-            if ( Math.random() > gameStatus.generateItemRate*level )
+            if ( Math.random() > gameStatus.generateItemRate*(level+hero.get("treasureHunting")) )
                 return;
 
             var block = map[x][y];
@@ -206,6 +225,41 @@ define(function(require,exports,module){
         },TIME_SLICE+1);
     }
 
+    window.removeSkillFromPool = function(skill){
+        for ( var i = 0; i < window.gameStatus.skillPool.length ; i++) {
+            if ( window.gameStatus.skillPool[i] == skill ) {
+                window.gameStatus.skillPool.splice(i,1);
+                return;
+            }
+        }
+    }
+
+    window.showLevelUpDialog = function(callback){
+        var skillArray = getRandomItems(window.gameStatus.skillPool, 2);
+        var el = $("<div class='levelup-body'></div>");
+        gameStatus.showingDialog = true;
+        $(".main-window").append(el);
+        _.each(skillArray, function(skillEntry){
+            var view = new skillEntry.viewClass({model: skillEntry.model, mode:"select"})
+            el.append(view.render().$el)
+            view.$el.on("click",function(){
+                var model = view.model;
+                if ( model.onGet ) {
+                    model.onGet.call(model);
+                    model.levelup();
+                    if ( model.get("level") >= model.get("maxLevel") ) {
+                        removeSkillFromPool(model);
+                    }
+                } else {
+
+                }
+                gameStatus.showingDialog = false;
+                $(".levelup-body").remove();
+                callback.call();
+            })
+        })
+    }
+
     var checkAllFill = function(){
         for ( var i = 0 ; i < mapWidth; i++){
             for ( var j = 0 ; j < mapHeight; j++){
@@ -281,21 +335,21 @@ define(function(require,exports,module){
 
     var initEvent = function(){
         var hammertime = Hammer($('.map')[0]).on("swipeup", function(event) {
-            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingTutorial )
+            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingDialog )
                 calMove(0);
         }).on("swiperight", function(event) {
-            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingTutorial )
+            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingDialog )
                 calMove(1);
         }).on("swipedown", function(event) {
-            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingTutorial )
+            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingDialog )
                 calMove(2);
         }).on("swipeleft", function(event) {
-            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingTutorial )
+            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingDialog )
                 calMove(3);
         });
 
         $(document).on("keydown",function(event){
-            if ( gameStatus.phase != PHASE_USER || gameStatus.showingTutorial )
+            if ( gameStatus.phase != PHASE_USER || gameStatus.showingDialog )
                 return;
             switch(event.keyCode){
                 case 38:
@@ -439,12 +493,25 @@ define(function(require,exports,module){
         },pass ? 1 : 2*TIME_SLICE+1);
     }
 
-    var heroAttack = function(){
-        var direction = window.moveDirection;
-        var pass = heroView.attack(direction);
-        setTimeout(function(){
+    var checkLevelUp = function(){
+        if ( curLevel > prevLevel ) {
+            showLevelUpDialog(function(){
+                prevLevel++;
+                checkLevelUp();
+            });
+        } else {
             gameStatus.phase = PHASE_MONSTER_ATTACK;
             monsterAttack();
+        }
+    }
+
+    var heroAttack = function(){
+        var direction = window.moveDirection;
+        window.prevLevel = hero.get("level");
+        var pass = heroView.attack(direction);
+        setTimeout(function(){
+            window.curLevel = hero.get("level");
+            checkLevelUp();
         },pass ? 1 : 4*TIME_SLICE+1);
     }
 
@@ -471,7 +538,7 @@ define(function(require,exports,module){
         gameStatus.phase = PHASE_GENERATE;
         gameStatus.turn ++;
         if ( gameStatus.turn == 6 ) {
-            gameStatus.generateItemRate = 0.1;
+            gameStatus.generateItemRate = 0.05;
             gameStatus.currentMonsterTypes.push("skeleton")
         } else if ( gameStatus.turn == 18 ) {
             gameStatus.currentMonsterTypes.push("slime")
@@ -522,6 +589,7 @@ define(function(require,exports,module){
     var startGame = function(){
         $("body").empty();
         initGameStatus();
+        initSkillPool();
         window.map = initMap();
 
         hero = new Model.Hero();

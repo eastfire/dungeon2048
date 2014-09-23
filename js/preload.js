@@ -38,6 +38,14 @@ define(function(require,exports,module) {
         "./img/archer3-4.png",
         "./img/archer3-5.png",
         "./img/potion.png",
+
+        "./img/skill-constitution.png",
+        "./img/skill-cunning.png",
+        "./img/skill-cooling.png",
+        "./img/skill-dexterity.png",
+        "./img/skill-wisdom.png",
+        "./img/skill-recover.png",
+        "./img/skill-treasurehunting.png",
     ];
 
     var imgLoad = function (url, callback) {
@@ -54,14 +62,17 @@ define(function(require,exports,module) {
         ;
     };
 
-    var currentImageIndex;
+    var threadCount = 5;
+    var loadedImageCount = 0;
+    var totalImageCount = imageList.length;
+
     var initProgress = function () {
-        currentImageIndex = 0
+
         $("body").append("<label class='loading-label'></label>")
         renderProgress();
     }
     var renderProgress = function () {
-        $(".loading-label").html("Loading:" + Math.floor(currentImageIndex / imageList.length * 100) + "%");
+        $(".loading-label").html("Loading:" + Math.floor(loadedImageCount / totalImageCount * 100) + "%");
     }
 
     var endProgress = function () {
@@ -70,18 +81,23 @@ define(function(require,exports,module) {
 
     exports.preload = function(callback){
         initProgress();
+
         var imageLoadAction = function () {
-            imgLoad(imageList[currentImageIndex], function () {
-                currentImageIndex++;
-                renderProgress();
-                if (currentImageIndex >= imageList.length) {
-                    endProgress();
-                    callback();
-                } else {
-                    setTimeout(imageLoadAction, 1);
-                }
-            })
+            var url = imageList.shift();
+            if ( url ) {
+                imgLoad(url, function () {
+                    loadedImageCount++;
+                    renderProgress();
+                    if ( loadedImageCount >= totalImageCount ){
+                        endProgress();
+                        callback();
+                    } else {
+                        setTimeout(imageLoadAction, 1);
+                    }
+                })
+            }
         }
-        imageLoadAction();
+        for ( var i = 0 ; i < threadCount ; i++)
+            imageLoadAction();
     }
 });

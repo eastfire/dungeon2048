@@ -145,6 +145,7 @@ define(function(require,exports,module){
             return true;
         },
         getHp:function(hp){
+            hp += this.model.get("recover");
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
             if ( realHeal > 0 ){
                 this.effecQueue.add("♥+"+realHeal);
@@ -206,7 +207,7 @@ define(function(require,exports,module){
         checkLive:function(){
             if ( this.model.get("hp") <= 0 ) {
                 var level = this.model.get("level");
-                window.hero.getExp(this.model.get("exp"));
+                window.hero.getExp(this.model.get("exp"), level);
                 this.model.destroy();
                 clearMapBlock(this.model.get("position").x, this.model.get("position").y);
                 generateItem(this.model.get("position").x, this.model.get("position").y, level);
@@ -365,7 +366,7 @@ define(function(require,exports,module){
         render:function(){
             this.type.html(this.model.get("typeDisplayName"))
             this.hp.html("<span class='hp-symbol'>♥</span>"+this.model.get("hp")+"/"+this.model.get("maxHp"));
-            this.level.html("Lv:"+this.model.get("level"));
+            this.level.html("LV:"+this.model.get("level"));
             this.exp.html("EXP:"+this.model.get("exp")+"/"+this.model.get("maxExp"));
             if ( window.windowOriention == "landscape") {
                 this.$el.css({
