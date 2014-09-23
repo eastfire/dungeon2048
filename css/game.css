@@ -119,6 +119,16 @@
     background-image: url("../img/slime2-2.png");
 }
 
+.monster.vampire.d0,.monster.vampire.d1,.monster.vampire.d2,.monster.vampire.d3 {
+    background-image: url("../img/vampire2-0.png");
+}
+.monster.vampire.d0.attacking0, .monster.vampire.d1.attacking0, .monster.vampire.d2.attacking0, .monster.vampire.d3.attacking0 {
+    background-image: url("../img/vampire2-3.png");
+}
+.monster.vampire.d0.attacking1, .monster.vampire.d1.attacking1, .monster.vampire.d2.attacking1, .monster.vampire.d3.attacking1 {
+    background-image: url("../img/vampire2-4.png");
+}
+
 .monster.skeleton.d0 {
     background-image: url("../img/skeleton2-0.png");
 }
@@ -307,6 +317,9 @@
 
 .slime-help {
     background-image: url("../img/slime2-0.png");
+}
+.vampire-help {
+    background-image: url("../img/vampire2-0.png");
 }
 .skeleton-help {
     background-image: url("../img/skeleton2-0.png");

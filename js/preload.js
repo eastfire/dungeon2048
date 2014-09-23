@@ -37,6 +37,9 @@ define(function(require,exports,module) {
         "./img/archer3-3.png",
         "./img/archer3-4.png",
         "./img/archer3-5.png",
+        "./img/vampire2-0.png",
+        "./img/vampire2-3.png",
+        "./img/vampire2-4.png",
         "./img/potion.png",
 
         "./img/skill-constitution.png",

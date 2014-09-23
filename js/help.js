@@ -44,6 +44,10 @@ define(function(require,exports,module) {
         "archer":{
             text:"骷髅弓箭手<br/>远程攻击<br/>攻击力：始终为1<br/>经验值：中",
             imageClass:"archer-help"
+        },
+        "vampire":{
+            text:"吸血鬼<br/>每次击中英雄后升级<br/>攻击力：强（为等级的2倍）<br/>经验值：高",
+            imageClass:"vampire-help"
         }
     }
 });

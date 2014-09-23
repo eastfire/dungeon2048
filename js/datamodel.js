@@ -112,6 +112,9 @@ define(function(require,exports,module){
         },
         calExp:function(level){
             return level;
+        },
+        onHitHero:function(){
+
         }
     })
 
@@ -136,6 +139,18 @@ define(function(require,exports,module){
         }
     })
 
+    exports.Vampire = exports.Monster.extend({
+        calAttack:function(level){
+            return level*2;
+        },
+        calExp:function(level){
+            return level*(level-1)+1;
+        },
+        onHitHero:function(){
+            this.setToLevel(this.get("level")+1);
+        }
+    })
+
     exports.Goblin = exports.Monster.extend({
 
     })
@@ -150,11 +165,12 @@ define(function(require,exports,module){
     })
 
     exports.ModelMap = {
-        "slime":exports.Slime,
-        "skeleton":exports.Skeleton,
-        "ogre":exports.Ogre,
-        "archer":exports.Archer,
-        "goblin":exports.Goblin
+        slime:exports.Slime,
+        skeleton:exports.Skeleton,
+        ogre:exports.Ogre,
+        archer:exports.Archer,
+        goblin:exports.Goblin,
+        vampire:exports.Vampire
     }
 
     exports.Item = Backbone.Model.extend({
