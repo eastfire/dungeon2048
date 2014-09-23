@@ -230,6 +230,8 @@ define(function(require,exports,module){
                     var hit = heroView.takeDamage(self.model.get("attack"));
                     if ( !hit ) {
                         self.effecQueue.add("Miss!");
+                    } else {
+                        self.model.onHitHero();
                     }
                     self.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
                 },TIME_SLICE);
@@ -280,6 +282,10 @@ define(function(require,exports,module){
 
     })
 
+    exports.VampireView = exports.MonsterView.extend({
+
+    })
+
     exports.ArcherView = exports.MonsterView.extend({
         attack:function(){
             var attackDirection = this.checkInRange();
@@ -287,7 +293,10 @@ define(function(require,exports,module){
                 this.$el.addClass("attacking0");
                 var self = this;
                 setTimeout(function(){
-                    heroView.takeDamage(self.model.get("attack"));
+                    var hit = heroView.takeDamage(self.model.get("attack"));
+                    if ( !hit ) {
+                        self.effecQueue.add("Miss!");
+                    }
                     self.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
                 },TIME_SLICE);
                 setTimeout(function(){
@@ -311,7 +320,8 @@ define(function(require,exports,module){
         "skeleton":exports.SkeletonView,
         "ogre":exports.OgreView,
         "archer":exports.ArcherView,
-        "goblin":exports.GoblinView
+        goblin:exports.GoblinView,
+        vampire:exports.VampireView
     };
 
     exports.ItemView = MovableView.extend({

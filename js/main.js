@@ -54,7 +54,6 @@ define(function(require,exports,module){
             turn: 0,
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
-            generateMonsterNumber: 1,
             generateItemRate: 0,
             currentItemTypes:["potion"],
             tutorial:{
@@ -193,7 +192,12 @@ define(function(require,exports,module){
                 generateOneMonster();
             }
         } else {
-            for (var i = 0; i < gameStatus.generateMonsterNumber; i++) {
+            var spaceCount = getFreeSpaceCount();
+            if ( spaceCount >= 8)
+                generateNumber = 2;
+            else
+                generateNumber = 1;
+            for (var i = 0; i < generateNumber; i++) {
                 generateOneMonster();
             }
         }
@@ -268,6 +272,17 @@ define(function(require,exports,module){
             }
         }
         return true;
+    }
+
+    var getFreeSpaceCount = function(){
+        var count = 0;
+        for ( var i = 0 ; i < mapWidth; i++){
+            for ( var j = 0 ; j < mapHeight; j++){
+                if ( map[i][j].type == "blank" )
+                    count++;
+            }
+        }
+        return count;
     }
 
     var initMap = function(){
@@ -545,7 +560,6 @@ define(function(require,exports,module){
             gameStatus.currentMonsterTypes.push("skeleton")
             gameStatus.currentMonsterTypes.push("ogre")
         } else if ( gameStatus.turn == 36 ) {
-            gameStatus.generateMonsterNumber = 2;
         } else if ( gameStatus.turn == 50 ) {
             gameStatus.currentMonsterTypes.push("ogre")
         } else if ( gameStatus.turn == 100 ) {
@@ -559,6 +573,9 @@ define(function(require,exports,module){
             gameStatus.currentMonsterTypes.push("archer")
         } else if ( gameStatus.turn == 150 ) {
             gameStatus.currentMonsterLevels.push(2);
+            gameStatus.currentMonsterTypes.push("vampire")
+        } else if ( gameStatus.turn == 180 ) {
+            gameStatus.currentMonsterTypes.push("vampire")
         }
 
         generateMonster();
