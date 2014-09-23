@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-09-17 v1.0.0
+# 2014-09-23 v1.0.0
 /css/bootstrap.css
 /css/bootstrap-theme.css
 /css/game.css
@@ -44,6 +44,14 @@ CACHE MANIFEST
 /img/warrior3-2.png
 /img/warrior3-3.png
 /img/warrior3-4.png
+
+/img/skill-constitution.png
+/img/skill-cunning.png
+/img/skill-dexterity.png
+/img/skill-cooling.png
+/img/skill-wisdom.png
+/img/skill-recover.png
+/img/skill-treasurehunting.png
 #libs js
 /js/vendor/backbone-min.js
 /js/vendor/hammer.min.js
@@ -60,6 +68,7 @@ CACHE MANIFEST
 /js/preload.js
 /js/view.js
 /js/help.js
+/js/skill.js
 #layout
 /layout/main_window.html
 

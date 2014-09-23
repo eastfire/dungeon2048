@@ -134,13 +134,18 @@ define(function(require,exports,module){
             }
         },
         takeDamage:function(attack){
+            if ( Math.random() < this.model.get("dexterity")*0.05 ) {
+                return false;
+            }
             var realDamage = attack - this.model.get("defend");
             if ( realDamage > 0 ){
                 this.effecQueue.add("♥-"+realDamage);
                 this.model.set("hp",this.model.get("hp")-realDamage);
             }
+            return true;
         },
         getHp:function(hp){
+            hp += this.model.get("recover");
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
             if ( realHeal > 0 ){
                 this.effecQueue.add("♥+"+realHeal);
@@ -202,7 +207,7 @@ define(function(require,exports,module){
         checkLive:function(){
             if ( this.model.get("hp") <= 0 ) {
                 var level = this.model.get("level");
-                window.hero.getExp(this.model.get("exp"));
+                window.hero.getExp(this.model.get("exp"), level);
                 this.model.destroy();
                 clearMapBlock(this.model.get("position").x, this.model.get("position").y);
                 generateItem(this.model.get("position").x, this.model.get("position").y, level);
@@ -222,7 +227,10 @@ define(function(require,exports,module){
                 this.$el.addClass("attacking0");
                 var self = this;
                 setTimeout(function(){
-                    heroView.takeDamage(self.model.get("attack"));
+                    var hit = heroView.takeDamage(self.model.get("attack"));
+                    if ( !hit ) {
+                        self.effecQueue.add("Miss!");
+                    }
                     self.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
                 },TIME_SLICE);
                 setTimeout(function(){
@@ -358,7 +366,7 @@ define(function(require,exports,module){
         render:function(){
             this.type.html(this.model.get("typeDisplayName"))
             this.hp.html("<span class='hp-symbol'>♥</span>"+this.model.get("hp")+"/"+this.model.get("maxHp"));
-            this.level.html("Lv:"+this.model.get("level"));
+            this.level.html("LV:"+this.model.get("level"));
             this.exp.html("EXP:"+this.model.get("exp")+"/"+this.model.get("maxExp"));
             if ( window.windowOriention == "landscape") {
                 this.$el.css({
@@ -411,23 +419,4 @@ define(function(require,exports,module){
             return this;
         }
     })
-
-    exports.monsterDescription = {
-        "slime":{
-            text:"史莱姆<br/>攻击力：弱（为等级的1/2）<br/>经验值：低",
-            imageClass:"slime-help"
-        },
-        "skeleton":{
-            text:"骷髅<br/>攻击力：中（与等级相同）<br/>经验值：中",
-            imageClass:"skeleton-help"
-        },
-        "ogre":{
-            text:"食人魔<br/>攻击力：强（为等级的2倍）<br/>经验值：高",
-            imageClass:"ogre-help"
-        },
-        "archer":{
-            text:"骷髅弓箭手<br/>远程攻击<br/>攻击力：始终为1<br/>经验值：中",
-            imageClass:"archer-help"
-        }
-    }
 });

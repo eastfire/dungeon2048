@@ -1,4 +1,6 @@
 define(function(require,exports,module){
+    window.WISDOM_THRESHOLD = 6;
+
    exports.Hero = Backbone.Model.extend({
        UP:0,
        RIGHT:1,
@@ -21,15 +23,26 @@ define(function(require,exports,module){
                position: {
                    x:2,
                    y:2
-               }
+               },
+               constitution:0,
+               cunning:0,
+               wisdom:0,
+               dexterity:0,
+               cooling:0,
+               recover:0,
+               treasureHunting:0
            }
        },
        initialize:function(){
-
+            this.on("change:constitution", this.onConstitutionChange, this);
+           this.on("change:cunning", this.onCunningChange, this);
        },
-       getExp:function(exp){
+       getExp:function(exp, level){
            var currentExp = this.get("exp");
            var expRequire = this.get("maxExp");
+           if ( level >= WISDOM_THRESHOLD ){
+                exp += Math.round( exp * this.get("wisdom")*0.1 );
+           }
            if ( currentExp+exp >= expRequire ) {
                this.levelUp();
                this.getExp(currentExp+exp-expRequire);
@@ -49,10 +62,22 @@ define(function(require,exports,module){
            })
        },
        calExpRequire:function(lv){
-           return lv*10;
+           return Math.ceil(lv*10*(1-0.05*this.get("cunning")));
+       },
+       onConstitutionChange:function(){
+           var maxHp = this.calMaxHp(this.get("level"));
+           this.set({
+               hp: ( this.get("constitution") - this.previous("constitution") ) * 5 + this.get("hp"),
+               maxHp: maxHp
+           });
+       },
+       onCunningChange:function(){
+           this.set({
+               maxExp: this.calExpRequire(this.get("level"))
+           });
        },
        calMaxHp:function(lv){
-           return lv*10;
+           return lv*10+this.get("constitution")*5;
        }
    })
 
