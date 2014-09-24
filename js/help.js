@@ -29,21 +29,25 @@ define(function(require,exports,module) {
     });
 
     exports.monsterDescription = {
-        "slime":{
-            text:"史莱姆<br/>攻击力：弱（为等级的1/2）<br/>经验值：低",
-            imageClass:"slime-help"
+        "archer":{
+            text:"骷髅弓箭手<br/>远程攻击<br/>攻击力：始终为1<br/>经验值：中",
+            imageClass:"archer-help"
         },
-        "skeleton":{
-            text:"骷髅<br/>攻击力：中（与等级相同）<br/>经验值：中",
-            imageClass:"skeleton-help"
+        "mimic":{
+            text:"宝箱怪<br/>必然掉落宝物，且宝物等级与怪物等级相同<br/>攻击力：中（与等级相同）<br/>经验值：始终为1",
+            imageClass:"mimic-help"
         },
         "ogre":{
             text:"食人魔<br/>攻击力：强（为等级的2倍）<br/>经验值：高",
             imageClass:"ogre-help"
         },
-        "archer":{
-            text:"骷髅弓箭手<br/>远程攻击<br/>攻击力：始终为1<br/>经验值：中",
-            imageClass:"archer-help"
+        "skeleton":{
+            text:"骷髅<br/>攻击力：中（与等级相同）<br/>经验值：中",
+            imageClass:"skeleton-help"
+        },
+        "slime":{
+            text:"史莱姆<br/>攻击力：弱（为等级的1/2）<br/>经验值：低",
+            imageClass:"slime-help"
         },
         "vampire":{
             text:"吸血鬼<br/>每次击中英雄后升级<br/>攻击力：强（为等级的2倍）<br/>经验值：高",

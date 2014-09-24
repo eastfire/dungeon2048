@@ -20,6 +20,10 @@ define(function(require,exports,module) {
         "./img/warrior3-2.png",
         "./img/warrior3-3.png",
         "./img/warrior3-4.png",
+
+        "./img/mimic2-0.png",
+        "./img/mimic2-3.png",
+        "./img/mimic2-4.png",
         "./img/slime2-0.png",
         "./img/slime2-1.png",
         "./img/slime2-2.png",

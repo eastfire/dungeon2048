@@ -130,6 +130,12 @@ define(function(require,exports,module){
         }
     })
 
+    exports.Mimic = exports.Monster.extend({
+        calExp:function(level){
+            return 1;
+        }
+    })
+
     exports.Ogre = exports.Monster.extend({
         calAttack:function(level){
             return level*2;
@@ -165,11 +171,12 @@ define(function(require,exports,module){
     })
 
     exports.ModelMap = {
-        slime:exports.Slime,
-        skeleton:exports.Skeleton,
-        ogre:exports.Ogre,
         archer:exports.Archer,
         goblin:exports.Goblin,
+        mimic:exports.Mimic,
+        skeleton:exports.Skeleton,
+        slime:exports.Slime,
+        ogre:exports.Ogre,
         vampire:exports.Vampire
     }
 

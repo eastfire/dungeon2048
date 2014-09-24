@@ -100,25 +100,30 @@ define(function(require,exports,module){
         return {width:blockW, height:blockH}
     }
 
-    window.generateItem = function(x,y, level){
+    window.generateItem = function(x,y, monsterLevel){
         if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
-            if ( Math.random() > gameStatus.generateItemRate*(level+hero.get("treasureHunting")) )
+            if ( Math.random() > gameStatus.generateItemRate*(monsterLevel+hero.get("treasureHunting")) )
                 return;
 
-            var block = map[x][y];
-            block.model = new Model.Item({
-                type:getRandomItem(gameStatus.currentItemTypes),
-                position:{
-                    x: x,
-                    y: y
-                }
-            });
-            var itemView = new View.ItemView({model:block.model});
-            mapEl.append(itemView.render().$el);
-
-            block.view = itemView;
-            block.type = "item";
+            generateItemForSure(x,y,1);
         }
+    }
+
+    window.generateItemForSure=function(x,y, itemLevel){
+        var block = map[x][y];
+        block.model = new Model.Item({
+            type:getRandomItem(gameStatus.currentItemTypes),
+            position:{
+                x: x,
+                y: y
+            },
+            level: itemLevel
+        });
+        var itemView = new View.ItemView({model:block.model});
+        mapEl.append(itemView.render().$el);
+
+        block.view = itemView;
+        block.type = "item";
     }
 
     var generateOneMonster = function(){
@@ -554,7 +559,7 @@ define(function(require,exports,module){
         gameStatus.turn ++;
         if ( gameStatus.turn == 6 ) {
             gameStatus.generateItemRate = 0.05;
-            gameStatus.currentMonsterTypes.push("skeleton")
+            gameStatus.currentMonsterTypes.push("mimic")
         } else if ( gameStatus.turn == 18 ) {
             gameStatus.currentMonsterTypes.push("slime")
             gameStatus.currentMonsterTypes.push("skeleton")

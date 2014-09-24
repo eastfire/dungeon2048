@@ -10,12 +10,14 @@ CACHE MANIFEST
 /img/archer3-3.png
 /img/archer3-4.png
 /img/archer3-5.png
+/img/mimic2-0.png
+/img/mimic2-3.png
+/img/mimic2-4.png
 /img/ogre2-0.png
 /img/ogre2-3.png
 /img/ogre2-4.png
 /img/ogre3-3.png
 /img/ogre3-4.png
-/img/potion.png
 /img/skeleton2-0.png
 /img/skeleton2-3.png
 /img/skeleton2-4.png
@@ -27,6 +29,8 @@ CACHE MANIFEST
 /img/vampire2-0.png
 /img/vampire2-1.png
 /img/vampire2-2.png
+
+/img/potion.png
 
 /img/warrior0-0.png
 /img/warrior0-1.png
