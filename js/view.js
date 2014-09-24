@@ -292,7 +292,7 @@ define(function(require,exports,module){
 
     exports.VampireView = exports.MonsterView.extend({
         onHitHero:function(){
-            exports.MonsterView.prototype.onHitHero.call();
+            exports.MonsterView.prototype.onHitHero.call(this);
             this.effecQueue.add("Level Up");
         }
     })
