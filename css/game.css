@@ -113,10 +113,20 @@
 }
 
 .monster.slime.d0.attacking0, .monster.slime.d1.attacking0, .monster.slime.d2.attacking0, .monster.slime.d3.attacking0 {
-    background-image: url("../img/slime2-1.png");
-}
+     background-image: url("../img/slime2-1.png");
+ }
 .monster.slime.d0.attacking1, .monster.slime.d1.attacking1, .monster.slime.d2.attacking1, .monster.slime.d3.attacking1 {
     background-image: url("../img/slime2-2.png");
+}
+
+.monster.mimic.d0,.monster.mimic.d1,.monster.mimic.d2,.monster.mimic.d3 {
+    background-image: url("../img/mimic2-0.png");
+}
+.monster.mimic.d0.attacking0, .monster.mimic.d1.attacking0, .monster.mimic.d2.attacking0, .monster.mimic.d3.attacking0 {
+    background-image: url("../img/mimic2-3.png");
+}
+.monster.mimic.d0.attacking1, .monster.mimic.d1.attacking1, .monster.mimic.d2.attacking1, .monster.mimic.d3.attacking1 {
+    background-image: url("../img/mimic2-4.png");
 }
 
 .monster.vampire.d0,.monster.vampire.d1,.monster.vampire.d2,.monster.vampire.d3 {
@@ -315,6 +325,9 @@
     vertical-align: middle;
 }
 
+.mimic-help {
+    background-image: url("../img/mimic2-0.png");
+}
 .slime-help {
     background-image: url("../img/slime2-0.png");
 }

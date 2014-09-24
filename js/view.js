@@ -210,7 +210,7 @@ define(function(require,exports,module){
                 window.hero.getExp(this.model.get("exp"), level);
                 this.model.destroy();
                 clearMapBlock(this.model.get("position").x, this.model.get("position").y);
-                generateItem(this.model.get("position").x, this.model.get("position").y, level);
+                this.onDropItem(this.model.get("position").x, this.model.get("position").y);
                 return false;
             }
             return true;
@@ -231,7 +231,7 @@ define(function(require,exports,module){
                     if ( !hit ) {
                         self.effecQueue.add("Miss!");
                     } else {
-                        self.model.onHitHero();
+                        self.onHitHero();
                     }
                     self.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
                 },TIME_SLICE);
@@ -245,6 +245,14 @@ define(function(require,exports,module){
                     self.$el.removeClass("attacking0");
                 },TIME_SLICE*2);
             }
+        },
+
+        onHitHero:function(){
+            this.model.onHitHero();
+        },
+
+        onDropItem:function(x,y){
+            generateItem(this.model.get("position").x, this.model.get("position").y, this.model.get("level"));
         },
 
         checkInRange:function(){
@@ -283,7 +291,10 @@ define(function(require,exports,module){
     })
 
     exports.VampireView = exports.MonsterView.extend({
-
+        onHitHero:function(){
+            exports.MonsterView.prototype.onHitHero.call();
+            this.effecQueue.add("Level Up");
+        }
     })
 
     exports.ArcherView = exports.MonsterView.extend({
@@ -315,12 +326,19 @@ define(function(require,exports,module){
         }
     })
 
+    exports.MimicView = exports.MonsterView.extend({
+        onDropItem:function(x,y){
+            generateItemForSure(x,y, this.model.get("level"));
+        }
+    })
+
     exports.ViewMap = {
-        "slime":exports.SlimeView,
-        "skeleton":exports.SkeletonView,
-        "ogre":exports.OgreView,
-        "archer":exports.ArcherView,
+        slime:exports.SlimeView,
+        skeleton:exports.SkeletonView,
+        ogre:exports.OgreView,
+        archer:exports.ArcherView,
         goblin:exports.GoblinView,
+        mimic:exports.MimicView,
         vampire:exports.VampireView
     };
 
