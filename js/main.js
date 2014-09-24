@@ -28,6 +28,14 @@ define(function(require,exports,module){
         return outputArray;
     }
 
+    window.isInArray = function(array, item){
+        for ( var i = 0 ; i < array.length; i++ ){
+            if ( array[i] == item )
+                return true;
+        }
+        return false;
+    }
+
     var Model = require("./datamodel");
     var View = require("./view");
     var mainTemplate = _.template(require("../layout/main_window.html"));
@@ -52,6 +60,9 @@ define(function(require,exports,module){
         window.gameStatus = {
             phase: PHASE_GENERATE,
             turn: 0,
+            currentMonsterWave: ["slime"],
+            currentMonsterTypeNumber:1,
+            monsterPool:["archer","mimic","ogre","skeleton","slime","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             generateItemRate: 0,
@@ -124,6 +135,28 @@ define(function(require,exports,module){
 
         block.view = itemView;
         block.type = "item";
+    }
+
+    var calMonsterWave = function(){
+        var monsterType = "";
+        do {
+            monsterType = getRandomItem(gameStatus.monsterPool)
+        } while ( isInArray(gameStatus.currentMonsterWave, monsterType) )
+        if ( gameStatus.currentMonsterTypeNumber > gameStatus.currentMonsterWave.length ){
+            //add a monster
+            gameStatus.currentMonsterWave.unshift( monsterType )
+        } else {
+            //replace a monster
+            gameStatus.currentMonsterWave.pop();
+            gameStatus.currentMonsterWave.unshift( monsterType )
+        }
+
+        gameStatus.currentMonsterTypes = [];
+        for ( var i = 0; i < gameStatus.currentMonsterWave.length; i++){
+            for ( var j = 0; j < i+1; j++ ){
+                gameStatus.currentMonsterTypes.push( gameStatus.currentMonsterWave[i]);
+            }
+        }
     }
 
     var generateOneMonster = function(){
@@ -557,7 +590,7 @@ define(function(require,exports,module){
         }
         gameStatus.phase = PHASE_GENERATE;
         gameStatus.turn ++;
-        if ( gameStatus.turn == 6 ) {
+        /*if ( gameStatus.turn == 6 ) {
             gameStatus.generateItemRate = 0.05;
             gameStatus.currentMonsterTypes.push("mimic")
         } else if ( gameStatus.turn == 18 ) {
@@ -581,6 +614,19 @@ define(function(require,exports,module){
             gameStatus.currentMonsterTypes.push("vampire")
         } else if ( gameStatus.turn == 180 ) {
             gameStatus.currentMonsterTypes.push("vampire")
+        }*/
+        if ( gameStatus.turn == 6) {
+            gameStatus.generateItemRate = 0.05;
+            gameStatus.currentMonsterTypeNumber = 2;
+            calMonsterWave();
+        } else if ( gameStatus.turn == 30 ) {
+            gameStatus.currentMonsterTypeNumber = 3;
+            calMonsterWave();
+        } else if ( gameStatus.turn == 60 ) {
+            gameStatus.currentMonsterTypeNumber = 4;
+            calMonsterWave();
+        } else if ( gameStatus.turn % 30 == 0 ) {
+            calMonsterWave();
         }
 
         generateMonster();
