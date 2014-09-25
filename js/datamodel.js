@@ -120,13 +120,19 @@ define(function(require,exports,module){
 
     exports.Slime = exports.Monster.extend({
         calAttack:function(level){
-            return Math.ceil(level/2);
+            return Math.round(level/2);
+        }
+    })
+
+    exports.Goblin = exports.Monster.extend({
+        calAttack:function(level){
+            return Math.round(level/2);
         }
     })
 
     exports.Skeleton = exports.Monster.extend({
         calExp:function(level){
-            return Math.floor(level*3/2);
+            return Math.round(level*3/2);
         }
     })
 
@@ -155,10 +161,6 @@ define(function(require,exports,module){
         onHitHero:function(){
             this.setToLevel(this.get("level")+1);
         }
-    })
-
-    exports.Goblin = exports.Monster.extend({
-
     })
 
     exports.Archer = exports.Monster.extend({

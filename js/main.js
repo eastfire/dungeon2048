@@ -62,7 +62,7 @@ define(function(require,exports,module){
             turn: 0,
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
-            monsterPool:["archer","mimic","ogre","skeleton","slime","vampire"],
+            monsterPool:["archer","goblin","mimic","ogre","skeleton","slime","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             generateItemRate: 0,
@@ -447,8 +447,10 @@ define(function(require,exports,module){
                     mapblock.merge = true;
                     if ( curblock.mergeTo == null ) {
                         mapblock.mergeTo = curblock.model;
+                        mapblock.mergeToView = curblock.view;
                     } else {
                         mapblock.mergeTo = curblock.mergeTo;
+                        mapblock.mergeToView = curblock.mergeToView;
                     }
                     break;
                 } else {
@@ -474,6 +476,7 @@ define(function(require,exports,module){
                 map[i][j].movement = 0;
                 map[i][j].merge = false;
                 map[i][j].mergeTo = null;
+                map[i][j].mergeToView = null;
                 /*if ( map[i][j].model ) {
                     console.log("x:"+i+" y:"+j+" model:"+map[i][j].model.get("type"))
                 }*/

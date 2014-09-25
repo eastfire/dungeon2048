@@ -34,7 +34,7 @@ define(function(require,exports,module){
             var x2 = x1*blockSize.width;
             var y2 = y1*blockSize.height;
             //console.log(this.model.get("type")+" move to "+x1+" "+y1);
-            this.$el.css({transition: "all "+(TIME_SLICE/1000)*movement+"s ease-in-out 0s", left:x2, top:y2});
+            this.$el.css({transition: "left "+(TIME_SLICE/1000)*movement+"s ease-in-out 0s, top "+(TIME_SLICE/1000)*movement+"s ease-in-out 0s", left:x2, top:y2});
             var oldblock = map[oldx][oldy];
             oldblock.type = "blank";
             oldblock.view = null;
@@ -175,7 +175,7 @@ define(function(require,exports,module){
             if ( merge ) {
                 var mergeToModel = oldblock.mergeTo;
                 if ( mergeToModel ) {
-                    mergeToModel.setToLevel(this.model.get("level")+mergeToModel.get("level"));
+                    this.onMergeTo(mergeToModel, oldblock.mergeToView);
                 }
                 this.model.destroy();
             } else {
@@ -190,12 +190,12 @@ define(function(require,exports,module){
             var oldy = this.model.get("position").y * blockSize.height;
             var x = oldx + increment[direction].x * blockSize.width*0.35;
             var y = oldy + increment[direction].y * blockSize.height*0.35;
-            this.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
+            this.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
             var self = this;
             setTimeout(function(){
                 self.takeDamage(attack);
                 if ( self.checkLive() )
-                    self.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:oldx, top:oldy});
+                    self.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:oldx, top:oldy});
             },TIME_SLICE)
         },
         takeDamage:function(attack) {
@@ -223,7 +223,7 @@ define(function(require,exports,module){
                 var y = this.model.get("position").y * blockSize.height;
                 var moveX = x  + increment[attackDirection].x * blockSize.width*0.35;
                 var moveY = y  + increment[attackDirection].y * blockSize.height*0.35;
-                this.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:moveX, top:moveY});
+                this.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:moveX, top:moveY});
                 this.$el.addClass("attacking0");
                 var self = this;
                 setTimeout(function(){
@@ -233,7 +233,7 @@ define(function(require,exports,module){
                     } else {
                         self.onHitHero();
                     }
-                    self.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
+                    self.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
                 },TIME_SLICE);
                 setTimeout(function(){
                     self.$el.removeClass("attacking0").addClass("attacking1");
@@ -255,6 +255,13 @@ define(function(require,exports,module){
             generateItem(this.model.get("position").x, this.model.get("position").y, this.model.get("level"));
         },
 
+        onMergeTo:function(mergeToModel, mergeToView){
+            mergeToModel.setToLevel(this.model.get("level")+mergeToModel.get("level"));
+            mergeToView.onMerged.call(mergeToView);
+        },
+        onMerged:function(){
+
+        },
         checkInRange:function(){
             var x = this.model.get("position").x;
             var y = this.model.get("position").y;
@@ -287,7 +294,10 @@ define(function(require,exports,module){
     })
 
     exports.GoblinView = exports.MonsterView.extend({
-
+        onMerged:function(){
+            this.effecQueue.add("Level Up");
+            this.model.setToLevel(this.model.get("level")+1);
+        }
     })
 
     exports.VampireView = exports.MonsterView.extend({
@@ -308,7 +318,7 @@ define(function(require,exports,module){
                     if ( !hit ) {
                         self.effecQueue.add("Miss!");
                     }
-                    self.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
+                    self.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
                 },TIME_SLICE);
                 setTimeout(function(){
                     self.$el.removeClass("attacking0").addClass("attacking1");
@@ -376,7 +386,7 @@ define(function(require,exports,module){
         beTaken:function(){
             this.model.effectHappen();
             var self = this;
-            this.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", "margin-top":-blockSize.height/2,opacity:0.4});
+            this.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", "margin-top":-blockSize.height/2,opacity:0.4});
             setTimeout(function(){
                 self.model.destroy();
             },TIME_SLICE);

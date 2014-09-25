@@ -33,6 +33,10 @@ define(function(require,exports,module) {
             text:"骷髅弓箭手<br/>远程攻击<br/>攻击力：始终为1<br/>经验值：中",
             imageClass:"archer-help"
         },
+        "goblin":{
+            text:"哥布林<br/>每次合并后升级<br/>攻击力：低（为等级的1/2）<br/>经验值：低",
+            imageClass:"goblin-help"
+        },
         "mimic":{
             text:"宝箱怪<br/>必然掉落宝物，且宝物等级与怪物等级相同<br/>攻击力：中（与等级相同）<br/>经验值：始终为1",
             imageClass:"mimic-help"
