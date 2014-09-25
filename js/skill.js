@@ -7,7 +7,7 @@ define(function(require,exports,module) {
                     "<div class='skill-image skill-image-"+this.model.get("name")+"'></div></span>" +
                     "<span class='skill-description'>" +
                     "<div class='skill-level'>"+this.model.get("displayName")+"lv" + this.model.get("level") + "</div>" +
-                    "<label class='skill-text'>"+this.model.getDescription()+"</label>" +
+                    "<label class='skill-text'>"+this.model.generateDescription()+"</label>" +
                     "</span>")
                 this.$el.css({
                     "font-size":blockSize.height/5+"px"
@@ -38,12 +38,6 @@ define(function(require,exports,module) {
         levelup:function(){
             this.set("level",this.get("level")+1);
         },
-        getDescription:function(){
-            if ( this.get("description") )
-                return this.get("description");
-            else
-                return this.generateDescription();
-        },
         generateDescription:function(){
             return "";
         }
@@ -56,11 +50,12 @@ define(function(require,exports,module) {
                 type:"passive",
                 displayName:"体质",
                 level:1,
-                maxLevel:5,
-                description:"生命值上限加5"
+                maxLevel:5
             }
         },
-
+        generateDescription:function(){
+            return "生命值上限加5";
+        },
         onGet:function(){
             window.hero.set("constitution", this.get("level"))
         }
@@ -143,7 +138,7 @@ define(function(require,exports,module) {
             return {
                 name:"treasurehunting",
                 type:"passive",
-                displayName:"恢复",
+                displayName:"寻宝",
                 level:1,
                 maxLevel:5
             }

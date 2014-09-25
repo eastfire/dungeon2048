@@ -269,7 +269,7 @@ define(function(require,exports,module){
 
     window.removeSkillFromPool = function(skill){
         for ( var i = 0; i < window.gameStatus.skillPool.length ; i++) {
-            if ( window.gameStatus.skillPool[i] == skill ) {
+            if ( window.gameStatus.skillPool[i].model == skill ) {
                 window.gameStatus.skillPool.splice(i,1);
                 return;
             }
