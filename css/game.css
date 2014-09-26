@@ -138,6 +138,22 @@
     transform:scaleX(-1);
 }
 
+.monster.orc.d0,.monster.orc.d1,.monster.orc.d2,.monster.orc.d3 {
+    background-image: url("../img/orc1-0.png");
+}
+.monster.orc.d0.attacking0, .monster.orc.d1.attacking0, .monster.orc.d2.attacking0, .monster.orc.d3.attacking0 {
+    background-image: url("../img/orc1-3.png");
+}
+.monster.orc.d0.attacking1, .monster.orc.d1.attacking1, .monster.orc.d2.attacking1, .monster.orc.d3.attacking1 {
+    background-image: url("../img/orc1-4.png");
+}
+.monster.orc.d2.attacking0, .monster.orc.d3.attacking0 {
+    transform:scaleX(-1);
+}
+.monster.orc.d2.attacking1, .monster.orc.d3.attacking1 {
+    transform:scaleX(-1);
+}
+
 .monster.slime.d0 {
     background-image: url("../img/slime2-0.png");
 }
@@ -230,23 +246,19 @@
     background-image: url("../img/ogre2-4.png");
 }
 
-/*
-.monster.goblin.d0 {
-    background-image: url("../img/goblin2-0.png");
-}
-.monster.goblin.d1 {
-    background-image: url("../img/goblin2-0.png");
-}
-.monster.goblin.d2 {
-    background-image: url("../img/goblin2-0.png");
-}
-.monster.goblin.d3 {
-    background-image: url("../img/goblin2-0.png");
-}
-*/
-
 .item.potion {
     background-image: url("../img/potion.png");
+}
+
+.status-angry {
+    background-image: url("../img/status-angry.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 10%;
+    position: absolute;
+    right: 25%;
+    top: 25%;
+    width: 10%;
 }
 
 .effect-queue {
@@ -350,14 +362,17 @@
 .mimic-help {
     background-image: url("../img/mimic2-0.png");
 }
+.ogre-help {
+    background-image: url("../img/ogre2-0.png");
+}
+.orc-help {
+    background-image: url("../img/orc1-0.png");
+}
 .skeleton-help {
     background-image: url("../img/skeleton2-0.png");
 }
 .slime-help {
     background-image: url("../img/slime2-0.png");
-}
-.ogre-help {
-    background-image: url("../img/ogre2-0.png");
 }
 .vampire-help {
     background-image: url("../img/vampire2-0.png");

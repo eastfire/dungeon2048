@@ -30,7 +30,7 @@ define(function(require,exports,module) {
 
     exports.monsterDescription = {
         "archer":{
-            text:"骷髅弓箭手<br/>远程攻击<br/>攻击力：始终为1<br/>经验值：中",
+            text:"骷髅弓箭手<br/>远程攻击，近身不攻击<br/>攻击力：始终为1<br/>经验值：中",
             imageClass:"archer-help"
         },
         "goblin":{
@@ -44,6 +44,10 @@ define(function(require,exports,module) {
         "ogre":{
             text:"食人魔<br/>攻击力：强（为等级的2倍）<br/>经验值：高",
             imageClass:"ogre-help"
+        },
+        "orc":{
+            text:"兽人<br/>出现和合并后<i><u>愤怒</u></i>(攻击力3倍)直到下回合<br/>攻击力：中（与等级相同）<br/>经验值：中",
+            imageClass:"orc-help"
         },
         "skeleton":{
             text:"骷髅<br/>攻击力：中（与等级相同）<br/>经验值：中",

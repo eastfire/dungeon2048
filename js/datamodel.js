@@ -94,7 +94,8 @@ define(function(require,exports,module){
                     x:0,
                     y:0
                 },
-                direction: 2
+                direction: 2,
+                angry: 0
             }
         },
         initialize:function(){
@@ -132,7 +133,7 @@ define(function(require,exports,module){
 
     exports.Skeleton = exports.Monster.extend({
         calExp:function(level){
-            return Math.round(level*3/2);
+            return Math.floor(level*3/2);
         }
     })
 
@@ -148,6 +149,12 @@ define(function(require,exports,module){
         },
         calExp:function(level){
             return level*(level-1)+1;
+        }
+    })
+
+    exports.Orc = exports.Monster.extend({
+        calExp:function(level){
+            return level*2-1;
         }
     })
 
@@ -179,6 +186,7 @@ define(function(require,exports,module){
         skeleton:exports.Skeleton,
         slime:exports.Slime,
         ogre:exports.Ogre,
+        orc:exports.Orc,
         vampire:exports.Vampire
     }
 

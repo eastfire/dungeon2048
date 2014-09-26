@@ -62,7 +62,7 @@ define(function(require,exports,module){
             turn: 0,
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
-            monsterPool:["archer","goblin","mimic","ogre","skeleton","slime","vampire"],
+            monsterPool:["archer","goblin","mimic","ogre","orc","skeleton","slime","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             generateItemRate: 0,
@@ -200,9 +200,21 @@ define(function(require,exports,module){
         mapEl.append(monsterView.render().$el);
 
         block.view = monsterView;
+        setTimeout(function(){
+            monsterView.onGenerate.call(monsterView);
+        },10)
     }
 
     var generateMonster = function(){
+        for ( var i = 0 ; i < mapWidth; i++){
+            for ( var j = 0 ; j < mapHeight; j++){
+                var m = map[i][j];
+                if ( m.view instanceof View.MonsterView ){
+                    m.view.onNewRound.call(m);
+                }
+            }
+        }
+
         if ( gameStatus.tutorial.on ) {
             if (gameStatus.tutorial.step == 0) {
                 createOneMonster("slime", 3, 2);
@@ -231,7 +243,7 @@ define(function(require,exports,module){
             }
         } else {
             var spaceCount = getFreeSpaceCount();
-            if ( spaceCount >= 8)
+            if ( spaceCount >= 5)
                 generateNumber = 2;
             else
                 generateNumber = 1;
@@ -278,7 +290,7 @@ define(function(require,exports,module){
 
     window.showLevelUpDialog = function(callback){
         var skillArray = getRandomItems(window.gameStatus.skillPool, 2);
-        var el = $("<div class='levelup-body'></div>");
+        var el = $("<div class='levelup-body'>升级了！<br/>请选择</div>");
         gameStatus.showingDialog = true;
         $(".main-window").append(el);
         _.each(skillArray, function(skillEntry){
@@ -473,13 +485,11 @@ define(function(require,exports,module){
         //console.log("--MAP--")
         for ( var i = 0 ; i < mapWidth; i++){
             for ( var j = 0 ; j < mapHeight; j++){
-                map[i][j].movement = 0;
-                map[i][j].merge = false;
-                map[i][j].mergeTo = null;
-                map[i][j].mergeToView = null;
-                /*if ( map[i][j].model ) {
-                    console.log("x:"+i+" y:"+j+" model:"+map[i][j].model.get("type"))
-                }*/
+                var m = map[i][j];
+                m.movement = 0;
+                m.merge = false;
+                m.mergeTo = null;
+                m.mergeToView = null;
             }
         }
         //console.log("--MAP END--")
