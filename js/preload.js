@@ -36,6 +36,9 @@ define(function(require,exports,module) {
         "./img/ogre2-4.png",
         "./img/ogre3-3.png",
         "./img/ogre3-4.png",
+        "./img/orc1-0.png",
+        "./img/orc1-3.png",
+        "./img/orc1-4.png",
         "./img/slime2-0.png",
         "./img/slime2-1.png",
         "./img/slime2-2.png",
@@ -47,7 +50,10 @@ define(function(require,exports,module) {
         "./img/vampire2-0.png",
         "./img/vampire2-3.png",
         "./img/vampire2-4.png",
+
         "./img/potion.png",
+
+        "./img/status-angry.png",
 
         "./img/skill-constitution.png",
         "./img/skill-cunning.png",

@@ -159,6 +159,7 @@ define(function(require,exports,module){
             MovableView.prototype.initialize.call(this);
             this.model.on("destroy",this.remove,this);
             this.model.on("change:level",this.renderLevel,this);
+            this.model.on("change:angry",this.renderAngry,this);
         },
         render:function(){
             this.$el = $("<div class='monster'><lable class='monster-level'>lv"+this.model.get("level")+"</lable></div>")
@@ -169,6 +170,13 @@ define(function(require,exports,module){
         },
         renderLevel:function(){
             this.levelEl.html("lv"+this.model.get("level"));
+        },
+        renderAngry:function(){
+            if ( this.model.get("angry") && !this.model.previous("angry")) {
+                this.$el.append("<div class='status-angry'></div>")
+            } else if ( !this.model.get("angry") && this.model.previous("angry")) {
+                this.$(".status-angry").remove();
+            }
         },
         onMoveComplete:function(oldblock, newblock){
             var merge = oldblock.merge;
@@ -227,7 +235,10 @@ define(function(require,exports,module){
                 this.$el.addClass("attacking0");
                 var self = this;
                 setTimeout(function(){
-                    var hit = heroView.takeDamage(self.model.get("attack"));
+                    var att = self.model.get("attack");
+                    if ( self.model.get("angry") )
+                        att = att*3;
+                    var hit = heroView.takeDamage(att);
                     if ( !hit ) {
                         self.effecQueue.add("Miss!");
                     } else {
@@ -247,6 +258,10 @@ define(function(require,exports,module){
             }
         },
 
+        onGenerate:function(){
+        },
+        onNewRound:function(){
+        },
         onHitHero:function(){
             this.model.onHitHero();
         },
@@ -293,6 +308,26 @@ define(function(require,exports,module){
 
     })
 
+    exports.OrcView = exports.MonsterView.extend({
+        onNewRound:function(){
+            this.model.set({
+                angry:0
+            });
+        },
+        onGenerate:function(){
+            this.effecQueue.add("怒");
+            this.model.set({
+                angry:1
+            });
+        },
+        onMerged:function(){
+            this.effecQueue.add("怒");
+            this.model.set({
+                angry:1
+            });
+        }
+    })
+
     exports.GoblinView = exports.MonsterView.extend({
         onMerged:function(){
             this.effecQueue.add("Level Up");
@@ -332,6 +367,14 @@ define(function(require,exports,module){
             }
         },
         checkInRange:function(){
+            var x = this.model.get("position").x;
+            var y = this.model.get("position").y;
+            var heroX = window.hero.get("position").x;
+            var heroY = window.hero.get("position").y;
+            if (( x == heroX && y == heroY-1 ) || ( x == heroX && y == heroY+1 ) ||
+                ( y == heroY && x == heroX+1 ) || ( y == heroY && x == heroX-1 ) ){
+                return null;
+            }
             return 3;
         }
     })
@@ -345,10 +388,11 @@ define(function(require,exports,module){
     exports.ViewMap = {
         slime:exports.SlimeView,
         skeleton:exports.SkeletonView,
-        ogre:exports.OgreView,
         archer:exports.ArcherView,
         goblin:exports.GoblinView,
         mimic:exports.MimicView,
+        ogre:exports.OgreView,
+        orc:exports.OrcView,
         vampire:exports.VampireView
     };
 
@@ -386,7 +430,7 @@ define(function(require,exports,module){
         beTaken:function(){
             this.model.effectHappen();
             var self = this;
-            this.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", "margin-top":-blockSize.height/2,opacity:0.4});
+            this.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", "margin-top":-blockSize.height/2,opacity:0.4});
             setTimeout(function(){
                 self.model.destroy();
             },TIME_SLICE);
