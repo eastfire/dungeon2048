@@ -50,7 +50,7 @@ define(function(require,exports,module) {
                 type:"passive",
                 displayName:"体质",
                 level:1,
-                maxLevel:5
+                maxLevel:1000
             }
         },
         generateDescription:function(){
@@ -122,7 +122,7 @@ define(function(require,exports,module) {
                 type:"passive",
                 displayName:"恢复",
                 level:1,
-                maxLevel:5
+                maxLevel:6
             }
         },
         onGet:function(){
@@ -158,7 +158,7 @@ define(function(require,exports,module) {
                 type:"passive",
                 displayName:"敏捷",
                 level:1,
-                maxLevel:5
+                maxLevel:4
             }
         },
         onGet:function(){

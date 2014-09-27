@@ -49,6 +49,10 @@ define(function(require,exports,module) {
             text:"兽人<br/>出现和合并后<i><u>愤怒</u></i>(攻击力3倍)直到下回合<br/>攻击力：中（与等级相同）<br/>经验值：中",
             imageClass:"orc-help"
         },
+        "shaman":{
+            text:"萨满<br/>出现和合并后使周围怪物进入<i><u>愤怒</u></i>状态(攻击力3倍)直到下回合<br/>攻击力：始终为1<br/>经验值：中",
+            imageClass:"shaman-help"
+        },
         "skeleton":{
             text:"骷髅<br/>攻击力：中（与等级相同）<br/>经验值：中",
             imageClass:"skeleton-help"

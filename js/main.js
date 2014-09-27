@@ -70,7 +70,7 @@ define(function(require,exports,module){
             turn: 0,
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
-            monsterPool:["archer","goblin","mimic","ogre","orc","skeleton","slime","vampire"],
+            monsterPool:["archer","goblin","mimic","ogre","orc","shaman","skeleton","slime","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             generateItemRate: 0,
