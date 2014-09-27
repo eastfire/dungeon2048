@@ -59,6 +59,10 @@ define(function(require,exports,module){
                 this.effecQueue = new EffectQueue();
                 this.$el.append(this.effecQueue.render().el);
             }
+            var self = this;
+            this.$el.on("click",function(){
+                $("#mapblock"+self.model.get("position").x+"_"+self.model.get("position").y).click();
+            })
             return this;
         },
         renderDirection:function(){
