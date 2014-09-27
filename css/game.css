@@ -183,6 +183,22 @@
     background-image: url("../img/mimic2-4.png");
 }
 
+.monster.shaman.d0,.monster.shaman.d1,.monster.shaman.d2,.monster.shaman.d3 {
+    background-image: url("../img/shaman2-0.png");
+}
+.monster.shaman.d0.attacking0, .monster.shaman.d1.attacking0, .monster.shaman.d2.attacking0, .monster.shaman.d3.attacking0 {
+    background-image: url("../img/shaman2-3.png");
+}
+.monster.shaman.d0.attacking1, .monster.shaman.d1.attacking1, .monster.shaman.d2.attacking1, .monster.shaman.d3.attacking1 {
+    background-image: url("../img/shaman2-4.png");
+}
+.monster.shaman.d0.attacking0, .monster.shaman.d3.attacking0 {
+    transform:scaleX(-1);
+}
+.monster.shaman.d0.attacking1, .monster.shaman.d3.attacking1 {
+    transform:scaleX(-1);
+}
+
 .monster.vampire.d0,.monster.vampire.d1,.monster.vampire.d2,.monster.vampire.d3 {
     background-image: url("../img/vampire2-0.png");
 }
@@ -367,6 +383,9 @@
 }
 .orc-help {
     background-image: url("../img/orc1-0.png");
+}
+.shaman-help {
+    background-image: url("../img/shaman2-0.png");
 }
 .skeleton-help {
     background-image: url("../img/skeleton2-0.png");

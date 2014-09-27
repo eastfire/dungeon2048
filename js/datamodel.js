@@ -119,9 +119,14 @@ define(function(require,exports,module){
         }
     })
 
-    exports.Slime = exports.Monster.extend({
+
+
+    exports.Archer = exports.Monster.extend({
         calAttack:function(level){
-            return Math.round(level/2);
+            return 1;
+        },
+        calExp:function(level){
+            return Math.floor(level*3/2);
         }
     })
 
@@ -131,11 +136,7 @@ define(function(require,exports,module){
         }
     })
 
-    exports.Skeleton = exports.Monster.extend({
-        calExp:function(level){
-            return Math.floor(level*3/2);
-        }
-    })
+
 
     exports.Mimic = exports.Monster.extend({
         calExp:function(level){
@@ -158,6 +159,27 @@ define(function(require,exports,module){
         }
     })
 
+    exports.Shaman = exports.Monster.extend({
+        calAttack:function(level){
+            return 1;
+        },
+        calExp:function(level){
+            return Math.round(level*3/2);
+        }
+    })
+
+    exports.Skeleton = exports.Monster.extend({
+        calExp:function(level){
+            return Math.floor(level*3/2);
+        }
+    })
+
+    exports.Slime = exports.Monster.extend({
+        calAttack:function(level){
+            return Math.round(level/2);
+        }
+    })
+
     exports.Vampire = exports.Monster.extend({
         calAttack:function(level){
             return level*2;
@@ -170,23 +192,17 @@ define(function(require,exports,module){
         }
     })
 
-    exports.Archer = exports.Monster.extend({
-        calAttack:function(level){
-            return 1;
-        },
-        calExp:function(level){
-            return Math.floor(level*3/2);
-        }
-    })
+
 
     exports.ModelMap = {
         archer:exports.Archer,
         goblin:exports.Goblin,
         mimic:exports.Mimic,
-        skeleton:exports.Skeleton,
-        slime:exports.Slime,
         ogre:exports.Ogre,
         orc:exports.Orc,
+        shaman:exports.Shaman,
+        skeleton:exports.Skeleton,
+        slime:exports.Slime,
         vampire:exports.Vampire
     }
 

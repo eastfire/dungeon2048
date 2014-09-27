@@ -178,6 +178,7 @@ define(function(require,exports,module){
         renderAngry:function(){
             if ( this.model.get("angry") && !this.model.previous("angry")) {
                 this.$el.append("<div class='status-angry'></div>")
+                this.effecQueue.add("怒");
             } else if ( !this.model.get("angry") && this.model.previous("angry")) {
                 this.$(".status-angry").remove();
             }
@@ -265,6 +266,9 @@ define(function(require,exports,module){
         onGenerate:function(){
         },
         onNewRound:function(){
+            this.model.set({
+                angry:0
+            });
         },
         onHitHero:function(){
             this.model.onHitHero();
@@ -313,19 +317,12 @@ define(function(require,exports,module){
     })
 
     exports.OrcView = exports.MonsterView.extend({
-        onNewRound:function(){
-            this.model.set({
-                angry:0
-            });
-        },
         onGenerate:function(){
-            this.effecQueue.add("怒");
             this.model.set({
                 angry:1
             });
         },
         onMerged:function(){
-            this.effecQueue.add("怒");
             this.model.set({
                 angry:1
             });
@@ -336,6 +333,34 @@ define(function(require,exports,module){
         onMerged:function(){
             this.effecQueue.add("Level Up");
             this.model.setToLevel(this.model.get("level")+1);
+        }
+    })
+
+    exports.ShamanView = exports.MonsterView.extend({
+        checkMonster:function(x,y){
+            if ( !map[x] )
+                return;
+            var mapBlock = map[x][y];
+            if ( !mapBlock )
+                return;
+            if ( mapBlock.type == "monster") {
+                mapBlock.model.set("angry",1);
+            }
+        },
+        effectAround:function(){
+            var x = this.model.get("position").x;
+            var y = this.model.get("position").y;
+
+            this.checkMonster(x-1,y);
+            this.checkMonster(x+1,y);
+            this.checkMonster(x,y-1);
+            this.checkMonster(x,y+1);
+        },
+        onGenerate:function(){
+            this.effectAround();
+        },
+        onMerged:function(){
+            this.effectAround();
         }
     })
 
@@ -390,13 +415,14 @@ define(function(require,exports,module){
     })
 
     exports.ViewMap = {
-        slime:exports.SlimeView,
-        skeleton:exports.SkeletonView,
         archer:exports.ArcherView,
         goblin:exports.GoblinView,
         mimic:exports.MimicView,
         ogre:exports.OgreView,
         orc:exports.OrcView,
+        shaman:exports.ShamanView,
+        slime:exports.SlimeView,
+        skeleton:exports.SkeletonView,
         vampire:exports.VampireView
     };
 
@@ -451,7 +477,8 @@ define(function(require,exports,module){
         },
         render:function(){
             this.type.html(this.model.get("typeDisplayName"))
-            this.hp.html("<span class='hp-symbol'>♥</span>"+this.model.get("hp")+"/"+this.model.get("maxHp"));
+            var hp = this.model.get("hp");
+            this.hp.html("<span class='hp-symbol'>♥</span>"+(hp>0?hp:0)+"/"+this.model.get("maxHp"));
             this.level.html("LV:"+this.model.get("level"));
             this.exp.html("EXP:"+this.model.get("exp")+"/"+this.model.get("maxExp"));
             if ( window.windowOriention == "landscape") {
