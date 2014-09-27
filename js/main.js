@@ -51,6 +51,14 @@ define(function(require,exports,module){
     window.PHASE_MONSTER_ATTACK = 4;
     window.PHASE_GAME_OVER = 10;
 
+    window.PHASE_ASK_DIRECTION = 1.1;
+    window.PHASE_ASK_BLOCK = 1.2;
+    window.PHASE_ASK_MONSTER = 1.3;
+    window.PHASE_ASK_EMPTY_BLOCK = 1.4;
+    window.PHASE_ASK_ITEM = 1.5;
+    window.PHASE_VERTICAL_LINE = 1.6;
+    window.PHASE_HORIZONTAL_LINE = 1.7;
+
     window.TIME_SLICE = 150;
 
     window.mapWidth = 5;
@@ -290,7 +298,7 @@ define(function(require,exports,module){
 
     window.showLevelUpDialog = function(callback){
         var skillArray = getRandomItems(window.gameStatus.skillPool, 2);
-        var el = $("<div class='levelup-body'>升级了！<br/>请选择</div>");
+        var el = $("<div class='levelup-body'>你升级了！<br/>请选择技能</div>");
         gameStatus.showingDialog = true;
         $(".main-window").append(el);
         _.each(skillArray, function(skillEntry){
@@ -385,7 +393,36 @@ define(function(require,exports,module){
         $(".main-window").addClass(window.windowOriention);
         for ( var i = 0 ; i < mapWidth; i++){
             for ( var j = 0 ; j < mapHeight; j++){
-                mapEl.append(renderMapBlock(map[i][j]));
+                var mapBlock = renderMapBlock(map[i][j]);
+                mapBlock.attr({
+                    x:i,
+                    y:j,
+                    id: "mapblock"+i+"_"+j
+                })
+                mapEl.append(mapBlock);
+                mapBlock.on("click", function () {
+                    var x = $(this).attr("x");
+                    var y = $(this).attr("y");
+                    //console.log("x:"+x+" y:"+y)
+                    if (gameStatus.phase == window.PHASE_ASK_BLOCK) {
+                        returnUserInput({
+                            x: x,
+                            y: y
+                        })
+                    } else if (gameStatus.phase == window.PHASE_ASK_EMPTY_BLOCK) {
+                        if (map[x][y].type == "blank")
+                            returnUserInput({
+                                x: x,
+                                y: y
+                            })
+                    } else if (gameStatus.phase == window.PHASE_ASK_MONSTER) {
+                        if (map[x][y].type == "monster")
+                            returnUserInput(map[x][y].view)
+                    } else if (gameStatus.phase == window.PHASE_ASK_ITEM) {
+                        if (map[x][y].type == "item")
+                            returnUserInput(map[x][y].view)
+                    }
+                })
             }
         }
     }
@@ -398,36 +435,64 @@ define(function(require,exports,module){
 
     }
 
+    window.askContext = null;
+    window.askUserInput = function(what, callback, context, additionalParams){
+        var prevPhase = gameStatus.phase;
+        gameStatus.phase = window["PHASE_ASK_"+what.toUpperCase()];
+        askContext = {
+            callback:callback,
+            context:context,
+            params:additionalParams,
+            prevPhase: prevPhase
+        };
+    }
+
+    var returnUserInput = function(result){
+        window.askContext.callback.call(askContext.context, result, askContext.params);
+        gameStatus.phase = askContext.prevPhase;
+    }
+
+    window.isDirectionInputValid = function(){
+        return (gameStatus.phase == PHASE_USER || gameStatus.phase == PHASE_ASK_DIRECTION ) && !gameStatus.showingDialog;
+    }
+
+    var directionInput = function(direction){
+        if ( gameStatus.phase == PHASE_ASK_DIRECTION ) {
+            returnUserInput(direction);
+        } else
+            calMove(direction);
+    }
+
     var initEvent = function(){
         var hammertime = Hammer($('.map')[0]).on("swipeup", function(event) {
-            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingDialog )
-                calMove(0);
+            if ( window.isDirectionInputValid() )
+                directionInput(0);
         }).on("swiperight", function(event) {
-            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingDialog )
-                calMove(1);
+            if ( window.isDirectionInputValid() )
+                directionInput(1);
         }).on("swipedown", function(event) {
-            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingDialog )
-                calMove(2);
+            if ( window.isDirectionInputValid() )
+                directionInput(2);
         }).on("swipeleft", function(event) {
-            if ( gameStatus.phase == PHASE_USER && !gameStatus.showingDialog )
-                calMove(3);
+            if ( window.isDirectionInputValid() )
+                directionInput(3);
         });
 
         $(document).on("keydown",function(event){
-            if ( gameStatus.phase != PHASE_USER || gameStatus.showingDialog )
+            if ( !window.isDirectionInputValid() )
                 return;
             switch(event.keyCode){
                 case 38:
-                    calMove(0);
+                    directionInput(0);
                     break;
                 case 39:
-                    calMove(1);
+                    directionInput(1);
                     break;
                 case 40:
-                    calMove(2);
+                    directionInput(2);
                     break;
                 case 37:
-                    calMove(3);
+                    directionInput(3);
                     break;
             }
         })
@@ -603,31 +668,6 @@ define(function(require,exports,module){
         }
         gameStatus.phase = PHASE_GENERATE;
         gameStatus.turn ++;
-        /*if ( gameStatus.turn == 6 ) {
-            gameStatus.generateItemRate = 0.05;
-            gameStatus.currentMonsterTypes.push("mimic")
-        } else if ( gameStatus.turn == 18 ) {
-            gameStatus.currentMonsterTypes.push("slime")
-            gameStatus.currentMonsterTypes.push("skeleton")
-            gameStatus.currentMonsterTypes.push("ogre")
-        } else if ( gameStatus.turn == 36 ) {
-        } else if ( gameStatus.turn == 50 ) {
-            gameStatus.currentMonsterTypes.push("ogre")
-        } else if ( gameStatus.turn == 100 ) {
-            gameStatus.currentMonsterLevels.push(1);
-            gameStatus.currentMonsterLevels.push(1);
-            gameStatus.currentMonsterLevels.push(2);
-            gameStatus.currentMonsterTypes.push("archer")
-        } else if ( gameStatus.turn == 120 ) {
-            gameStatus.currentMonsterTypes.push("skeleton")
-            gameStatus.currentMonsterTypes.push("ogre")
-            gameStatus.currentMonsterTypes.push("archer")
-        } else if ( gameStatus.turn == 150 ) {
-            gameStatus.currentMonsterLevels.push(2);
-            gameStatus.currentMonsterTypes.push("vampire")
-        } else if ( gameStatus.turn == 180 ) {
-            gameStatus.currentMonsterTypes.push("vampire")
-        }*/
         if ( gameStatus.turn == 6) {
             gameStatus.generateItemRate = 0.05;
             gameStatus.currentMonsterTypeNumber = 2;

@@ -131,10 +131,10 @@
 .monster.goblin.d0.attacking1, .monster.goblin.d1.attacking1, .monster.goblin.d2.attacking1, .monster.goblin.d3.attacking1 {
     background-image: url("../img/goblin1-4.png");
 }
-.monster.goblin.d2.attacking0, .monster.goblin.d3.attacking0 {
+.monster.goblin.d0.attacking0, .monster.goblin.d3.attacking0 {
     transform:scaleX(-1);
 }
-.monster.goblin.d2.attacking1, .monster.goblin.d3.attacking1 {
+.monster.goblin.d0.attacking1, .monster.goblin.d3.attacking1 {
     transform:scaleX(-1);
 }
 
@@ -147,10 +147,10 @@
 .monster.orc.d0.attacking1, .monster.orc.d1.attacking1, .monster.orc.d2.attacking1, .monster.orc.d3.attacking1 {
     background-image: url("../img/orc1-4.png");
 }
-.monster.orc.d2.attacking0, .monster.orc.d3.attacking0 {
+.monster.orc.d0.attacking0, .monster.orc.d3.attacking0 {
     transform:scaleX(-1);
 }
-.monster.orc.d2.attacking1, .monster.orc.d3.attacking1 {
+.monster.orc.d0.attacking1, .monster.orc.d3.attacking1 {
     transform:scaleX(-1);
 }
 
@@ -386,6 +386,8 @@
     background-color: rgba(255, 255, 255, 0.85);
     top:0;
     left:0;
+    font-size: 2em;
+    text-align: center;
 }
 
 .levelup-body .skill {
