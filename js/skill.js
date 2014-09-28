@@ -160,7 +160,7 @@ define(function(require,exports,module) {
                 type:"passive",
                 displayName:"敏捷",
                 level:1,
-                maxLevel:4
+                maxLevel:5
             }
         },
         onGet:function(){
