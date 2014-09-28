@@ -30,7 +30,7 @@ define(function(require,exports,module) {
 
     exports.monsterDescription = {
         "archer":{
-            text:"骷髅弓箭手<br/>远程攻击，近身不攻击<br/>攻击力：始终为1<br/>经验值：中",
+            text:"骷髅弓箭手<br/>远程攻击<br/>攻击力：始终为1<br/>经验值：中",
             imageClass:"archer-help"
         },
         "goblin":{

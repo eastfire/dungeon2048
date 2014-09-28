@@ -62,7 +62,7 @@ define(function(require,exports,module){
            })
        },
        calExpRequire:function(lv){
-           return Math.ceil(lv*10*(1-0.05*this.get("cunning")));
+           return Math.ceil(lv*10*(1-(CUNNING_EFFECT/100)*this.get("cunning")));
        },
        onConstitutionChange:function(){
            var maxHp = this.calMaxHp(this.get("level"));
@@ -136,8 +136,6 @@ define(function(require,exports,module){
         }
     })
 
-
-
     exports.Mimic = exports.Monster.extend({
         calExp:function(level){
             return 1;
@@ -149,7 +147,7 @@ define(function(require,exports,module){
             return level*2;
         },
         calExp:function(level){
-            return level*(level-1)+1;
+            return 3*level-1;
         }
     })
 
@@ -182,10 +180,10 @@ define(function(require,exports,module){
 
     exports.Vampire = exports.Monster.extend({
         calAttack:function(level){
-            return level*2;
+            return level*level;
         },
         calExp:function(level){
-            return level*(level-1)+1;
+            return level*level+1;
         },
         onHitHero:function(){
             this.setToLevel(this.get("level")+1);

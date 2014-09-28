@@ -138,7 +138,7 @@ define(function(require,exports,module){
             }
         },
         takeDamage:function(attack){
-            if ( Math.random() < this.model.get("dexterity")*0.05 ) {
+            if ( Math.random() < this.model.get("dexterity")*DIXTERITY_EFFECT/100 ) {
                 return false;
             }
             var realDamage = attack - this.model.get("defend");
@@ -396,14 +396,14 @@ define(function(require,exports,module){
             }
         },
         checkInRange:function(){
-            var x = this.model.get("position").x;
-            var y = this.model.get("position").y;
-            var heroX = window.hero.get("position").x;
-            var heroY = window.hero.get("position").y;
-            if (( x == heroX && y == heroY-1 ) || ( x == heroX && y == heroY+1 ) ||
-                ( y == heroY && x == heroX+1 ) || ( y == heroY && x == heroX-1 ) ){
-                return null;
-            }
+//            var x = this.model.get("position").x;
+//            var y = this.model.get("position").y;
+//            var heroX = window.hero.get("position").x;
+//            var heroY = window.hero.get("position").y;
+//            if (( x == heroX && y == heroY-1 ) || ( x == heroX && y == heroY+1 ) ||
+//                ( y == heroY && x == heroX+1 ) || ( y == heroY && x == heroX-1 ) ){
+//                return null;
+//            }
             return 3;
         }
     })
@@ -500,7 +500,7 @@ define(function(require,exports,module){
             this.queue.push(string);
             if ( !this.isRunning ){
                 this.start();
-            }
+            } -----------------
         },
         start:function(){
             this.isRunning = true;

@@ -1,4 +1,6 @@
 define(function(require,exports,module) {
+    window.DIXTERITY_EFFECT = 3;
+    window.CUNNING_EFFECT = 5;
     exports.SkillView = Backbone.View.extend({
         initialize:function(options){
             if ( options.mode == "select" ) {
@@ -75,7 +77,7 @@ define(function(require,exports,module) {
             window.hero.set("cunning", this.get("level"))
         },
         generateDescription:function(){
-            return "升级所需的经验值减少"+(5*this.get("level"))+"%";
+            return "升级所需的经验值减少"+(CUNNING_EFFECT*this.get("level"))+"%";
         }
     })
 
@@ -165,7 +167,7 @@ define(function(require,exports,module) {
             window.hero.set("dexterity", this.get("level"))
         },
         generateDescription:function(){
-            return "有"+(5*this.get("level"))+"%的概率躲过怪物的攻击";
+            return "有"+(DIXTERITY_EFFECT*this.get("level"))+"%的概率躲过怪物的攻击";
         }
     })
 
