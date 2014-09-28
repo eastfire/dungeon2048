@@ -62,7 +62,7 @@ define(function(require,exports,module) {
             imageClass:"slime-help"
         },
         "vampire":{
-            text:"吸血鬼<br/>每次击中英雄后升级<br/>攻击力：强（为等级的2倍）<br/>经验值：高",
+            text:"吸血鬼<br/>每次击中英雄后升级<br/>攻击力：很强（为等级的平方）<br/>经验值：很高",
             imageClass:"vampire-help"
         }
     }

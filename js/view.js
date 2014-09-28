@@ -238,28 +238,30 @@ define(function(require,exports,module){
                 var moveY = y  + increment[attackDirection].y * blockSize.height*0.35;
                 this.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:moveX, top:moveY});
                 this.$el.addClass("attacking0");
-                var self = this;
-                setTimeout(function(){
-                    var att = self.model.get("attack");
-                    if ( self.model.get("angry") )
-                        att = att*3;
-                    var hit = heroView.takeDamage(att);
-                    if ( !hit ) {
-                        self.effecQueue.add("Miss!");
-                    } else {
-                        self.onHitHero();
-                    }
-                    self.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
-                },TIME_SLICE);
-                setTimeout(function(){
-                    self.$el.removeClass("attacking0").addClass("attacking1");
-                },TIME_SLICE/2);
-                setTimeout(function(){
-                    self.$el.removeClass("attacking1").addClass("attacking0");
-                },TIME_SLICE*3/2);
-                setTimeout(function(){
-                    self.$el.removeClass("attacking0");
-                },TIME_SLICE*2);
+
+                (function t(self) {
+                    setTimeout(function () {
+                        var att = self.model.get("attack");
+                        if (self.model.get("angry"))
+                            att = att * 3;
+                        var hit = heroView.takeDamage(att);
+                        if (!hit) {
+                            self.effecQueue.add("Miss!");
+                        } else {
+                            self.onHitHero();
+                        }
+                        self.$el.css({transition: "left " + TIME_SLICE / 1000 + "s ease-in-out 0s,top " + TIME_SLICE / 1000 + "s ease-in-out 0s", left: x, top: y});
+                    }, TIME_SLICE);
+                    setTimeout(function(){
+                        self.$el.removeClass("attacking0").addClass("attacking1");
+                    },TIME_SLICE/2);
+                    setTimeout(function(){
+                        self.$el.removeClass("attacking1").addClass("attacking0");
+                    },TIME_SLICE*3/2);
+                    setTimeout(function(){
+                        self.$el.removeClass("attacking0");
+                    },TIME_SLICE*2);
+                })(this);
             }
         },
 
@@ -376,23 +378,24 @@ define(function(require,exports,module){
             var attackDirection = this.checkInRange();
             if ( attackDirection != null ) {
                 this.$el.addClass("attacking0");
-                var self = this;
-                setTimeout(function(){
-                    var hit = heroView.takeDamage(self.model.get("attack"));
-                    if ( !hit ) {
-                        self.effecQueue.add("Miss!");
-                    }
-                    self.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
-                },TIME_SLICE);
-                setTimeout(function(){
-                    self.$el.removeClass("attacking0").addClass("attacking1");
-                },TIME_SLICE/2);
-                setTimeout(function(){
-                    self.$el.removeClass("attacking1").addClass("attacking2");
-                },TIME_SLICE*3/2);
-                setTimeout(function(){
-                    self.$el.removeClass("attacking2");
-                },TIME_SLICE*2);
+                (function t(self) {
+                    setTimeout(function () {
+                        var hit = heroView.takeDamage(self.model.get("attack"));
+                        if (!hit) {
+                            self.effecQueue.add("Miss!");
+                        }
+                        self.$el.css({transition: "left " + TIME_SLICE / 1000 + "s ease-in-out 0s,top " + TIME_SLICE / 1000 + "s ease-in-out 0s", left: x, top: y});
+                    }, TIME_SLICE);
+                    setTimeout(function () {
+                        self.$el.removeClass("attacking0").addClass("attacking1");
+                    }, TIME_SLICE / 2);
+                    setTimeout(function () {
+                        self.$el.removeClass("attacking1").addClass("attacking2");
+                    }, TIME_SLICE * 3 / 2);
+                    setTimeout(function () {
+                        self.$el.removeClass("attacking2");
+                    }, TIME_SLICE * 2);
+                })(this);
             }
         },
         checkInRange:function(){
