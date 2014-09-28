@@ -73,6 +73,7 @@ define(function(require,exports,module){
             monsterPool:["archer","goblin","mimic","ogre","orc","shaman","skeleton","slime","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
+            currentMonsterMaxLevel : 1,
             generateItemRate: 0,
             currentItemTypes:["potion"],
             tutorial:{
@@ -163,6 +164,16 @@ define(function(require,exports,module){
         for ( var i = 0; i < gameStatus.currentMonsterWave.length; i++){
             for ( var j = 0; j < i+1; j++ ){
                 gameStatus.currentMonsterTypes.push( gameStatus.currentMonsterWave[i]);
+            }
+        }
+    }
+
+    var calMonsterLevel = function(){
+        gameStatus.currentMonsterMaxLevel ++;
+        gameStatus.currentMonsterLevels = [];
+        for ( var i = 1; i <= gameStatus.currentMonsterMaxLevel; i++) {
+            for (var j = 0; j < i; j++){
+                gameStatus.currentMonsterLevels.push(gameStatus.currentMonsterMaxLevel-i+1);
             }
         }
     }
@@ -678,8 +689,13 @@ define(function(require,exports,module){
         } else if ( gameStatus.turn == 60 ) {
             gameStatus.currentMonsterTypeNumber = 4;
             calMonsterWave();
-        } else if ( gameStatus.turn % 30 == 0 ) {
-            calMonsterWave();
+        } else {
+            if ( gameStatus.turn % 33 == 0 ) {
+                calMonsterWave();
+            }
+            if ( gameStatus.turn % 101 == 0 ) {
+                calMonsterLevel();
+            }
         }
 
         generateMonster();
