@@ -500,7 +500,7 @@ define(function(require,exports,module){
             this.queue.push(string);
             if ( !this.isRunning ){
                 this.start();
-            } -----------------
+            }
         },
         start:function(){
             this.isRunning = true;
