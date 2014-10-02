@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-09-28 v1.0.1
+# 2014-10-02 v1.0.1
 /css/bootstrap.css
 /css/bootstrap-theme.css
 /css/game.css
@@ -38,10 +38,11 @@ CACHE MANIFEST
 /img/vampire2-0.png
 /img/vampire2-1.png
 /img/vampire2-2.png
-
+#item
 /img/potion.png
+#status
 /img/status-angry.png
-
+#hero
 /img/warrior0-0.png
 /img/warrior0-1.png
 /img/warrior0-2.png
@@ -62,7 +63,7 @@ CACHE MANIFEST
 /img/warrior3-2.png
 /img/warrior3-3.png
 /img/warrior3-4.png
-
+#skill
 /img/skill-constitution.png
 /img/skill-cunning.png
 /img/skill-dexterity.png
