@@ -50,7 +50,7 @@ define(function(require,exports,module) {
             imageClass:"orc-help"
         },
         "shaman":{
-            text:"萨满<br/>出现和合并后使周围怪物进入<i><u>愤怒</u></i>状态(攻击力3倍)直到下回合<br/>攻击力：始终为1<br/>经验值：中",
+            text:"萨满<br/>出现和合并后使周围怪物进入<i><u>愤怒</u></i>状态(攻击力3倍)直到下回合<br/>攻击力：弱（为等级的1/2）<br/>经验值：中",
             imageClass:"shaman-help"
         },
         "skeleton":{
@@ -62,7 +62,7 @@ define(function(require,exports,module) {
             imageClass:"slime-help"
         },
         "vampire":{
-            text:"吸血鬼<br/>每次击中英雄后升级<br/>攻击力：很强（为等级的平方）<br/>经验值：很高",
+            text:"吸血鬼<br/>每次击中英雄后升级<br/>攻击力：非常强（为等级的平方）<br/>经验值：非常高",
             imageClass:"vampire-help"
         }
     }
