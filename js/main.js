@@ -489,7 +489,14 @@ define(function(require,exports,module){
                 directionInput(3);
         });
 
-        $(document).on("keydown",function(event){
+        $(document).on("keydown",function(event) {
+            if (gameStatus.showingDialog) {
+                if ( $(".help").length ) {
+                    $(".help").remove();
+                    window.gameStatus.showingDialog = false;
+                    return;
+                }
+            }
             if ( !window.isDirectionInputValid() )
                 return;
             switch(event.keyCode){
@@ -680,7 +687,7 @@ define(function(require,exports,module){
         gameStatus.phase = PHASE_GENERATE;
         gameStatus.turn ++;
         if ( gameStatus.turn == 6) {
-            gameStatus.generateItemRate = 0.05;
+            gameStatus.generateItemRate = TREASURE_HUNTING_EFFECT/100;
             gameStatus.currentMonsterTypeNumber = 2;
             calMonsterWave();
         } else if ( gameStatus.turn == 30 ) {

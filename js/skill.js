@@ -1,6 +1,11 @@
 define(function(require,exports,module) {
     window.DIXTERITY_EFFECT = 3;
     window.CUNNING_EFFECT = 5;
+    window.CONSTITUTION_EFFECT = 10;
+    window.WISDOM_EFFECT = 10;
+    window.TREASURE_HUNTING_EFFECT = 5;
+    window.COOLING_EFFECT = 5;
+
     exports.SkillView = Backbone.View.extend({
         initialize:function(options){
             if ( options.mode == "select" ) {
@@ -56,7 +61,7 @@ define(function(require,exports,module) {
             }
         },
         generateDescription:function(){
-            return "生命值上限加5";
+            return "生命值上限加"+CONSTITUTION_EFFECT;
         },
         onGet:function(){
             window.hero.set("constitution", this.get("level"))
@@ -95,7 +100,7 @@ define(function(require,exports,module) {
             window.hero.set("cooling", this.get("level"))
         },
         generateDescription:function(){
-            return "技能的冷却时间减少"+(5*this.get("level"))+"%";
+            return "技能的冷却时间减少"+(COOLING_EFFECT*this.get("level"))+"%";
         }
     })
 
@@ -113,7 +118,7 @@ define(function(require,exports,module) {
             window.hero.set("wisdom", this.get("level"))
         },
         generateDescription:function(){
-            return "杀死6级或以上怪物时多获得"+(10*this.get("level"))+"%的经验值";
+            return "杀死6级或以上怪物时多获得"+(WISDOM_EFFECT*this.get("level"))+"%的经验值";
         }
     })
 
@@ -149,7 +154,7 @@ define(function(require,exports,module) {
             window.hero.set("treasureHunting", this.get("level"))
         },
         generateDescription:function(){
-            return "杀死怪物掉落宝物的概率增加"+(this.get("level")*5)+"%";
+            return "杀死怪物掉落宝物的概率增加"+(this.get("level")*TREASURE_HUNTING_EFFECT)+"%";
         }
     })
 

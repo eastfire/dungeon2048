@@ -41,7 +41,7 @@ define(function(require,exports,module){
            var currentExp = this.get("exp");
            var expRequire = this.get("maxExp");
            if ( level >= WISDOM_THRESHOLD ){
-                exp += Math.round( exp * this.get("wisdom")*0.1 );
+                exp += Math.round( exp * this.get("wisdom")*WISDOM_EFFECT/100 );
            }
            if ( currentExp+exp >= expRequire ) {
                this.levelUp();
@@ -62,12 +62,12 @@ define(function(require,exports,module){
            })
        },
        calExpRequire:function(lv){
-           return Math.ceil(lv*10*(1-(CUNNING_EFFECT/100)*this.get("cunning")));
+           return Math.round( (Math.log10(lv)*lv*16.61+10)*(1-(CUNNING_EFFECT/100)*this.get("cunning")));
        },
        onConstitutionChange:function(){
            var maxHp = this.calMaxHp(this.get("level"));
            this.set({
-               hp: ( this.get("constitution") - this.previous("constitution") ) * 5 + this.get("hp"),
+               hp: ( this.get("constitution") - this.previous("constitution") ) * CONSTITUTION_EFFECT + this.get("hp"),
                maxHp: maxHp
            });
        },
@@ -77,7 +77,7 @@ define(function(require,exports,module){
            });
        },
        calMaxHp:function(lv){
-           return lv*10+this.get("constitution")*5;
+           return lv*10+this.get("constitution")*CONSTITUTION_EFFECT;
        }
    })
 
@@ -159,7 +159,7 @@ define(function(require,exports,module){
 
     exports.Shaman = exports.Monster.extend({
         calAttack:function(level){
-            return 1;
+            return Math.round(level/2);
         },
         calExp:function(level){
             return Math.round(level*3/2);
@@ -183,7 +183,7 @@ define(function(require,exports,module){
             return level*level;
         },
         calExp:function(level){
-            return level*level+1;
+            return level*level;
         },
         onHitHero:function(){
             this.setToLevel(this.get("level")+1);
