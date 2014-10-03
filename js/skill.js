@@ -3,6 +3,7 @@ define(function(require,exports,module) {
     window.CUNNING_EFFECT = 5;
     window.CONSTITUTION_EFFECT = 10;
     window.WISDOM_EFFECT = 10;
+    window.WISDOM_THRESHOLD = 6;
     window.TREASURE_HUNTING_EFFECT = 5;
     window.COOLING_EFFECT = 5;
 
@@ -118,7 +119,7 @@ define(function(require,exports,module) {
             window.hero.set("wisdom", this.get("level"))
         },
         generateDescription:function(){
-            return "杀死6级或以上怪物时多获得"+(WISDOM_EFFECT*this.get("level"))+"%的经验值";
+            return "杀死"+WISDOM_THRESHOLD+"级或以上怪物时多获得"+(WISDOM_EFFECT*this.get("level"))+"%的经验值";
         }
     })
 

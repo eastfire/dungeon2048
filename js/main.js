@@ -216,12 +216,12 @@ define(function(require,exports,module){
         })
         block.model = m;
         var monsterView = new TempView({model:m});
-        mapEl.append(monsterView.render().$el);
+        mapEl.append(monsterView.generate().$el);
 
         block.view = monsterView;
-        setTimeout(function(){
+        /*setTimeout(function(){
             monsterView.onGenerate.call(monsterView);
-        },10)
+        },10)*/
     }
 
     var generateMonster = function(){
