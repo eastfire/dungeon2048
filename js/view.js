@@ -172,7 +172,31 @@ define(function(require,exports,module){
             //this.levelEl.css({"line-height":window.blockSize.height+"px"});
             return this;
         },
+        generate:function(){
+            this.render();
+            this.levelEl.hide();
+            this.$el.css({
+                opacity:0,
+                transform:"scale(0.1)",
+                transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s"
+            })
+            var self = this;
+            setTimeout(function(){
+                self.$el.css({
+                    opacity:1,
+                    transform:"scale(1)"
+                })
+                self.onGenerate.call(self);
+            },10);
+            setTimeout(function(){
+                self.levelEl.show();
+            },TIME_SLICE);
+            return this;
+        },
         renderLevel:function(){
+            if ( this.model.get("level") >= WISDOM_THRESHOLD ) {
+
+            }
             this.levelEl.html("lv"+this.model.get("level"));
         },
         renderAngry:function(){
@@ -282,6 +306,7 @@ define(function(require,exports,module){
 
         onMergeTo:function(mergeToModel, mergeToView){
             mergeToModel.setToLevel(this.model.get("level")+mergeToModel.get("level"));
+            mergeToModel.mergeStatus(this.model);
             mergeToView.onMerged.call(mergeToView);
         },
         onMerged:function(){

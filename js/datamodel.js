@@ -1,7 +1,5 @@
 define(function(require,exports,module){
-    window.WISDOM_THRESHOLD = 6;
-
-   exports.Hero = Backbone.Model.extend({
+    exports.Hero = Backbone.Model.extend({
        UP:0,
        RIGHT:1,
        DOWN:2,
@@ -116,6 +114,11 @@ define(function(require,exports,module){
         },
         onHitHero:function(){
 
+        },
+        mergeStatus:function(mergeToModel){
+            if ( mergeToModel.get("angry") ){
+                this.set("angry", mergeToModel.get("angry"))
+            }
         }
     })
 

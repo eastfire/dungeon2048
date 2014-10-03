@@ -3,7 +3,7 @@ define(function(require,exports,module) {
         initialize:function(options){
             var self = this;
             this.$el.addClass("help")
-            this.$el.html("<div class='help-body'><div class='help-image'></div><div class='help-text'></div></div><label class='close-help'>&gt;&gt;点击（按任意键）继续&lt;&lt;</button>")
+            this.$el.html("<div class='help-body'><div class='help-image'></div><div class='help-text'></div></div><label class='close-help'>&gt;&gt;点击（任意键）继续&lt;&lt;</button>")
             this.helpImage = this.$(".help-image")
             setTimeout(function(){
                 self.helpImage.css({height: self.helpImage.width()});
