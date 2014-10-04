@@ -455,6 +455,9 @@ body {
 .hero-active-skill .skill-level {
     font-size: 1em;
 }
+.main-window.portrait .hero-active-skill .skill {
+    display: inline-block;
+}
 .skill-level {
     text-align: center;
 }
