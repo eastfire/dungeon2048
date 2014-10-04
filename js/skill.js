@@ -24,23 +24,62 @@ define(function(require,exports,module) {
                 setTimeout(function(){
                     image.height(image.width())
                 },100)
-            } else if ( options.mode == "active") {
+            } else if ( options.mode == "list") {
+                this.$el.addClass("skill");
+                var lvStr = this.model.get("maxLevel") > 1 ? ( "lv" + this.model.get("level") ) : "";
+                this.$el.html("<div class='skill-image-icon'>" +
+                    "<div class='skill-image skill-image-"+this.model.get("name")+"'></div>" +
+                    "<div class='skill-cool-down'></div>"+
+                    "<div class='skill-level'>" + this.model.get("displayName")+ lvStr + "</div>"+
+                    "</div>")
+                this.$el.css({
+                    "font-size":blockSize.height/6+"px"
+                })
 
+                var image = this.$(".skill-image");
+                image.height(blockSize.height/2).width(blockSize.width/2)
+                this.$(".skill-cool-down").css("line-height",blockSize.height/2+"px");
+                this.coolDown = this.$(".skill-cool-down");
+                this.renderCoolDown();
+                this.model.on("change:coolDown",this.renderCoolDown,this);
+                this.model.on("change:currentCount",this.renderCoolDown,this);
+                var self = this;
+                this.$el.on("click",function(){
+                    if ( window.gameStatus.phase != PHASE_USER )
+                        return;
+                    var count = self.model.get("currentCount");
+                    var coolDown = self.model.calCoolDown();
+                    if ( count >= coolDown ) {
+                        self.model.onActive.call(self.model);
+                    }
+                })
             }
         },
-        onActive:function(){
-
+        renderCoolDown:function(){
+            var count = this.model.get("currentCount");
+            var coolDown = this.model.calCoolDown();
+            if ( count < coolDown ) {
+                this.coolDown.show();
+                this.coolDown.html((coolDown - count))
+                this.$(".skill-image").addClass("used");
+            } else {
+                this.coolDown.hide();
+                this.$(".skill-image").removeClass("used");
+            }
         }
     })
 
     exports.Skill = Backbone.Model.extend({
+        modelClass:null,
         defaults:function(){
             return {
                 name:"",
                 type:"",
                 displayName:"",
                 level:1,
-                maxLevel:5
+                maxLevel:5,
+                currentCount:1,
+                coolDown:1
             }
         },
         levelup:function(){
@@ -48,6 +87,23 @@ define(function(require,exports,module) {
         },
         generateDescription:function(){
             return "";
+        },
+        calCoolDown:function(){
+            return Math.max(1, Math.round( this.get("coolDown") * (1-window.COOLING_EFFECT/100*window.hero.get("cooling"))));
+        },
+        clone:function(){
+            if ( this.modelClass != null )
+                return new this.modelClass(window.clone(this.toJSON()))
+            return null;
+        },
+        used:function(){
+            this.set("currentCount",0);
+        },
+        onNewRound:function(){
+            var count = this.get("currentCount");
+            if ( count < this.calCoolDown() ){
+                this.set("currentCount", count+1);
+            }
         }
     })
 
@@ -177,6 +233,47 @@ define(function(require,exports,module) {
         }
     })
 
+    exports.SlashSkill = exports.Skill.extend({
+        modelClass:exports.SlashSkill,
+        defaults:function(){
+            return {
+                name:"slash",
+                type:"active",
+                displayName:"顺劈",
+                level:1,
+                maxLevel:1,
+                currentCount:5,
+                coolDown:5
+            }
+        },
+        generateDescription:function(){
+            return "英雄下次攻击同时攻击怪物后面的一个怪物";
+        },
+        onActive:function(){
+            this.set("skill-slash-active",1);
+            this.used();
+        },
+        onAttack:function(x,y, direction){
+            var mx = x;
+            var my = y;
+            if ( this.get("skill-slash-active") ){
+                mx += increment[direction].x;
+                my += increment[direction].y;
+                var block = getMapBlock(mx,my);
+                if ( block && block.type == "monster" ) {
+                    var monsterView = block.view;
+                    setTimeout(function(){
+                        monsterView.beAttacked(direction,window.hero.get("attack"));
+                    },TIME_SLICE)
+                }
+            }
+        },
+        onNewRound:function(){
+            exports.Skill.prototype.onNewRound.call(this);
+            this.set("skill-slash-active",0);
+        }
+    })
+
     exports.commonSkillPoolEntry = [
         exports.ConstitutionSkill,
         exports.CunningSkill,
@@ -187,14 +284,25 @@ define(function(require,exports,module) {
         exports.RecoverSkill
     ]
 
-    exports.getCommonSkillPool = function(){
-        return _.map(exports.commonSkillPoolEntry, genSkill)
-    }
+    exports.warriorSkillPoolEntry = [
+        exports.SlashSkill
+    ]
 
-    var genSkill = function(entry){
-        return {
-            viewClass: exports.SkillView,
-            model: new entry()
+    exports.getSkillPool = function(type){
+        var array = [];
+        _.each(exports.commonSkillPoolEntry, function(skill){
+             var s = new skill();
+             s.modelClass = skill;
+             array.push(s)
+        });
+        var pool2 = exports[type+"SkillPoolEntry"];
+        if ( pool2 ) {
+            _.each( pool2, function(skill){
+                var s = new skill();
+                s.modelClass = skill;
+                array.push(s)
+            });
         }
+        return array;
     }
 })
