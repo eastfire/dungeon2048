@@ -39,7 +39,7 @@ define(function(require,exports,module) {
                 this.$(".skill-image-icon").width(blockSize.width*2/3)
                 var image = this.$(".skill-image");
                 image.height(blockSize.height*2/3).width(blockSize.width*2/3)
-                this.$(".skill-cool-down").css("line-height",blockSize.height/2+"px");
+                this.$(".skill-cool-down").css("line-height",blockSize.height*2/3+"px");
                 this.coolDown = this.$(".skill-cool-down");
                 this.renderCoolDown();
                 this.model.on("change:coolDown",this.renderCoolDown,this);
