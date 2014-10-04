@@ -36,8 +36,9 @@ define(function(require,exports,module) {
                     "font-size":blockSize.height/6+"px"
                 })
 
+                this.$(".skill-image-icon").width(blockSize.width*2/3)
                 var image = this.$(".skill-image");
-                image.height(blockSize.height/2).width(blockSize.width/2)
+                image.height(blockSize.height*2/3).width(blockSize.width*2/3)
                 this.$(".skill-cool-down").css("line-height",blockSize.height/2+"px");
                 this.coolDown = this.$(".skill-cool-down");
                 this.renderCoolDown();
@@ -103,6 +104,15 @@ define(function(require,exports,module) {
             var count = this.get("currentCount");
             if ( count < this.calCoolDown() ){
                 this.set("currentCount", count+1);
+            }
+        },
+        attackBlock:function(x,y,direction){
+            var block = getMapBlock(x,y);
+            if ( block && block.type == "monster" ) {
+                var monsterView = block.view;
+                setTimeout(function(){
+                    monsterView.beAttacked(direction,window.hero.get("attack"));
+                },TIME_SLICE)
             }
         }
     })
@@ -259,13 +269,7 @@ define(function(require,exports,module) {
             if ( this.get("skill-slash-active") ){
                 mx += increment[direction].x;
                 my += increment[direction].y;
-                var block = getMapBlock(mx,my);
-                if ( block && block.type == "monster" ) {
-                    var monsterView = block.view;
-                    setTimeout(function(){
-                        monsterView.beAttacked(direction,window.hero.get("attack"));
-                    },TIME_SLICE)
-                }
+                this.attackBlock(mx,my,direction);
             }
         },
         onNewRound:function(){
@@ -274,27 +278,56 @@ define(function(require,exports,module) {
         }
     })
 
+    exports.WhirlSkill = exports.Skill.extend({
+        modelClass:exports.WhirlSkill,
+        defaults:function(){
+            return {
+                name:"whirl",
+                type:"active",
+                displayName:"旋风斩",
+                level:1,
+                maxLevel:1,
+                currentCount:20,
+                coolDown:20
+            }
+        },
+        generateDescription:function(){
+            return "杀死英雄上下左右的4个怪物";
+        },
+        onActive:function(){
+            var x = window.hero.get("position").x;
+            var y = window.hero.get("position").y;
+            for ( var i in [0,1,2,3]) {
+                var mx = x + increment[i].x;
+                var my = y + increment[i].y;
+                this.attackBlock(mx, my,i);
+            }
+            this.used();
+        }
+    })
+
     exports.commonSkillPoolEntry = [
         exports.ConstitutionSkill,
         exports.CunningSkill,
         exports.DexteritySkill,
-        //exports.CoolingSkill,
+        exports.CoolingSkill,
         exports.WisdomSkill,
         exports.TreasureHuntingSkill,
         exports.RecoverSkill
     ]
 
     exports.warriorSkillPoolEntry = [
-        exports.SlashSkill
+        exports.SlashSkill,
+        exports.WhirlSkill
     ]
 
     exports.getSkillPool = function(type){
         var array = [];
-        _.each(exports.commonSkillPoolEntry, function(skill){
-             var s = new skill();
-             s.modelClass = skill;
-             array.push(s)
-        });
+//        _.each(exports.commonSkillPoolEntry, function(skill){
+//             var s = new skill();
+//             s.modelClass = skill;
+//             array.push(s)
+//        });
         var pool2 = exports[type+"SkillPoolEntry"];
         if ( pool2 ) {
             _.each( pool2, function(skill){

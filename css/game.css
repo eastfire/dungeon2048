@@ -6,6 +6,10 @@
     user-select: none;
 }
 
+body {
+    overflow: hidden;
+}
+
 .main-window {
     height: auto;
     width: auto;
@@ -319,8 +323,8 @@
 }
 
 .hero-label {
-    font-size: 1.5em;
-    margin: 1px 10px;
+    font-size: 1.4em;
+    margin: 1px 9px;
 }
 
 .hp-symbol {
@@ -468,6 +472,7 @@
 
 .skill-image-icon {
     position: relative;
+    margin: 5px;
 }
 
 .skill-cool-down {
@@ -504,4 +509,7 @@
 /*warrior*/
 .skill-image-slash {
     background-image: url("../img/skill-slash.png");
+}
+.skill-image-whirl {
+    background-image: url("../img/skill-whirl.png");
 }

@@ -65,7 +65,8 @@ define(function(require,exports,module) {
         "./img/skill-wisdom.png",
         "./img/skill-recover.png",
         "./img/skill-treasurehunting.png",
-        "./img/skill-slash.png"
+        "./img/skill-slash.png",
+        "./img/skill-whirl.png"
     ];
 
     var imgLoad = function (url, callback) {

@@ -139,7 +139,7 @@ define(function(require,exports,module){
                 },3*TIME_SLICE)
 
                 _.each(this.skillList, function(skill){
-                    if ( skill.onNewRound ){
+                    if ( skill.onAttack ){
                         skill.onAttack.call(skill, x, y, direction);
                     }
                 },this);
