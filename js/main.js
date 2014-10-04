@@ -1,4 +1,9 @@
 define(function(require,exports,module){
+    if ( !Math.log10 ){
+        Math.log10 = function(num){
+            return Math.log(num)/Math.log(10)
+        }
+    }
     window.clone = function(obj){
         return JSON.parse( JSON.stringify(obj) );
     }
