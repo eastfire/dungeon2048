@@ -1,10 +1,5 @@
 define(function(require,exports,module){
-    var getMapBlock = function(x,y){
-        if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
-            return map[x][y];
-        }
-        return null;
-    }
+    var Skill = require("./skill");
 
     var clearMapBlock = function (x,y) {
         if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
@@ -80,11 +75,35 @@ define(function(require,exports,module){
         initialize:function(){
             MovableView.prototype.initialize.call(this);
             this.model.on("change:level",this.levelUp,this);
+            this.skillList = [];
         },
         render:function(){
             this.$el = $("<div class='hero'></div>")
             MovableView.prototype.render.call(this);
             return this;
+        },
+        getSkill:function(skill){
+            var found = null;
+            for ( var i = 0; i < this.skillList.length; i++) {
+                if ( this.skillList[i].get("name") == skill.get("name") ){
+                    found = this.skillList[i];
+                    break;
+                }
+            }
+            if ( found ) {
+                found.set("level", skill.get("level"));
+            } else {
+                this.skillList.push(skill.clone());
+            }
+            this.renderSkillList();
+        },
+        renderSkillList:function(){
+            var list = $(".hero-active-skill");
+            list.empty();
+            for ( var i = 0 ;i < this.skillList.length; i++ ) {
+                var view = new Skill.SkillView({model:this.skillList[i] , mode:"list"})
+                list.append(view.render().$el)
+            }
         },
         levelUp:function(){
             this.effecQueue.add("Level Up");
@@ -119,6 +138,11 @@ define(function(require,exports,module){
                     self.$el.removeClass("attacking0");
                 },3*TIME_SLICE)
 
+                _.each(this.skillList, function(skill){
+                    if ( skill.onNewRound ){
+                        skill.onAttack.call(skill, x, y, direction);
+                    }
+                },this);
                 return false;
             } else {
                 return true;
@@ -155,6 +179,13 @@ define(function(require,exports,module){
                 this.effecQueue.add("♥+"+realHeal);
                 this.model.set("hp",this.model.get("hp")+realHeal);
             }
+        },
+        onNewRound:function(){
+            _.each(this.skillList, function(skill){
+                if ( skill.onNewRound ){
+                    skill.onNewRound.call(skill);
+                }
+            },this);
         }
     })
 
@@ -409,7 +440,6 @@ define(function(require,exports,module){
                         if (!hit) {
                             self.effecQueue.add("Miss!");
                         }
-                        self.$el.css({transition: "left " + TIME_SLICE / 1000 + "s ease-in-out 0s,top " + TIME_SLICE / 1000 + "s ease-in-out 0s", left: x, top: y});
                     }, TIME_SLICE);
                     setTimeout(function () {
                         self.$el.removeClass("attacking0").addClass("attacking1");
@@ -538,7 +568,7 @@ define(function(require,exports,module){
                 return;
             }
 
-            var el = $("<label class='effect-label'>"+str+"</label>");
+            var el = $("<label class='effect-label unselectable'>"+str+"</label>");
 
             this.$el.append(el);
             setTimeout(function(){

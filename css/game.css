@@ -1,3 +1,10 @@
+.unselectable {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
 
 .main-window {
     height: auto;
@@ -20,6 +27,12 @@
     display: inline-block;
     vertical-align: top;
 }
+
+.main-window.landscape .hero-active-skill {
+    display: inline-block;
+    vertical-align: top;
+}
+
 .map {
     height: auto;
     width: auto;
@@ -306,8 +319,8 @@
 }
 
 .hero-label {
-    font-size:1.8em;
-    margin: 10px;
+    font-size: 1.5em;
+    margin: 1px 10px;
 }
 
 .hp-symbol {
@@ -435,11 +448,37 @@
      font-size:1.2em;
  }
 
+.hero-active-skill .skill-level {
+    font-size: 1em;
+}
+.skill-level {
+    text-align: center;
+}
+
 .skill-image {
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;
+    transition: all 0.5s ease-in-out 0s;
 }
+
+.skill-image.used {
+    opacity:0.4;
+}
+
+.skill-image-icon {
+    position: relative;
+}
+
+.skill-cool-down {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+}
+
 .skill-image-constitution {
     background-image: url("../img/skill-constitution.png");
 }
@@ -460,4 +499,9 @@
 }
 .skill-image-treasurehunting {
     background-image: url("../img/skill-treasurehunting.png");
+}
+
+/*warrior*/
+.skill-image-slash {
+    background-image: url("../img/skill-slash.png");
 }

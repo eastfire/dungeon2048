@@ -89,7 +89,7 @@ define(function(require,exports,module){
     }
 
     var initSkillPool = function(){
-        window.gameStatus.skillPool = Skill.getCommonSkillPool();
+        window.gameStatus.skillPool = Skill.getSkillPool("warrior");
     }
 
     var calculateBlockSize = function(){
@@ -233,6 +233,7 @@ define(function(require,exports,module){
                 }
             }
         }
+        window.heroView.onNewRound();
 
         if ( gameStatus.tutorial.on ) {
             if (gameStatus.tutorial.step == 0) {
@@ -300,7 +301,7 @@ define(function(require,exports,module){
 
     window.removeSkillFromPool = function(skill){
         for ( var i = 0; i < window.gameStatus.skillPool.length ; i++) {
-            if ( window.gameStatus.skillPool[i].model == skill ) {
+            if ( window.gameStatus.skillPool[i].get("name") == skill.get("name") ) {
                 window.gameStatus.skillPool.splice(i,1);
                 return;
             }
@@ -309,22 +310,26 @@ define(function(require,exports,module){
 
     window.showLevelUpDialog = function(callback){
         var skillArray = getRandomItems(window.gameStatus.skillPool, 2);
+        if ( skillArray == null || skillArray.length == 0 ){
+            callback.call();
+            return;
+        }
         var el = $("<div class='levelup-body'>你升级了！<br/>请选择技能</div>");
         gameStatus.showingDialog = true;
         $(".main-window").append(el);
-        _.each(skillArray, function(skillEntry){
-            var view = new skillEntry.viewClass({model: skillEntry.model, mode:"select"})
+        _.each(skillArray, function(model){
+            var view = new Skill.SkillView({model: model, mode:"select"})
             el.append(view.render().$el)
             view.$el.on("click",function(){
                 var model = view.model;
                 if ( model.onGet ) {
                     model.onGet.call(model);
-                    model.levelup();
-                    if ( model.get("level") >= model.get("maxLevel") ) {
-                        removeSkillFromPool(model);
-                    }
                 } else {
-
+                    window.heroView.getSkill(model);
+                }
+                model.levelup();
+                if ( model.get("level") >= model.get("maxLevel") ) {
+                    removeSkillFromPool(model);
                 }
                 gameStatus.showingDialog = false;
                 $(".levelup-body").remove();
@@ -735,6 +740,12 @@ define(function(require,exports,module){
         initGameStatus();
         initSkillPool();
         window.map = initMap();
+        window.getMapBlock = function(x,y){
+            if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
+                return map[x][y];
+            }
+            return null;
+        }
 
         hero = new Model.Hero();
         heroView = new View.HeroView({model:hero});

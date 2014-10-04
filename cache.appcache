@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-10-02 v1.0.1
+# 2014-10-04 v1.0.1
 /css/bootstrap.css
 /css/bootstrap-theme.css
 /css/game.css
@@ -71,6 +71,8 @@ CACHE MANIFEST
 /img/skill-wisdom.png
 /img/skill-recover.png
 /img/skill-treasurehunting.png
+#warrior-skill
+/img/skill-slash.png
 #libs js
 /js/vendor/backbone-min.js
 /js/vendor/hammer.min.js
