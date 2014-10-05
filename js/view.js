@@ -459,7 +459,7 @@ define(function(require,exports,module){
                     setTimeout(function () {
                         var hit = heroView.takeDamage(self.model.get("attack"));
                         if (!hit) {
-                            self.effecQueue.add.call(self, "Miss!");
+                            self.effecQueue.add.call(self.effecQueue, "Miss!");
                         }
                     }, TIME_SLICE);
                     setTimeout(function () {
@@ -579,6 +579,8 @@ define(function(require,exports,module){
             this.queue = [];
         },
         add:function(string){
+            if ( !this.queue )
+                console.log(this);
             this.queue.push(string);
             if ( !this.isRunning ){
                 this.start();
