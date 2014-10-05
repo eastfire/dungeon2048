@@ -123,8 +123,6 @@ define(function(require,exports,module){
         }
     })
 
-
-
     exports.Archer = exports.Monster.extend({
         calAttack:function(level){
             return 1;
@@ -187,7 +185,7 @@ define(function(require,exports,module){
             return Math.round(level/2);
         },
         calExp:function(level){
-            return Math.floor(level*3/2);
+            return level*2-1;
         },
         onHitHero:function(){
             if ( !window.hero.get("poison") )
