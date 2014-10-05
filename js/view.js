@@ -50,10 +50,8 @@ define(function(require,exports,module){
                 top: this.model.get("position").y * blockSize.height
             }).addClass(this.model.get("type"))
             this.renderDirection();
-            if (!this.effecQueue) {
-                this.effecQueue = new EffectQueue();
-                this.$el.append(this.effecQueue.render().el);
-            }
+            this.effecQueue = new EffectQueue();
+            this.$el.append(this.effecQueue.render().el);
             var self = this;
             this.$el.on("click",function(){
                 $("#mapblock"+self.model.get("position").x+"_"+self.model.get("position").y).click();
@@ -106,7 +104,7 @@ define(function(require,exports,module){
             }
         },
         levelUp:function(){
-            this.effecQueue.add("Level Up");
+            this.effecQueue.add.call(this.effecQueue,"Level Up");
         },
         onMoveComplete:function(oldblock, newblock){
             if ( newblock.type == "item" ) {
@@ -167,7 +165,7 @@ define(function(require,exports,module){
             }
             var realDamage = attack - this.model.get("defend");
             if ( realDamage > 0 ){
-                this.effecQueue.add("♥-"+realDamage);
+                this.effecQueue.add.call(this.effecQueue,"♥-"+realDamage);
                 this.model.set("hp",this.model.get("hp")-realDamage);
             }
             return true;
@@ -176,7 +174,7 @@ define(function(require,exports,module){
             hp += this.model.get("recover");
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
             if ( realHeal > 0 ){
-                this.effecQueue.add("♥+"+realHeal);
+                this.effecQueue.add.call(this.effecQueue,"♥+"+realHeal);
                 this.model.set("hp",this.model.get("hp")+realHeal);
             }
         },
@@ -233,7 +231,7 @@ define(function(require,exports,module){
         renderAngry:function(){
             if ( this.model.get("angry") && !this.model.previous("angry")) {
                 this.$el.append("<div class='status-angry'></div>")
-                this.effecQueue.add("怒");
+                this.effecQueue.add.call(this.effecQueue, "怒");
             } else if ( !this.model.get("angry") && this.model.previous("angry")) {
                 this.$(".status-angry").remove();
             }
@@ -301,7 +299,7 @@ define(function(require,exports,module){
                             att = att * 3;
                         var hit = heroView.takeDamage(att);
                         if (!hit) {
-                            self.effecQueue.add("Miss!");
+                            self.effecQueue.add.call(self.effecQueue, "Miss!");
                         } else {
                             self.onHitHero();
                         }
@@ -389,7 +387,7 @@ define(function(require,exports,module){
 
     exports.GoblinView = exports.MonsterView.extend({
         onMerged:function(){
-            this.effecQueue.add("Level Up");
+            this.effecQueue.add.call(this.effecQueue, "Level Up");
             this.model.setToLevel(this.model.get("level")+1);
         }
     })
@@ -425,7 +423,7 @@ define(function(require,exports,module){
     exports.VampireView = exports.MonsterView.extend({
         onHitHero:function(){
             exports.MonsterView.prototype.onHitHero.call(this);
-            this.effecQueue.add("Level Up");
+            this.effecQueue.add.call(this.effecQueue,"Level Up");
         }
     })
 
@@ -438,7 +436,7 @@ define(function(require,exports,module){
                     setTimeout(function () {
                         var hit = heroView.takeDamage(self.model.get("attack"));
                         if (!hit) {
-                            self.effecQueue.add("Miss!");
+                            self.effecQueue.add.call(self, "Miss!");
                         }
                     }, TIME_SLICE);
                     setTimeout(function () {
@@ -553,7 +551,9 @@ define(function(require,exports,module){
     })
 
     var EffectQueue = Backbone.View.extend({
-        queue:[],
+        initialize:function(){
+            this.queue = [];
+        },
         add:function(string){
             this.queue.push(string);
             if ( !this.isRunning ){
