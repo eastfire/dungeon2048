@@ -73,6 +73,7 @@ define(function(require,exports,module){
         initialize:function(){
             MovableView.prototype.initialize.call(this);
             this.model.on("change:level",this.levelUp,this);
+            this.model.on("change:poison",this.renderPoison,this);
             this.skillList = [];
         },
         render:function(){
@@ -175,15 +176,32 @@ define(function(require,exports,module){
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
             if ( realHeal > 0 ){
                 this.effecQueue.add.call(this.effecQueue,"♥+"+realHeal);
-                this.model.set("hp",this.model.get("hp")+realHeal);
+                this.model.set({
+                    hp:this.model.get("hp")+realHeal,
+                    poison:0
+                });
             }
         },
         onNewRound:function(){
+            if ( this.model.get("poison") ){
+                this.effecQueue.add.call(this.effecQueue,"♥-"+1);
+                this.model.set("hp",this.model.get("hp")-1);
+                if ( !this.model.get("hp") )
+                    return;
+            }
             _.each(this.skillList, function(skill){
                 if ( skill.onNewRound ){
                     skill.onNewRound.call(skill);
                 }
             },this);
+        },
+        renderPoison:function(){
+            if ( this.model.get("poison") && !this.model.previous("poison")) {
+                this.$el.append("<div class='status-poison'></div>")
+                this.effecQueue.add.call(this.effecQueue, "中毒");
+            } else if ( !this.model.get("poison") && this.model.previous("poison")) {
+                this.$(".status-poison").remove();
+            }
         }
     })
 
@@ -291,7 +309,7 @@ define(function(require,exports,module){
                 var moveY = y  + increment[attackDirection].y * blockSize.height*0.35;
                 this.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:moveX, top:moveY});
                 this.$el.addClass("attacking0");
-
+                this.$el.removeClass("d0 d1 d2 d3").addClass("d"+attackDirection);
                 (function t(self) {
                     setTimeout(function () {
                         var att = self.model.get("attack");
@@ -313,6 +331,7 @@ define(function(require,exports,module){
                     },TIME_SLICE*3/2);
                     setTimeout(function(){
                         self.$el.removeClass("attacking0");
+                        self.$el.removeClass("d0 d1 d2 d3").addClass("d"+self.model.get("direction"));
                     },TIME_SLICE*2);
                 })(this);
             }
@@ -365,6 +384,10 @@ define(function(require,exports,module){
     })
 
     exports.SkeletonView = exports.MonsterView.extend({
+
+    })
+
+    exports.SnakeView = exports.MonsterView.extend({
 
     })
 
@@ -479,6 +502,7 @@ define(function(require,exports,module){
         shaman:exports.ShamanView,
         slime:exports.SlimeView,
         skeleton:exports.SkeletonView,
+        snake:exports.SnakeView,
         vampire:exports.VampireView
     };
 

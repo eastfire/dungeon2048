@@ -56,7 +56,8 @@ define(function(require,exports,module){
                level: newLevel,
                maxHp: newMaxHp,
                hp:newMaxHp,
-               maxExp:this.calExpRequire(newLevel)
+               maxExp:this.calExpRequire(newLevel),
+               poison:0
            })
        },
        calExpRequire:function(lv){
@@ -181,6 +182,19 @@ define(function(require,exports,module){
         }
     })
 
+    exports.Snake = exports.Monster.extend({
+        calAttack:function(level){
+            return Math.round(level/2);
+        },
+        calExp:function(level){
+            return Math.floor(level*3/2);
+        },
+        onHitHero:function(){
+            if ( !window.hero.get("poison") )
+                window.hero.set("poison",1);
+        }
+    })
+
     exports.Vampire = exports.Monster.extend({
         calAttack:function(level){
             return level*level;
@@ -204,6 +218,7 @@ define(function(require,exports,module){
         shaman:exports.Shaman,
         skeleton:exports.Skeleton,
         slime:exports.Slime,
+        snake:exports.Snake,
         vampire:exports.Vampire
     }
 

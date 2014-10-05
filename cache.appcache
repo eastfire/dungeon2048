@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-10-05 v1.0.2.3
+# 2014-10-05 v1.0.2.4
 /dungeon2048/css/bootstrap.css
 /dungeon2048/css/bootstrap-theme.css
 /dungeon2048/css/game.css
@@ -24,17 +24,20 @@ CACHE MANIFEST
 /dungeon2048/img/orc1-0.png
 /dungeon2048/img/orc1-3.png
 /dungeon2048/img/orc1-4.png
+/dungeon2048/img/shaman2-0.png
+/dungeon2048/img/shaman2-3.png
+/dungeon2048/img/shaman2-4.png
 /dungeon2048/img/skeleton2-0.png
 /dungeon2048/img/skeleton2-3.png
 /dungeon2048/img/skeleton2-4.png
 /dungeon2048/img/skeleton3-3.png
 /dungeon2048/img/skeleton3-4.png
-/dungeon2048/img/shaman2-0.png
-/dungeon2048/img/shaman2-3.png
-/dungeon2048/img/shaman2-4.png
 /dungeon2048/img/slime2-0.png
 /dungeon2048/img/slime2-1.png
 /dungeon2048/img/slime2-2.png
+/dungeon2048/img/snake1-0.png
+/dungeon2048/img/snake1-3.png
+/dungeon2048/img/snake1-4.png
 /dungeon2048/img/vampire2-0.png
 /dungeon2048/img/vampire2-3.png
 /dungeon2048/img/vampire2-4.png
@@ -42,6 +45,7 @@ CACHE MANIFEST
 /dungeon2048/img/potion.png
 #status
 /dungeon2048/img/status-angry.png
+/dungeon2048/img/status-poison.png
 #hero
 /dungeon2048/img/warrior0-0.png
 /dungeon2048/img/warrior0-1.png

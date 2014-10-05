@@ -75,7 +75,7 @@ define(function(require,exports,module){
             turn: 0,
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
-            monsterPool:["archer","goblin","mimic","ogre","orc","shaman","skeleton","slime","vampire"],
+            monsterPool:["archer","goblin","mimic","ogre","orc","shaman","skeleton","slime","snake","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             currentMonsterMaxLevel : 1,
@@ -707,10 +707,10 @@ define(function(require,exports,module){
             gameStatus.currentMonsterTypeNumber = 4;
             calMonsterWave();
         } else {
-            if ( gameStatus.turn % 33 == 0 ) {
+            if ( gameStatus.turn % 31 == 0 ) {
                 calMonsterWave();
             }
-            if ( gameStatus.turn % 101 == 0 ) {
+            if ( gameStatus.turn % 97 == 0 ) {
                 calMonsterLevel();
             }
         }
