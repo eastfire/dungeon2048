@@ -216,6 +216,7 @@ define(function(require,exports,module){
             this.$el = $("<div class='monster'><lable class='monster-level'>lv"+this.model.get("level")+"</lable></div>")
             MovableView.prototype.render.call(this);
             this.levelEl = this.$(".monster-level");
+            this.renderLevel();
             //this.levelEl.css({"line-height":window.blockSize.height+"px"});
             return this;
         },
@@ -242,7 +243,16 @@ define(function(require,exports,module){
         },
         renderLevel:function(){
             if ( this.model.get("level") >= WISDOM_THRESHOLD ) {
-
+                if ( this.$(".status-elite.star1").length == 0 )
+                    this.$el.append("<div class='status-elite star1'></div>");
+            }
+            if ( this.model.get("level") >= WISDOM_THRESHOLD*2 ) {
+                if ( this.$(".status-elite.star2").length == 0 )
+                    this.$el.append("<div class='status-elite star2'></div>");
+            }
+            if ( this.model.get("level") >= WISDOM_THRESHOLD*3 ) {
+                if ( this.$(".status-elite.star3").length == 0 )
+                    this.$el.append("<div class='status-elite star3'></div>");
             }
             this.levelEl.html("lv"+this.model.get("level"));
         },
@@ -516,10 +526,23 @@ define(function(require,exports,module){
             this.$el = $("<div class='item'><lable class='item-level'>lv"+this.model.get("level")+"</lable></div>")
             MovableView.prototype.render.call(this);
             this.levelEl = this.$(".item-level");
+            this.renderLevel();
             //this.levelEl.css({"line-height":window.blockSize.height+"px"});
             return this;
         },
         renderLevel:function(){
+            if ( this.model.get("level") >= WISDOM_THRESHOLD ) {
+                if ( this.$(".status-elite.star1").length == 0 )
+                    this.$el.append("<div class='status-elite star1'></div>");
+            }
+            if ( this.model.get("level") >= WISDOM_THRESHOLD*2 ) {
+                if ( this.$(".status-elite.star2").length == 0 )
+                    this.$el.append("<div class='status-elite star2'></div>");
+            }
+            if ( this.model.get("level") >= WISDOM_THRESHOLD*3 ) {
+                if ( this.$(".status-elite.star3").length == 0 )
+                    this.$el.append("<div class='status-elite star3'></div>");
+            }
             this.levelEl.html("lv"+this.model.get("level"));
         },
         onMoveComplete:function(oldblock, newblock){

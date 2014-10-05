@@ -46,6 +46,7 @@ CACHE MANIFEST
 #status
 /dungeon2048/img/status-angry.png
 /dungeon2048/img/status-poison.png
+/dungeon2048/img/status-elite.png
 #hero
 /dungeon2048/img/warrior0-0.png
 /dungeon2048/img/warrior0-1.png
