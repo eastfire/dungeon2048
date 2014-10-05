@@ -215,7 +215,7 @@ define(function(require,exports,module){
             setTimeout(function(){
                 self.$el.css({
                     opacity:1,
-                    transform:"scale(1)"
+                    transform:""
                 })
                 self.onGenerate.call(self);
             },10);
@@ -562,27 +562,32 @@ define(function(require,exports,module){
         },
         start:function(){
             this.isRunning = true;
+            //if ( this.queue.length )
+            //    console.log(this.queue);
             var str = this.queue.shift();
             if ( !str ) {
                 this.isRunning = false;
                 return;
             }
 
-            var el = $("<label class='effect-label unselectable'>"+str+"</label>");
+            (function(str1) {
+                var el = $("<label class='effect-label unselectable'>"+str1+"</label>");
+                this.$el.append(el);
+                setTimeout(function () {
+                    el.css({
+                        "margin-top": "-40%"
+                    });
+                }, 50)
 
-            this.$el.append(el);
-            setTimeout(function(){
-                el.css({
-                    "margin-top": "-40%"
-                });
-            },50)
-            var self = this;
-            setTimeout(function(){
-                el.remove();
-            }, 600);
-            setTimeout(function(){
-                self.start.call(self);
-            }, 200);
+                setTimeout(function () {
+                    el.remove();
+                }, 600);
+
+                var self = this;
+                setTimeout(function(){
+                    self.start.call(self);
+                }, 200);
+            }).call(this, str);
         },
         isRunning : false,
         render:function(){
