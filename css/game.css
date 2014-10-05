@@ -158,16 +158,18 @@ body {
 .monster.orc.d0,.monster.orc.d1,.monster.orc.d2,.monster.orc.d3 {
     background-image: url("../img/orc1-0.png");
 }
-.monster.orc.d0.attacking0, .monster.orc.d1.attacking0, .monster.orc.d2.attacking0, .monster.orc.d3.attacking0 {
+.monster.orc.attacking0.d1, .monster.orc.attacking0.d2 {
     background-image: url("../img/orc1-3.png");
 }
-.monster.orc.d0.attacking1, .monster.orc.d1.attacking1, .monster.orc.d2.attacking1, .monster.orc.d3.attacking1 {
+.monster.orc.attacking1.d1, .monster.orc.attacking1.d2 {
     background-image: url("../img/orc1-4.png");
 }
-.monster.orc.d0.attacking0, .monster.orc.d3.attacking0 {
+.monster.orc.attacking0.d0, .monster.orc.attacking0.d3 {
+    background-image: url("../img/orc1-3.png");
     transform:scaleX(-1);
 }
-.monster.orc.d0.attacking1, .monster.orc.d3.attacking1 {
+.monster.orc.attacking1.d0, .monster.orc.attacking1.d3 {
+    background-image: url("../img/orc1-4.png");
     transform:scaleX(-1);
 }
 
@@ -308,6 +310,10 @@ body {
     text-align: center;
     transition: all 0.5s ease-in-out 0s;
     width: 100%;
+}
+
+.monster.attacking0 .monster-level , .monster.attacking1 .monster-level, .monster.attacking2 .monster-level{
+    display:none;
 }
 
 .monster-level , .item-level{
