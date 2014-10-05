@@ -50,6 +50,9 @@ define(function(require,exports,module) {
         "./img/skeleton2-4.png",
         "./img/skeleton3-3.png",
         "./img/skeleton3-4.png",
+        "./img/snake1-0.png",
+        "./img/snake1-3.png",
+        "./img/snake1-4.png",
         "./img/vampire2-0.png",
         "./img/vampire2-3.png",
         "./img/vampire2-4.png",
@@ -57,6 +60,7 @@ define(function(require,exports,module) {
         "./img/potion.png",
 
         "./img/status-angry.png",
+        "./img/status-poison.png",
 
         "./img/skill-constitution.png",
         "./img/skill-cunning.png",

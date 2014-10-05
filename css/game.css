@@ -255,6 +255,33 @@ body {
     background-image: url("../img/skeleton3-4.png");
 }
 
+.monster.snake.d0 {
+    background-image: url("../img/snake1-0.png");
+}
+.monster.snake.d1 {
+    background-image: url("../img/snake1-0.png");
+}
+.monster.snake.d2 {
+    background-image: url("../img/snake1-0.png");
+}
+.monster.snake.d3 {
+    background-image: url("../img/snake1-0.png");
+}
+.monster.snake.d3.attacking0 {
+    background-image: url("../img/snake1-3.png");
+    transform: scaleX(-1);
+}
+.monster.snake.d3.attacking1 {
+    background-image: url("../img/snake1-4.png");
+    transform: scaleX(-1);
+}
+.monster.snake.d0.attacking0,.monster.snake.d2.attacking0, .monster.snake.d1.attacking0 {
+    background-image: url("../img/snake1-3.png");
+}
+.monster.snake.d0.attacking1,.monster.snake.d2.attacking1, .monster.snake.d1.attacking1 {
+    background-image: url("../img/snake1-4.png");
+}
+
 .monster.ogre.d0 {
     background-image: url("../img/ogre2-0.png");
 }
@@ -294,6 +321,17 @@ body {
     right: 25%;
     top: 25%;
     width: 10%;
+}
+
+.status-poison {
+    background-image: url("../img/status-poison.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 20%;
+    position: absolute;
+    right: 15%;
+    top: 15%;
+    width: 20%;
 }
 
 .effect-queue {
@@ -415,6 +453,9 @@ body {
 }
 .slime-help {
     background-image: url("../img/slime2-0.png");
+}
+.snake-help {
+    background-image: url("../img/snake1-0.png");
 }
 .vampire-help {
     background-image: url("../img/vampire2-0.png");

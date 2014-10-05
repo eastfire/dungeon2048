@@ -61,8 +61,12 @@ define(function(require,exports,module) {
             text:"史莱姆<br/>攻击力：弱（为等级的1/2）<br/>经验值：低",
             imageClass:"slime-help"
         },
+        "snake":{
+            text:"毒蛇<br/>击中英雄后使英雄<i><u>中毒</u></i>(每回合开始-1HP，升级或获得回复药时解毒)<br/>攻击力：弱（为等级的1/2）<br/>经验值：中",
+            imageClass:"snake-help"
+        },
         "vampire":{
-            text:"吸血鬼<br/>每次击中英雄后升级<br/>攻击力：非常强（为等级的平方）<br/>经验值：非常高",
+            text:"吸血鬼<br/>击中英雄后升级<br/>攻击力：非常强（为等级的平方）<br/>经验值：非常高",
             imageClass:"vampire-help"
         }
     }
