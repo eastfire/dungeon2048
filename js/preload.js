@@ -60,6 +60,7 @@ define(function(require,exports,module) {
         "./img/potion.png",
 
         "./img/status-angry.png",
+        "./img/status-elite.png",
         "./img/status-poison.png",
 
         "./img/skill-constitution.png",

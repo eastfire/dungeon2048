@@ -334,6 +334,30 @@ body {
     width: 20%;
 }
 
+.status-elite {
+    background-image: url("../img/status-elite.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 14%;
+    position: absolute;
+    width: 14%;
+}
+
+.status-elite.star1 {
+    left: 43%;
+    top: 3%;
+}
+
+.status-elite.star2 {
+    left: 25%;
+    top: 10%;
+}
+
+.status-elite.star3 {
+    right: 25%;
+    top: 10%;
+}
+
 .effect-queue {
     position:relative;
     text-align: center;
