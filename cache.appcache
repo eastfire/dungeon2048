@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-10-06 v1.0.2.5
+# 2014-10-06 v1.0.2.6
 /dungeon2048/index.html
 #css
 /dungeon2048/css/bootstrap.css
@@ -88,6 +88,7 @@ CACHE MANIFEST
 #warrior-skill
 /dungeon2048/img/skill-slash.png
 /dungeon2048/img/skill-whirl.png
+/dungeon2048/img/skill-big-whirl.png
 #libs js
 /dungeon2048/js/vendor/backbone-min.js
 /dungeon2048/js/vendor/hammer.min.js
