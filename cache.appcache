@@ -1,5 +1,7 @@
 CACHE MANIFEST
-# 2014-10-05 v1.0.2.4
+# 2014-10-06 v1.0.2.4
+/dungeon2048/index.html
+#css
 /dungeon2048/css/bootstrap.css
 /dungeon2048/css/bootstrap-theme.css
 /dungeon2048/css/game.css
