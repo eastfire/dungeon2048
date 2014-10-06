@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-10-06 v1.0.2.4
+# 2014-10-06 v1.0.2.5
 /dungeon2048/index.html
 #css
 /dungeon2048/css/bootstrap.css
@@ -18,6 +18,13 @@ CACHE MANIFEST
 /dungeon2048/img/mimic2-0.png
 /dungeon2048/img/mimic2-3.png
 /dungeon2048/img/mimic2-4.png
+/dungeon2048/img/minotaur2-0.png
+/dungeon2048/img/minotaur0-3.png
+/dungeon2048/img/minotaur0-4.png
+/dungeon2048/img/minotaur2-3.png
+/dungeon2048/img/minotaur2-4.png
+/dungeon2048/img/minotaur3-3.png
+/dungeon2048/img/minotaur3-4.png
 /dungeon2048/img/ogre2-0.png
 /dungeon2048/img/ogre2-3.png
 /dungeon2048/img/ogre2-4.png
