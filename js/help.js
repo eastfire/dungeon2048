@@ -41,6 +41,10 @@ define(function(require,exports,module) {
             text:"宝箱怪<br/>必然掉落宝物，且宝物等级与怪物等级相同<br/>攻击力：中（与等级相同）<br/>经验值：始终为1",
             imageClass:"mimic-help"
         },
+        "minotaur":{
+            text:"牛头怪<br/>攻击力：非常强（为等级的平方）<br/>经验值：非常高",
+            imageClass:"minotaur-help"
+        },
         "ogre":{
             text:"食人魔<br/>攻击力：强（为等级的2倍）<br/>经验值：高",
             imageClass:"ogre-help"

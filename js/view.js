@@ -172,6 +172,7 @@ define(function(require,exports,module){
             return true;
         },
         getHp:function(hp){
+            this.model.set("score",this.model.get("score")+hp);
             hp += this.model.get("recover");
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
             if ( realHeal > 0 ){
@@ -389,77 +390,6 @@ define(function(require,exports,module){
         }
     })
 
-    exports.SlimeView = exports.MonsterView.extend({
-
-    })
-
-    exports.SkeletonView = exports.MonsterView.extend({
-
-    })
-
-    exports.SnakeView = exports.MonsterView.extend({
-
-    })
-
-    exports.OgreView = exports.MonsterView.extend({
-
-    })
-
-    exports.OrcView = exports.MonsterView.extend({
-        onGenerate:function(){
-            this.model.set({
-                angry:1
-            });
-        },
-        onMerged:function(){
-            this.model.set({
-                angry:1
-            });
-        }
-    })
-
-    exports.GoblinView = exports.MonsterView.extend({
-        onMerged:function(){
-            this.effecQueue.add.call(this.effecQueue, "Level Up");
-            this.model.setToLevel(this.model.get("level")+1);
-        }
-    })
-
-    exports.ShamanView = exports.MonsterView.extend({
-        checkMonster:function(x,y){
-            if ( !map[x] )
-                return;
-            var mapBlock = map[x][y];
-            if ( !mapBlock )
-                return;
-            if ( mapBlock.type == "monster") {
-                mapBlock.model.set("angry",1);
-            }
-        },
-        effectAround:function(){
-            var x = this.model.get("position").x;
-            var y = this.model.get("position").y;
-
-            this.checkMonster(x-1,y);
-            this.checkMonster(x+1,y);
-            this.checkMonster(x,y-1);
-            this.checkMonster(x,y+1);
-        },
-        onGenerate:function(){
-            this.effectAround();
-        },
-        onMerged:function(){
-            this.effectAround();
-        }
-    })
-
-    exports.VampireView = exports.MonsterView.extend({
-        onHitHero:function(){
-            exports.MonsterView.prototype.onHitHero.call(this);
-            this.effecQueue.add.call(this.effecQueue,"Level Up");
-        }
-    })
-
     exports.ArcherView = exports.MonsterView.extend({
         attack:function(){
             var attackDirection = this.checkInRange();
@@ -497,16 +427,94 @@ define(function(require,exports,module){
         }
     })
 
+    exports.GoblinView = exports.MonsterView.extend({
+        onMerged:function(){
+            this.effecQueue.add.call(this.effecQueue, "Level Up");
+            this.model.setToLevel(this.model.get("level")+1);
+        }
+    })
+
     exports.MimicView = exports.MonsterView.extend({
         onDropItem:function(x,y){
             generateItemForSure(x,y, this.model.get("level"));
         }
     })
 
+    exports.MinotaurView = exports.MonsterView.extend({
+
+    })
+
+    exports.OgreView = exports.MonsterView.extend({
+
+    })
+
+    exports.OrcView = exports.MonsterView.extend({
+        onGenerate:function(){
+            this.model.set({
+                angry:1
+            });
+        },
+        onMerged:function(){
+            this.model.set({
+                angry:1
+            });
+        }
+    })
+
+    exports.ShamanView = exports.MonsterView.extend({
+        checkMonster:function(x,y){
+            if ( !map[x] )
+                return;
+            var mapBlock = map[x][y];
+            if ( !mapBlock )
+                return;
+            if ( mapBlock.type == "monster") {
+                mapBlock.model.set("angry",1);
+            }
+        },
+        effectAround:function(){
+            var x = this.model.get("position").x;
+            var y = this.model.get("position").y;
+
+            this.checkMonster(x-1,y);
+            this.checkMonster(x+1,y);
+            this.checkMonster(x,y-1);
+            this.checkMonster(x,y+1);
+        },
+        onGenerate:function(){
+            this.effectAround();
+        },
+        onMerged:function(){
+            this.effectAround();
+        }
+    })
+
+    exports.SkeletonView = exports.MonsterView.extend({
+
+    })
+
+    exports.SlimeView = exports.MonsterView.extend({
+
+    })
+
+    exports.SnakeView = exports.MonsterView.extend({
+
+    })
+
+    exports.VampireView = exports.MonsterView.extend({
+        onHitHero:function(){
+            exports.MonsterView.prototype.onHitHero.call(this);
+            this.effecQueue.add.call(this.effecQueue,"Level Up");
+        }
+    })
+
+
+
     exports.ViewMap = {
         archer:exports.ArcherView,
         goblin:exports.GoblinView,
         mimic:exports.MimicView,
+        minotaur:exports.MinotaurView,
         ogre:exports.OgreView,
         orc:exports.OrcView,
         shaman:exports.ShamanView,
