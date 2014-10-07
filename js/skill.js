@@ -284,7 +284,7 @@ define(function(require,exports,module) {
             return {
                 name:"whirl",
                 type:"active",
-                displayName:"旋风斩",
+                displayName:"回旋斩",
                 level:1,
                 maxLevel:1,
                 currentCount:20,
@@ -306,6 +306,37 @@ define(function(require,exports,module) {
         }
     })
 
+    exports.BigWhirlSkill = exports.Skill.extend({
+        modelClass:exports.BigWhirlSkill,
+        defaults:function(){
+            return {
+                name:"big-whirl",
+                type:"active",
+                displayName:"大回旋斩",
+                level:1,
+                maxLevel:1,
+                currentCount:35,
+                coolDown:35
+            }
+        },
+        generateDescription:function(){
+            return "杀死英雄周围的8个怪物";
+        },
+        onActive:function(){
+            var x = window.hero.get("position").x;
+            var y = window.hero.get("position").y;
+            this.attackBlock(x-1, y-1,0);
+            this.attackBlock(x, y-1,0);
+            this.attackBlock(x+1, y-1,0);
+            this.attackBlock(x-1, y,3);
+            this.attackBlock(x+1, y,1);
+            this.attackBlock(x-1, y+1,2);
+            this.attackBlock(x, y+1,2);
+            this.attackBlock(x+1, y+1,2);
+            this.used();
+        }
+    })
+
     exports.commonSkillPoolEntry = [
         exports.ConstitutionSkill,
         exports.CunningSkill,
@@ -318,7 +349,8 @@ define(function(require,exports,module) {
 
     exports.warriorSkillPoolEntry = [
         exports.SlashSkill,
-        exports.WhirlSkill
+        exports.WhirlSkill,
+        exports.BigWhirlSkill,
     ]
 
     exports.getSkillPool = function(type){

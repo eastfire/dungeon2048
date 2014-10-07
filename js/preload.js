@@ -78,18 +78,22 @@ define(function(require,exports,module) {
         "./img/skill-recover.png",
         "./img/skill-treasurehunting.png",
         "./img/skill-slash.png",
-        "./img/skill-whirl.png"
+        "./img/skill-whirl.png",
+        "./img/skill-big-whirl.png"
     ];
 
     var imgLoad = function (url, callback) {
         var img = new Image();
         img.src = url;
+        $("body").append(img);
+        $(img).hide();
         if (img.complete) {
             callback(img.width, img.height);
         } else {
             img.onload = function () {
                 callback(img.width, img.height);
                 img.onload = null;
+                img.remove();
             };
         }
         ;

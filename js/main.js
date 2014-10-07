@@ -47,6 +47,7 @@ define(function(require,exports,module){
     var Help = require("./help");
     var Skill = require("./skill");
     var HelpView = Help.HelpView;
+    var ScoreBoard = require("./score-board");
 
     window.PHASE_GENERATE = 0;
     window.PHASE_USER = 1;
@@ -98,7 +99,8 @@ define(function(require,exports,module){
     }
 
     var calculateBlockSize = function(){
-        var winW = 630, winH = 460;
+        window.winW = 630;
+        window.winH = 460;
         if (document.body && document.body.offsetWidth) {
             winW = document.body.offsetWidth;
             winH = document.body.offsetHeight;
@@ -200,8 +202,8 @@ define(function(require,exports,module){
 
         if ( !gameStatus.tutorial.on && !gameStatus.tutorial[monsterType] ) {
             gameStatus.tutorial[monsterType] = true;
-            var description = Help.monsterDescription[monsterType];
-            var view = new HelpView({text:description.text, imageClass:description.imageClass});
+            var description = Help.monsterDisplayName[monsterType] + "<br/>" + Help.monsterDescription[monsterType].text;
+            var view = new HelpView({text:description, imageClass:Help.monsterDescription[monsterType].imageClass});
             view.show();
         }
     }
@@ -691,6 +693,9 @@ define(function(require,exports,module){
 
     var nextTurn = function(){
         if ( checkAllFill() ) {
+            gameStatus.killBy={
+                type:"full"
+            }
             gameOver();
             return;
         }
@@ -721,8 +726,21 @@ define(function(require,exports,module){
     window.gameOver = function(){
         if (gameStatus.phase == PHASE_GAME_OVER )
             return
+        gameStatus.death = {
+            name : window.hero.get("name"),
+            type : window.hero.get("typeDisplayName"),
+            score : window.hero.get("score"),
+            level : window.hero.get("level"),
+            killBy :gameStatus.killBy,
+            timestamp : (new Date()).getTime(),
+            ".priority":window.hero.get("score")
+        }
         gameStatus.phase = PHASE_GAME_OVER;
         setTimeout(function(){
+            var view = new ScoreBoard.GameOver();
+            $(".map").append(view.render().$el);
+            /*var scoreBoard = new ScoreBoard.ScoreBoard({currentScore:gameStatus.death})
+            $(".map").append(scoreBoard.render().$el);
             $(".map").append("<label class='game-over'>GAME OVER</label>" +
                 "<button class='btn btn-primary restart-game'>再来一局</button>");
             $(".game-over").css({
@@ -732,7 +750,7 @@ define(function(require,exports,module){
             })
             $(".restart-game").on("click",function(){
                 startGame();
-            });
+            });*/
         },TIME_SLICE);
     }
 
@@ -740,7 +758,7 @@ define(function(require,exports,module){
         event.preventDefault();
     }
 
-    var startGame = function(){
+    window.startGame = function(){
         $("body").empty();
         initGameStatus();
         initSkillPool();

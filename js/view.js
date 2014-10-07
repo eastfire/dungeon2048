@@ -172,8 +172,8 @@ define(function(require,exports,module){
             return true;
         },
         getHp:function(hp){
-            this.model.set("score",this.model.get("score")+hp);
             hp += this.model.get("recover");
+            this.model.set("score",this.model.get("score")+hp);
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
             if ( realHeal > 0 ){
                 this.effecQueue.add.call(this.effecQueue,"♥+"+realHeal);
@@ -187,8 +187,12 @@ define(function(require,exports,module){
             if ( this.model.get("poison") ){
                 this.effecQueue.add.call(this.effecQueue,"♥-"+1);
                 this.model.set("hp",this.model.get("hp")-1);
-                if ( !this.model.get("hp") )
+                if ( !this.model.get("hp") ) {
+                    gameStatus.killBy = {
+                        type :"poison"
+                    }
                     return;
+                }
             }
             _.each(this.skillList, function(skill){
                 if ( skill.onNewRound ){
@@ -326,6 +330,11 @@ define(function(require,exports,module){
                         var att = self.model.get("attack");
                         if (self.model.get("angry"))
                             att = att * 3;
+                        gameStatus.killBy = {
+                            type :"monster",
+                            monsterLevel:self.model.get("level"),
+                            monsterType:self.model.get("type")
+                        }
                         var hit = heroView.takeDamage(att);
                         if (!hit) {
                             self.effecQueue.add.call(self.effecQueue, "Miss!");
@@ -598,7 +607,6 @@ define(function(require,exports,module){
                 })
             }
             if ( this.model.get("hp") <= 0 ) {
-                //die
                 gameOver();
             }
             return this;

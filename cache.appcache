@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-10-06 v1.0.2.5
+# 2014-10-07 v1.0.2.6
 /dungeon2048/index.html
 #css
 /dungeon2048/css/bootstrap.css
@@ -88,6 +88,7 @@ CACHE MANIFEST
 #warrior-skill
 /dungeon2048/img/skill-slash.png
 /dungeon2048/img/skill-whirl.png
+/dungeon2048/img/skill-big-whirl.png
 #libs js
 /dungeon2048/js/vendor/backbone-min.js
 /dungeon2048/js/vendor/hammer.min.js
@@ -97,6 +98,8 @@ CACHE MANIFEST
 /dungeon2048/js/vendor/sea.js
 /dungeon2048/js/vendor/seajs-text.js
 /dungeon2048/js/vendor/underscore.min.js
+/dungeon2048/js/vendor/bootstrap.min.js
+/dungeon2048/js/vendor/firebase.js
 #program
 /dungeon2048/js/datamodel.js
 /dungeon2048/js/main.js
@@ -105,6 +108,7 @@ CACHE MANIFEST
 /dungeon2048/js/view.js
 /dungeon2048/js/help.js
 /dungeon2048/js/skill.js
+/dungeon2048/js/score-board.js
 #layout
 /dungeon2048/layout/main_window.html
 

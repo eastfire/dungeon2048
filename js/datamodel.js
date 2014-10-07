@@ -7,6 +7,7 @@ define(function (require, exports, module) {
 
         defaults: function () {
             return {
+                name:"player",
                 race: "human",
                 type: "warrior",
                 typeDisplayName: "战士",
@@ -39,11 +40,11 @@ define(function (require, exports, module) {
         getExp: function (exp, level) {
             var currentExp = this.get("exp");
             var expRequire = this.get("maxExp");
-            if (level) {
-                this.set("score", this.get("score") + exp);
-            }
             if (level >= WISDOM_THRESHOLD) {
                 exp += Math.round(exp * this.get("wisdom") * WISDOM_EFFECT / 100);
+            }
+            if (level) {
+                this.set("score", this.get("score") + exp);
             }
             if (currentExp + exp >= expRequire) {
                 this.levelUp();
