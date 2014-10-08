@@ -86,7 +86,7 @@ define(function(require,exports,module) {
 
     var imgLoad = function (url, callback) {
         var img = new Image();
-        img.src = "/dungone2048/img/"+url;
+        img.src = "/dungeon2048/img/"+url;
         $("body").append(img);
         $(img).css({
             width:1,
