@@ -480,7 +480,16 @@ body {
     margin: 15px auto;
     width: 80%;
 }
-
+.input-group.input-group-message {
+    margin: 10px 5%;
+}
+.message {
+    list-style-type: none;
+    text-align: left;
+}
+.message-msg {
+    word-wrap: break-word;
+}
 
 .help {
     position:absolute;

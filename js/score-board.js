@@ -39,7 +39,7 @@ define(function(require,exports,module) {
             setTimeout(function(){
                 var h = window.winH - self.$('.game-over-tabs').height() - self.$(".game-over-buttons").height() - self.$(".game-over-title").height();
                 self.$(".score-board").height(h-50)
-                self.$(".message-board").height(h-50)
+                self.$(".message-list").height(h-50-self.$(".input-group-message").height())
             },10);
         },
         restartGame:function(){
@@ -165,15 +165,56 @@ define(function(require,exports,module) {
     })
 
     exports.MessageBoard = Backbone.View.extend({
+        currentLimit:50,
+        events:{
+            "click .send":"onSend",
+            "keydown .input-message":"onKeyDown"
+        },
         initialize:function(options){
+            this.$el.html("<div class='input-group input-group-message'>" +
+                "<input type='text' class='form-control input-message' maxlength='200'>" +
+                "<span class='input-group-btn'>" +
+                "<button class='btn btn-default send' type='button'>发送</button>"+
+                "</span>" +
+                "</div>" +
+                "<ul class='message-list'></ul>")
             this.$el.addClass("message-board");
-            this.query = new Firebase("https://dungeon2048.firebaseio.com/message").endAt().limit(20);
+            this.query = new Firebase("https://dungeon2048.firebaseio.com/message").endAt().limit(this.currentLimit);
             this.ref = this.query.ref();
             var self = this;
-
+            this.query.on("value",function(snapshot){
+                self.messages = snapshot.val();
+                self.renderList.call(self);
+            })
+        },
+        onKeyDown:function(event){
+            if ( event.keyCode == 13 ) {
+                this.onSend();
+            }
+        },
+        onSend: function () {
+            var msg = this.$(".input-message").val().trim();
+            if ( msg ) {
+                var self = this;
+                this.ref.push({
+                    name: gameStatus.playerName,
+                    ".priority": Firebase.ServerValue.TIMESTAMP,
+                    msg: msg
+                },function(){
+                    self.$(".input-message").val("");
+                })
+            }
+        },
+        renderList:function(){
+            var list = this.$(".message-list")
+            list.empty();
+            _.each( this.messages, function(message){
+                if ( message.name ) {
+                    list.prepend("<li class='message'><label class='message-user-name'>" + message.name + "</label>说:<div class='message-msg'>" + message.msg + "</div></li>");
+                }
+            },this);
         },
         render:function(){
-            this.$el.html("<label>开发中</label>")
             return this;
         }
     })
