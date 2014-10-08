@@ -739,6 +739,7 @@ define(function(require,exports,module){
         setTimeout(function(){
             var view = new ScoreBoard.GameOver();
             $(".map").append(view.render().$el);
+            $(".hero-active-skill").hide();
             /*var scoreBoard = new ScoreBoard.ScoreBoard({currentScore:gameStatus.death})
             $(".map").append(scoreBoard.render().$el);
             $(".map").append("<label class='game-over'>GAME OVER</label>" +

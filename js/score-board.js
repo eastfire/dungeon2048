@@ -10,8 +10,7 @@ define(function(require,exports,module) {
         },
         render:function(){
             this.$el.addClass("game-over");
-            this.$el.html("<label class='game-over-title'>GAME OVER</label><div>"+
-                "<ul class='nav nav-tabs game-over-tabs' role='tablist'>" +
+            this.$el.html("<div><ul class='nav nav-tabs game-over-tabs' role='tablist'>" +
                 "<li class='active'><a href='#score' role='tab' data-toggle='tab'>排行榜</a></li>" +
                 "<li><a href='#message' role='tab' data-toggle='tab'>留言板</a></li>" +
                 "</ul>" +
@@ -26,8 +25,12 @@ define(function(require,exports,module) {
             return this;
         },
         onPlayerNameInput:function(){
+            $(".hero-status").css("visibility","hidden");
             var scoreboardView = new exports.ScoreBoard({currentScore:gameStatus.death})
             this.$("#score").append(scoreboardView.render().$el)
+
+            var messageView = new exports.MessageBoard()
+            this.$("#message").append(messageView.render().$el)
 
             this.$('.game-over-tabs a').click(function (e) {
                 e.preventDefault()
@@ -36,6 +39,7 @@ define(function(require,exports,module) {
             setTimeout(function(){
                 var h = window.winH - self.$('.game-over-tabs').height() - self.$(".game-over-buttons").height() - self.$(".game-over-title").height();
                 self.$(".score-board").height(h-50)
+                self.$(".message-board").height(h-50)
             },10);
         },
         restartGame:function(){
@@ -61,7 +65,8 @@ define(function(require,exports,module) {
         },
         render:function(){
             this.$el.addClass("input-player-name");
-            this.$el.html("<lable>"+getRandomItem(endingWord)+"</lable><div class='input-group'>" +
+            this.$el.html("<label class='game-over-title'>GAME OVER</label>" +
+                "<lable>"+getRandomItem(endingWord)+"</lable><div class='input-group input-group-player-name'>" +
                 "<input type='text' class='form-control player-name' maxlength='15'>" +
                 "<span class='input-group-btn'>" +
                 "<button class='btn btn-default confirm' type='button'>确定</button>"+
@@ -78,7 +83,7 @@ define(function(require,exports,module) {
             var name = this.$(".player-name").val().trim();
             if ( name ) {
                 localStorage.setItem("player-name", name);
-                gameStatus.death.name = name;
+                gameStatus.playerName = gameStatus.death.name = name;
                 this.remove();
                 this.callback.call(this.callbackcontext);
             }
@@ -91,6 +96,7 @@ define(function(require,exports,module) {
             this.scoreRef = this.scoreQuery.ref();
             var self = this;
             if ( options && options.currentScore){
+                this.$el.addClass("loading");
                 this.scoreRef.push(options.currentScore, function(){
                     console.log("score upload complete");
                     self.fetchScore.call(self);
@@ -100,6 +106,7 @@ define(function(require,exports,module) {
         fetchScore:function(){
             var self = this;
             this.scoreQuery.once("value",function(snapshot){
+                self.$el.removeClass("loading");
                 self.scores = snapshot.val();
                 self.renderList.call(self);
             })
@@ -154,6 +161,20 @@ define(function(require,exports,module) {
                 reason="被Lv"+score.killBy.monsterLevel+Help.monsterDisplayName[score.killBy.monsterType]+"杀死";
             }
             return reason;
+        }
+    })
+
+    exports.MessageBoard = Backbone.View.extend({
+        initialize:function(options){
+            this.$el.addClass("message-board");
+            this.query = new Firebase("https://dungeon2048.firebaseio.com/message").endAt().limit(20);
+            this.ref = this.query.ref();
+            var self = this;
+
+        },
+        render:function(){
+            this.$el.html("<label>开发中</label>")
+            return this;
         }
     })
 })
