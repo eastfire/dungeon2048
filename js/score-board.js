@@ -57,7 +57,8 @@ define(function(require,exports,module) {
 
     exports.InputPlayerName = Backbone.View.extend({
         events:{
-            "click .confirm":"onConfirm"
+            "click .confirm":"onConfirm",
+            "keydown .player-name":"onKeyDown"
         },
         initialize:function(options){
             this.callback = options.callback;
@@ -78,6 +79,11 @@ define(function(require,exports,module) {
             }
 
             return this;
+        },
+        onKeyDown:function(event){
+            if ( event.keyCode == 13 ) {
+                this.onConfirm();
+            }
         },
         onConfirm:function(event){
             var name = this.$(".player-name").val().trim();
