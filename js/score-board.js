@@ -6,7 +6,14 @@ define(function(require,exports,module) {
             "click .to-menu":"toGameMenu"
         },
         initialize:function(options){
-
+            var star = localStorage.getItem("player-star");
+            if ( star == null )
+                star = 0;
+            else
+                star = parseInt(star);
+            //console.log("gain "+gameStatus.gainStar+" star");
+            localStorage.setItem("player-star", star + gameStatus.gainStar);
+            //console.log("total "+(star+gameStatus.gainStar)+" star");
         },
         render:function(){
             this.$el.addClass("game-over");

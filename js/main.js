@@ -85,7 +85,8 @@ define(function(require,exports,module){
             tutorial:{
                 on:true,
                 step:0
-            }
+            },
+            gainStar:0
         }
 
         var store = localStorage.getItem("tutorial");
@@ -119,10 +120,10 @@ define(function(require,exports,module){
         var blockW,blockH;
         if ( winW > winH ) {
             window.windowOriention = "landscape";
-            blockW = blockH = (winH)/mapWidth;
+            blockW = blockH = (winH)/mapWidth-0.1;
         } else {
             window.windowOriention = "portrait";
-            blockW = blockH = (winW)/mapWidth;
+            blockW = blockH = (winW)/mapWidth-0.1;
         }
         return {width:blockW, height:blockH}
     }
