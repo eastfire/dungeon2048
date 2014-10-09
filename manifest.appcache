@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-10-08 v1.0.2.7
+# 2014-10-09 v1.0.2.8
 /dungeon2048/index.html
 #css
 /dungeon2048/css/bootstrap.css
@@ -99,7 +99,7 @@ CACHE MANIFEST
 /dungeon2048/js/vendor/modernizr-2.6.2.min.js
 /dungeon2048/js/vendor/sea.js
 /dungeon2048/js/vendor/seajs-text.js
-/dungeon2048/js/vendor/underscore.min.js
+/dungeon2048/js/vendor/underscore-min.js
 /dungeon2048/js/vendor/bootstrap.min.js
 /dungeon2048/js/vendor/firebase.js
 #program

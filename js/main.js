@@ -397,7 +397,7 @@ define(function(require,exports,module){
 
 
     var renderMap = function () {
-        $("body").html(mainTemplate());
+        $("body .main-window-wrapper").html(mainTemplate());
         mapEl = $(".map");
         mapEl.css({
             "font-size":blockSize.height/5+"px",
@@ -760,7 +760,7 @@ define(function(require,exports,module){
     }
 
     window.startGame = function(){
-        $("body").empty();
+        $("body .main-window-wrapper").empty();
         initGameStatus();
         initSkillPool();
         window.map = initMap();
@@ -790,6 +790,7 @@ define(function(require,exports,module){
     }
 
     require("./preload").preload(function(){
+        $("body").append("<div class='main-window-wrapper'></div>")
         window.blockSize = calculateBlockSize();
 
         startGame();

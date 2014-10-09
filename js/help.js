@@ -83,7 +83,7 @@ define(function(require,exports,module) {
             imageClass:"snake-help"
         },
         "vampire":{
-            text:"吸血鬼<br/>击中英雄后升级<br/>攻击力：非常强（为等级的平方）<br/>经验值：非常高",
+            text:"击中英雄后升级<br/>攻击力：非常强（为等级的平方）<br/>经验值：非常高",
             imageClass:"vampire-help"
         }
     }

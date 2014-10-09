@@ -86,7 +86,8 @@ define(function(require,exports,module) {
 
     var imgLoad = function (url, callback) {
         var img = new Image();
-        img.src = "/dungeon2048/img/"+url;
+        img.src = "./img/"+url;
+        $(img).addClass("preload")
         $("body").append(img);
         $(img).css({
             width:1,
@@ -98,7 +99,7 @@ define(function(require,exports,module) {
             img.onload = function () {
                 callback(img.width, img.height);
                 img.onload = null;
-                img.remove();
+                //img.remove();
             };
         }
         ;

@@ -37,10 +37,10 @@ define(function(require,exports,module) {
                 $(this).tab('show')
             })
             setTimeout(function(){
-                var h = window.winH - self.$('.game-over-tabs').height() - self.$(".game-over-buttons").height() - self.$(".game-over-title").height();
-                self.$(".score-board").height(h-50)
-                self.$(".message-list").height(h-50-self.$(".input-group-message").height())
-            },10);
+                var h = self.$('.map').height() - self.$('.game-over-tabs').height() - self.$(".game-over-buttons").height();
+                self.$(".score-board").height(h-25)
+                self.$(".message-list").height(h-75)
+            },100);
         },
         restartGame:function(){
             window.startGame();

@@ -10,6 +10,10 @@ body {
     overflow: hidden;
 }
 
+.preload {
+    display: none;
+}
+
 .main-window {
     height: auto;
     width: auto;
@@ -421,7 +425,7 @@ body {
 }
 
 .hero-label {
-    font-size: 1.4em;
+    font-size: 1.2em;
     margin: 1px 9px;
 }
 
@@ -460,7 +464,9 @@ body {
     background-repeat: no-repeat;
     background-size: contain;
 }
-
+.score-list {
+    font-size: 0.9em;
+}
 .score-board td {
     padding: 0 10px;
 }
@@ -488,6 +494,8 @@ body {
     text-align: left;
 }
 .message-msg {
+    display: inline-block;
+    margin-left: 10px;
     word-wrap: break-word;
 }
 

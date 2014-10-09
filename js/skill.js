@@ -36,10 +36,10 @@ define(function(require,exports,module) {
                     "font-size":blockSize.height/6+"px"
                 })
 
-                this.$(".skill-image-icon").width(blockSize.width*2/3)
+                this.$(".skill-image-icon").width(blockSize.width*3/4)
                 var image = this.$(".skill-image");
-                image.height(blockSize.height*2/3).width(blockSize.width*2/3)
-                this.$(".skill-cool-down").css("line-height",blockSize.height*2/3+"px");
+                image.height(blockSize.height*3/4).width(blockSize.width*3/4)
+                this.$(".skill-cool-down").css("line-height",blockSize.height*3/4+"px");
                 this.coolDown = this.$(".skill-cool-down");
                 this.renderCoolDown();
                 this.model.on("change:coolDown",this.renderCoolDown,this);
@@ -355,11 +355,11 @@ define(function(require,exports,module) {
 
     exports.getSkillPool = function(type){
         var array = [];
-        _.each(exports.commonSkillPoolEntry, function(skill){
-             var s = new skill();
-             s.modelClass = skill;
-             array.push(s)
-        });
+//        _.each(exports.commonSkillPoolEntry, function(skill){
+//             var s = new skill();
+//             s.modelClass = skill;
+//             array.push(s)
+//        });
         var pool2 = exports[type+"SkillPoolEntry"];
         if ( pool2 ) {
             _.each( pool2, function(skill){
