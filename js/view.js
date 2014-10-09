@@ -303,8 +303,34 @@ define(function(require,exports,module){
                 this.model.set("hp",this.model.get("hp") - diff);
             }
         },
+        moveStar:function(el){
+            if ( el.length ) {
+                var p1 = this.$el.position();
+                var p2 = heroView.$el.position()
+                var p3 = el.position();
+                el.appendTo(".map");
+                el.css({
+                    left: p3.left + p1.left,
+                    top: p3.top + p1.top
+                })
+                setTimeout(function(){
+                    el.css({
+                        left:p2.left + blockSize.width/2-el.width()/2,
+                        top:p2.top + blockSize.height/2-el.height()/2
+                    })
+                },10)
+                setTimeout(function(){
+                    el.remove();
+                },410)
+                gameStatus.gainStar++;
+            }
+        },
         checkLive:function(){
             if ( this.model.get("hp") <= 0 ) {
+                //move star to hero
+                this.moveStar(this.$(".star1"));
+                this.moveStar(this.$(".star2"));
+                this.moveStar(this.$(".star3"));
                 var level = this.model.get("level");
                 window.hero.getExp(this.model.get("exp"), level);
                 this.model.destroy();
@@ -577,10 +603,35 @@ define(function(require,exports,module){
                 this.model.set("position",{x:newblock.x,y:newblock.y});
             }
         },
+        moveStar:function(el){
+            if ( el.length ) {
+                var p1 = this.$el.position();
+                var p2 = heroView.$el.position()
+                var p3 = el.position();
+                el.appendTo(".map");
+                el.css({
+                    left: p3.left + p1.left,
+                    top: p3.top + p1.top
+                })
+                setTimeout(function(){
+                    el.css({
+                        left:p2.left + blockSize.width/2-el.width()/2,
+                        top:p2.top + blockSize.height/2-el.height()/2
+                    })
+                },10)
+                setTimeout(function(){
+                    el.remove();
+                },410)
+                gameStatus.gainStar++;
+            }
+        },
         beTaken:function(){
             this.model.effectHappen();
             var self = this;
             this.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", "margin-top":-blockSize.height/2,opacity:0.4});
+            this.moveStar(this.$(".star1"));
+            this.moveStar(this.$(".star2"));
+            this.moveStar(this.$(".star3"));
             setTimeout(function(){
                 self.model.destroy();
             },TIME_SLICE);

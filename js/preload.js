@@ -1,5 +1,7 @@
 define(function(require,exports,module) {
     var imageList = [
+        "dungeon-tile.jpg",
+
         "warrior0-0.png",
         "warrior0-1.png",
         "warrior0-2.png",
