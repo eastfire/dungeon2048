@@ -119,10 +119,10 @@ define(function(require,exports,module){
         var blockW,blockH;
         if ( winW > winH ) {
             window.windowOriention = "landscape";
-            blockW = blockH = (winH-mapWidth)/mapWidth;
+            blockW = blockH = (winH)/mapWidth;
         } else {
             window.windowOriention = "portrait";
-            blockW = blockH = (winW-mapWidth)/mapWidth;
+            blockW = blockH = (winW)/mapWidth;
         }
         return {width:blockW, height:blockH}
     }

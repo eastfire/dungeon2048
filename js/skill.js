@@ -355,11 +355,11 @@ define(function(require,exports,module) {
 
     exports.getSkillPool = function(type){
         var array = [];
-//        _.each(exports.commonSkillPoolEntry, function(skill){
-//             var s = new skill();
-//             s.modelClass = skill;
-//             array.push(s)
-//        });
+        _.each(exports.commonSkillPoolEntry, function(skill){
+             var s = new skill();
+             s.modelClass = skill;
+             array.push(s)
+        });
         var pool2 = exports[type+"SkillPoolEntry"];
         if ( pool2 ) {
             _.each( pool2, function(skill){
