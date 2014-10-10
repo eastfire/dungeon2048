@@ -203,9 +203,13 @@ define(function(require,exports,module){
 
         if ( !gameStatus.tutorial.on && !gameStatus.tutorial[monsterType] ) {
             gameStatus.tutorial[monsterType] = true;
-            var description = Help.monsterDisplayName[monsterType] + "<br/>" + Help.monsterDescription[monsterType].text;
-            var view = new HelpView({text:description, imageClass:Help.monsterDescription[monsterType].imageClass});
-            view.show();
+            (function(monsterType) {
+                setTimeout(function () {
+                    var description = Help.monsterDisplayName[monsterType] + "<br/>" + Help.monsterDescription[monsterType].text;
+                    var view = new HelpView({text: description, imageClass: Help.monsterDescription[monsterType].imageClass});
+                    view.show();
+                }, TIME_SLICE );
+            })(monsterType);
         }
     }
 
@@ -304,7 +308,7 @@ define(function(require,exports,module){
 
         setTimeout(function(){
             gameStatus.phase = PHASE_USER;
-        },TIME_SLICE+1);
+        },TIME_SLICE*5/4);
     }
 
     window.removeSkillFromPool = function(skill){
@@ -655,15 +659,11 @@ define(function(require,exports,module){
         },pass ? 1 : 2*TIME_SLICE+1);
     }
 
-    var checkLevelUp = function(){
-        if ( curLevel > prevLevel ) {
-            showLevelUpDialog(function(){
-                prevLevel++;
-                checkLevelUp();
-            });
-        } else {
-            gameStatus.phase = PHASE_MONSTER_ATTACK;
+    var waitForMonsterAttack = function(){
+        if ( gameStatus.phase == PHASE_MONSTER_ATTACK && !gameStatus.showingDialog ){
             monsterAttack();
+        } else {
+            setTimeout(waitForMonsterAttack, TIME_SLICE)
         }
     }
 
@@ -672,8 +672,8 @@ define(function(require,exports,module){
         window.prevLevel = hero.get("level");
         var pass = heroView.attack(direction);
         setTimeout(function(){
-            window.curLevel = hero.get("level");
-            checkLevelUp();
+            gameStatus.phase = PHASE_MONSTER_ATTACK;
+            waitForMonsterAttack();
         },pass ? 1 : 4*TIME_SLICE+1);
     }
 

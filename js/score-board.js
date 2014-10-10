@@ -171,7 +171,7 @@ define(function(require,exports,module) {
             } else if ( score.killBy.type == "full" ){
                 reason="死于地城爆满"
             } else if ( score.killBy.type == "monster" ){
-                reason="被Lv"+score.killBy.monsterLevel+Help.monsterDisplayName[score.killBy.monsterType]+"杀死";
+                reason="被lv"+score.killBy.monsterLevel+Help.monsterDisplayName[score.killBy.monsterType]+"杀死";
             }
             return reason;
         }

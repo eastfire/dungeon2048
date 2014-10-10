@@ -36,21 +36,37 @@ define(function (require, exports, module) {
         initialize: function () {
             this.on("change:constitution", this.onConstitutionChange, this);
             this.on("change:cunning", this.onCunningChange, this);
+            this.expUnused = 0;
         },
         getExp: function (exp, level) {
-            var currentExp = this.get("exp");
-            var expRequire = this.get("maxExp");
+            console.log("exp:"+exp)
+
             if (level >= WISDOM_THRESHOLD) {
                 exp += Math.round(exp * this.get("wisdom") * WISDOM_EFFECT / 100);
             }
             if (level) {
                 this.set("score", this.get("score") + exp);
             }
-            if (currentExp + exp >= expRequire) {
-                this.levelUp();
-                this.getExp(currentExp + exp - expRequire);
+            if ( this.expUnused == 0 ) {
+                this.expUnused += exp;
+                this.checkLevelUp();
             } else {
-                this.set("exp", currentExp + exp);
+                this.expUnused += exp;
+            }
+        },
+        checkLevelUp:function(){
+            var currentExp = this.get("exp");
+            var expRequire = this.get("maxExp");
+            if (currentExp + this.expUnused >= expRequire) {
+                this.levelUp();
+                this.expUnused -= ( expRequire - currentExp );
+                var self = this;
+                window.showLevelUpDialog(function(){
+                    self.checkLevelUp();
+                })
+            } else {
+                this.set("exp", currentExp + this.expUnused);
+                this.expUnused = 0;
             }
         },
         levelUp: function () {
@@ -62,7 +78,8 @@ define(function (require, exports, module) {
                 maxHp: newMaxHp,
                 hp: newMaxHp,
                 maxExp: this.calExpRequire(newLevel),
-                poison: 0
+                poison: 0,
+                paralysis: 0
             })
         },
         calExpRequire: function (lv) {
