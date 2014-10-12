@@ -177,6 +177,22 @@ body {
     transform:scaleX(-1);
 }
 
+.monster.medusa.d0,.monster.medusa.d1,.monster.medusa.d2,.monster.medusa.d3 {
+    background-image: url("../img/medusa1-0.png");
+}
+.monster.medusa.d0.attacking0, .monster.medusa.d1.attacking0, .monster.medusa.d2.attacking0, .monster.medusa.d3.attacking0 {
+    background-image: url("../img/medusa1-3.png");
+}
+.monster.medusa.d0.attacking1, .monster.medusa.d1.attacking1, .monster.medusa.d2.attacking1, .monster.medusa.d3.attacking1 {
+    background-image: url("../img/medusa1-4.png");
+}
+.monster.medusa.d0.attacking0, .monster.medusa.d3.attacking0 {
+    transform:scaleX(-1);
+}
+.monster.medusa.d0.attacking1, .monster.medusa.d3.attacking1 {
+    transform:scaleX(-1);
+}
+
 .monster.mimic.d0,.monster.mimic.d1,.monster.mimic.d2,.monster.mimic.d3 {
     background-image: url("../img/mimic2-0.png");
 }
@@ -386,6 +402,17 @@ body {
     width: 20%;
 }
 
+.status-freeze {
+    background-image: url("../img/status-freeze.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 20%;
+    position: absolute;
+    right: 15%;
+    top: 40%;
+    width: 20%;
+}
+
 .status-elite {
     background-image: url("../img/status-elite.png");
     background-repeat: no-repeat;
@@ -566,8 +593,14 @@ body {
 .archer-help {
     background-image: url("../img/archer3-0.png");
 }
+.ghost-help {
+    background-image: url("../img/ghost1-0.png");
+}
 .goblin-help {
     background-image: url("../img/goblin1-0.png");
+}
+.medusa-help {
+    background-image: url("../img/medusa1-0.png");
 }
 .mimic-help {
     background-image: url("../img/mimic2-0.png");

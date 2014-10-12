@@ -12,6 +12,7 @@ define(function(require,exports,module){
     var MovableView = Backbone.View.extend({
         initialize:function(){
             this.model.on("change:direction",this.renderDirection,this);
+            this.model.on("change:freeze",this.renderFreeze,this);
         },
         move:function(movement, direction){
             if ( movement <= 0 )
@@ -61,6 +62,14 @@ define(function(require,exports,module){
         renderDirection:function(){
             this.$el.removeClass("d0 d1 d2 d3")
                 .addClass("d"+this.model.get("direction"))
+        },
+        renderFreeze:function(){
+            if ( this.model.get("freeze") && !this.model.previous("freeze")) {
+                this.$el.append("<div class='status-freeze'></div>")
+                this.effecQueue.add.call(this.effecQueue, "麻痹");
+            } else if ( !this.model.get("freeze") && this.model.previous("freeze")) {
+                this.$(".status-freeze").remove();
+            }
         },
         onMoveComplete:function(){
 
@@ -188,14 +197,17 @@ define(function(require,exports,module){
         },
         onNewRound:function(){
             if ( this.model.get("poison") ){
-                this.effecQueue.add.call(this.effecQueue,"♥-"+1);
-                this.model.set("hp",this.model.get("hp")-1);
+                this.effecQueue.add.call(this.effecQueue,"♥-"+this.model.get("poison"));
+                this.model.set("hp",this.model.get("hp")-this.model.get("poison"));
                 if ( !this.model.get("hp") ) {
                     gameStatus.killBy = {
                         type :"poison"
                     }
                     return;
                 }
+            }
+            if ( this.model.get("freeze") ){
+                this.model.set("freeze",this.model.get("freeze")-1);
             }
             _.each(this.skillList, function(skill){
                 if ( skill.onNewRound ){
@@ -469,8 +481,8 @@ define(function(require,exports,module){
     exports.GhostView = exports.MonsterView.extend({
         beAttacked:function(direction, attack, type){
             if ( type.contains("normal") ) {
-                var dodgeRate = Math.min( this.model.get("level")*5 , 50);
-                if ( Math.random() < dodgeRate / 100 ) {
+                var dodgeRate = this.model.getDodgeRate();
+                if ( Math.random() < dodgeRate ) {
 //                    this.effecQueue.add.call(this.effecQueue, "Dodge");
                     return false;
                 }
@@ -483,6 +495,16 @@ define(function(require,exports,module){
         onMerged:function(){
             this.effecQueue.add.call(this.effecQueue, "Level Up");
             this.model.setToLevel(this.model.get("level")+1);
+        }
+    })
+
+    exports.MedusaView = exports.MonsterView.extend({
+        onHitHero:function(){
+            exports.MonsterView.prototype.onHitHero.call(this);
+            var freezeRate = this.model.getFreezeRate();
+            if ( Math.random() < freezeRate ) {
+                hero.set("freeze",2);
+            }
         }
     })
 
@@ -566,6 +588,7 @@ define(function(require,exports,module){
         archer:exports.ArcherView,
         ghost:exports.GhostView,
         goblin:exports.GoblinView,
+        medusa:exports.MedusaView,
         mimic:exports.MimicView,
         minotaur:exports.MinotaurView,
         ogre:exports.OgreView,

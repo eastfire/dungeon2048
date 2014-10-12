@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-10-12 v1.0.2.14
+# 2014-10-12 v1.0.2.15
 /dungeon2048/index.html
 #css
 /dungeon2048/css/bootstrap.css
@@ -19,6 +19,9 @@ CACHE MANIFEST
 /dungeon2048/img/goblin1-0.png
 /dungeon2048/img/goblin1-3.png
 /dungeon2048/img/goblin1-4.png
+/dungeon2048/img/medusa1-0.png
+/dungeon2048/img/medusa1-3.png
+/dungeon2048/img/medusa1-4.png
 /dungeon2048/img/mimic2-0.png
 /dungeon2048/img/mimic2-3.png
 /dungeon2048/img/mimic2-4.png
@@ -59,6 +62,7 @@ CACHE MANIFEST
 #status
 /dungeon2048/img/status-angry.png
 /dungeon2048/img/status-poison.png
+/dungeon2048/img/status-freeze.png
 /dungeon2048/img/status-elite.png
 #hero
 /dungeon2048/img/warrior0-0.png

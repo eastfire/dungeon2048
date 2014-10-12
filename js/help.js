@@ -32,6 +32,7 @@ define(function(require,exports,module) {
         "archer":"骷髅弓箭手",
         "ghost":"幽灵",
         "goblin":"哥布林",
+        "medusa":"美杜莎",
         "mimic":"宝箱怪",
         "minotaur":"牛头怪",
         "ogre":"食人魔",
@@ -48,12 +49,16 @@ define(function(require,exports,module) {
             imageClass:"archer-help"
         },
         "ghost":{
-            text:"一定概率躲过英雄的普通攻击，等级越高概率越高<br/>攻击力：低（为等级的1/2）<br/>经验值：中偏高",
+            text:"一定概率躲过英雄的普通攻击<br/>等级越高概率越高<br/>攻击力：低（为等级的1/2）<br/>经验值：中偏高",
             imageClass:"ghost-help"
         },
         "goblin":{
             text:"每次合并后升级<br/>攻击力：低（为等级的1/2）<br/>经验值：低",
             imageClass:"goblin-help"
+        },
+        "medusa":{
+            text:"击中英雄后一定概率使英雄<u><i>麻痹</i></u>（无法移动）直到下回合。<br/>等级越高概率越高<br/>攻击力：中（与等级相同）<br/>经验值：高",
+            imageClass:"medusa-help"
         },
         "mimic":{
             text:"必然掉落宝物，且其等级与怪物等级相同<br/>攻击力：中（与等级相同）<br/>经验值：始终为1",
@@ -72,7 +77,7 @@ define(function(require,exports,module) {
             imageClass:"orc-help"
         },
         "shaman":{
-            text:"出现或合并后使周围怪物进入<i><u>愤怒</u></i>(攻击力3倍)直到下回合<br/>攻击力：弱（为等级的1/2）<br/>经验值：中",
+            text:"出现或合并后使周围怪物<i><u>愤怒</u></i>(攻击力3倍)直到下回合<br/>攻击力：弱（为等级的1/2）<br/>经验值：中",
             imageClass:"shaman-help"
         },
         "skeleton":{
