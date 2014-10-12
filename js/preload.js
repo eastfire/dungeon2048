@@ -33,6 +33,9 @@ define(function(require,exports,module) {
         "goblin1-0.png",
         "goblin1-3.png",
         "goblin1-4.png",
+        "medusa1-0.png",
+        "medusa1-3.png",
+        "medusa1-4.png",
         "mimic2-0.png",
         "mimic2-3.png",
         "mimic2-4.png",
@@ -74,6 +77,7 @@ define(function(require,exports,module) {
         "status-angry.png",
         "status-elite.png",
         "status-poison.png",
+        "status-freeze.png",
 
         "skill-constitution.png",
         "skill-cunning.png",

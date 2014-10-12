@@ -76,7 +76,7 @@ define(function(require,exports,module){
             turn: 0,
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
-            monsterPool:["archer","ghost","goblin","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","vampire"],
+            monsterPool:["archer","ghost","goblin","medusa","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             currentMonsterMaxLevel : 1,
@@ -544,6 +544,10 @@ define(function(require,exports,module){
 
         var mymodel = mapblock.model;
 
+        if (mymodel.get("freeze")) {
+            mapblock.movement = 0;
+            return;
+        }
         do {
             curx += increment[direction].x;
             cury += increment[direction].y;

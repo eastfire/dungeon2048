@@ -76,8 +76,7 @@ define(function (require, exports, module) {
                 maxHp: newMaxHp,
                 hp: newMaxHp,
                 maxExp: this.calExpRequire(newLevel),
-                poison: 0,
-                paralysis: 0
+                poison: 0
             })
         },
         calExpRequire: function (lv) {
@@ -164,12 +163,24 @@ define(function (require, exports, module) {
         },
         calExp: function (level) {
             return Math.floor(level * 5 / 2);
+        },
+        getDodgeRate:function(){
+            return Math.min( this.get("level")*6 , 66)/100;
         }
     })
 
     exports.Goblin = exports.Monster.extend({
         calAttack: function (level) {
             return Math.round(level / 2);
+        }
+    })
+
+    exports.Medusa = exports.Monster.extend({
+        calExp: function (level) {
+            return level*3-1;
+        },
+        getFreezeRate:function(){
+            return Math.min( this.get("level") * 6, 66 ) / 100;
         }
     })
 
@@ -254,6 +265,7 @@ define(function (require, exports, module) {
         archer: exports.Archer,
         ghost: exports.Ghost,
         goblin: exports.Goblin,
+        medusa: exports.Medusa,
         mimic: exports.Mimic,
         ogre: exports.Ogre,
         orc: exports.Orc,
