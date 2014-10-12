@@ -30,6 +30,7 @@ define(function(require,exports,module) {
 
     exports.monsterDisplayName = {
         "archer":"骷髅弓箭手",
+        "ghost":"幽灵",
         "goblin":"哥布林",
         "mimic":"宝箱怪",
         "minotaur":"牛头怪",
@@ -45,6 +46,10 @@ define(function(require,exports,module) {
         "archer":{
             text:"远程攻击<br/>攻击力：始终为1<br/>经验值：中",
             imageClass:"archer-help"
+        },
+        "ghost":{
+            text:"一定概率躲过英雄的普通攻击，等级越高概率越高<br/>攻击力：低（为等级的1/2）<br/>经验值：中偏高",
+            imageClass:"ghost-help"
         },
         "goblin":{
             text:"每次合并后升级<br/>攻击力：低（为等级的1/2）<br/>经验值：低",

@@ -128,7 +128,10 @@ define(function(require,exports,module){
                 var self = this;
                 setTimeout(function(){
                     self.$el.removeClass("attacking0").addClass("attacking1");
-                    monsterView.beAttacked(direction,self.model.get("attack"));
+                    var result = monsterView.beAttacked(direction,self.model.get("attack"),"melee normal");
+                    if ( !result ) {
+                        self.effecQueue.add.call(self.effecQueue,"Miss!");
+                    }
                 },TIME_SLICE)
                 setTimeout(function(){
                     self.$el.removeClass("attacking1").addClass("attacking0");
@@ -160,7 +163,7 @@ define(function(require,exports,module){
                 return true;
             }
         },
-        takeDamage:function(attack){
+        takeDamage:function(attack, type){
             if ( Math.random() < this.model.get("dexterity")*DIXTERITY_EFFECT/100 ) {
                 return false;
             }
@@ -284,7 +287,7 @@ define(function(require,exports,module){
                 this.model.set("position",{x:newblock.x,y:newblock.y});
             }
         },
-        beAttacked:function(direction, attack){
+        beAttacked:function(direction, attack, type){
             var oldx = this.model.get("position").x * blockSize.width ;
             var oldy = this.model.get("position").y * blockSize.height;
             var x = oldx + increment[direction].x * blockSize.width*0.35;
@@ -292,12 +295,13 @@ define(function(require,exports,module){
             this.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:x, top:y});
             var self = this;
             setTimeout(function(){
-                self.takeDamage(attack);
+                self.takeDamage(attack, type);
                 if ( self.checkLive() )
                     self.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:oldx, top:oldy});
             },TIME_SLICE)
+            return true;
         },
-        takeDamage:function(attack) {
+        takeDamage:function(attack, type) {
             var diff = attack - this.model.get("defend");
             if ( diff > 0 ) {
                 this.model.set("hp",this.model.get("hp") - diff);
@@ -361,7 +365,7 @@ define(function(require,exports,module){
                             monsterLevel:self.model.get("level"),
                             monsterType:self.model.get("type")
                         }
-                        var hit = heroView.takeDamage(att);
+                        var hit = heroView.takeDamage(att, self.model.get("attackType"));
                         if (!hit) {
                             self.effecQueue.add.call(self.effecQueue, "Miss!");
                         } else {
@@ -462,6 +466,19 @@ define(function(require,exports,module){
         }
     })
 
+    exports.GhostView = exports.MonsterView.extend({
+        beAttacked:function(direction, attack, type){
+            if ( type.contains("normal") ) {
+                var dodgeRate = Math.min( this.model.get("level")*5 , 50);
+                if ( Math.random() < dodgeRate / 100 ) {
+//                    this.effecQueue.add.call(this.effecQueue, "Dodge");
+                    return false;
+                }
+            }
+            return exports.MonsterView.prototype.beAttacked.call(this,direction, attack, type);
+        }
+    })
+
     exports.GoblinView = exports.MonsterView.extend({
         onMerged:function(){
             this.effecQueue.add.call(this.effecQueue, "Level Up");
@@ -547,6 +564,7 @@ define(function(require,exports,module){
 
     exports.ViewMap = {
         archer:exports.ArcherView,
+        ghost:exports.GhostView,
         goblin:exports.GoblinView,
         mimic:exports.MimicView,
         minotaur:exports.MinotaurView,
@@ -669,8 +687,6 @@ define(function(require,exports,module){
             this.queue = [];
         },
         add:function(string){
-            if ( !this.queue )
-                console.log(this);
             this.queue.push(string);
             if ( !this.isRunning ){
                 this.start();
@@ -678,8 +694,6 @@ define(function(require,exports,module){
         },
         start:function(){
             this.isRunning = true;
-            //if ( this.queue.length )
-            //    console.log(this.queue);
             var str = this.queue.shift();
             if ( !str ) {
                 this.isRunning = false;

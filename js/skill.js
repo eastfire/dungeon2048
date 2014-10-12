@@ -106,12 +106,12 @@ define(function(require,exports,module) {
                 this.set("currentCount", count+1);
             }
         },
-        attackBlock:function(x,y,direction){
+        attackBlock:function(x,y,direction, type){
             var block = getMapBlock(x,y);
             if ( block && block.type == "monster" ) {
                 var monsterView = block.view;
                 setTimeout(function(){
-                    monsterView.beAttacked(direction,window.hero.get("attack"));
+                    monsterView.beAttacked(direction,window.hero.get("attack"), type);
                 },TIME_SLICE)
             }
         }
@@ -269,7 +269,7 @@ define(function(require,exports,module) {
             if ( this.get("skill-slash-active") ){
                 mx += increment[direction].x;
                 my += increment[direction].y;
-                this.attackBlock(mx,my,direction);
+                this.attackBlock(mx,my,direction,"melee skill");
             }
         },
         onNewRound:function(){
@@ -300,7 +300,7 @@ define(function(require,exports,module) {
             for ( var i in [0,1,2,3]) {
                 var mx = x + increment[i].x;
                 var my = y + increment[i].y;
-                this.attackBlock(mx, my,i);
+                this.attackBlock(mx, my,i,"melee skill");
             }
             this.used();
         }
@@ -325,14 +325,14 @@ define(function(require,exports,module) {
         onActive:function(){
             var x = window.hero.get("position").x;
             var y = window.hero.get("position").y;
-            this.attackBlock(x-1, y-1,0);
-            this.attackBlock(x, y-1,0);
-            this.attackBlock(x+1, y-1,0);
-            this.attackBlock(x-1, y,3);
-            this.attackBlock(x+1, y,1);
-            this.attackBlock(x-1, y+1,2);
-            this.attackBlock(x, y+1,2);
-            this.attackBlock(x+1, y+1,2);
+            this.attackBlock(x-1, y-1,0,"melee skill");
+            this.attackBlock(x, y-1,0,"melee skill");
+            this.attackBlock(x+1, y-1,0,"melee skill");
+            this.attackBlock(x-1, y,3,"melee skill");
+            this.attackBlock(x+1, y,1,"melee skill");
+            this.attackBlock(x-1, y+1,2,"melee skill");
+            this.attackBlock(x, y+1,2,"melee skill");
+            this.attackBlock(x+1, y+1,2,"melee skill");
             this.used();
         }
     })
