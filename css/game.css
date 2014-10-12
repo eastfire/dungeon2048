@@ -145,6 +145,22 @@ body {
     background-image: url("../img/archer3-5.png");
 }
 
+.monster.ghost.d0,.monster.ghost.d1,.monster.ghost.d2,.monster.ghost.d3 {
+    background-image: url("../img/ghost1-0.png");
+}
+.monster.ghost.d0.attacking0, .monster.ghost.d1.attacking0, .monster.ghost.d2.attacking0, .monster.ghost.d3.attacking0 {
+    background-image: url("../img/ghost1-3.png");
+}
+.monster.ghost.d0.attacking1, .monster.ghost.d1.attacking1, .monster.ghost.d2.attacking1, .monster.ghost.d3.attacking1 {
+    background-image: url("../img/ghost1-4.png");
+}
+.monster.ghost.d0.attacking0, .monster.ghost.d3.attacking0 {
+    transform:scaleX(-1);
+}
+.monster.ghost.d0.attacking1, .monster.ghost.d3.attacking1 {
+    transform:scaleX(-1);
+}
+
 .monster.goblin.d0,.monster.goblin.d1,.monster.goblin.d2,.monster.goblin.d3 {
     background-image: url("../img/goblin1-0.png");
 }

@@ -76,7 +76,7 @@ define(function(require,exports,module){
             turn: 0,
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
-            monsterPool:["archer","goblin","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","vampire"],
+            monsterPool:["archer","ghost","goblin","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             currentMonsterMaxLevel : 1,

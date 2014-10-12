@@ -39,8 +39,6 @@ define(function (require, exports, module) {
             this.expUnused = 0;
         },
         getExp: function (exp, level) {
-            console.log("exp:"+exp)
-
             if (level >= WISDOM_THRESHOLD) {
                 exp += Math.round(exp * this.get("wisdom") * WISDOM_EFFECT / 100);
             }
@@ -111,6 +109,7 @@ define(function (require, exports, module) {
                 attack: 1,
                 hp: 1,
                 defend: 0,
+                attackType: "melee normal",
                 position: {
                     x: 0,
                     y: 0
@@ -146,11 +145,25 @@ define(function (require, exports, module) {
     })
 
     exports.Archer = exports.Monster.extend({
+        defaults:function(){
+            var data = exports.Monster.prototype.defaults.call(this);
+            data.attackType = "range normal";
+            return data;
+        },
         calAttack: function (level) {
             return 1;
         },
         calExp: function (level) {
             return Math.floor(level * 3 / 2);
+        }
+    })
+
+    exports.Ghost = exports.Monster.extend({
+        calAttack: function (level) {
+            return Math.round(level / 2);
+        },
+        calExp: function (level) {
+            return Math.floor(level * 5 / 2);
         }
     })
 
@@ -239,6 +252,7 @@ define(function (require, exports, module) {
 
     exports.ModelMap = {
         archer: exports.Archer,
+        ghost: exports.Ghost,
         goblin: exports.Goblin,
         mimic: exports.Mimic,
         ogre: exports.Ogre,

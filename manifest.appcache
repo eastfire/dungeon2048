@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-10-10 v1.0.2.14
+# 2014-10-12 v1.0.2.14
 /dungeon2048/index.html
 #css
 /dungeon2048/css/bootstrap.css
@@ -13,6 +13,9 @@ CACHE MANIFEST
 /dungeon2048/img/archer3-3.png
 /dungeon2048/img/archer3-4.png
 /dungeon2048/img/archer3-5.png
+/dungeon2048/img/ghost1-0.png
+/dungeon2048/img/ghost1-3.png
+/dungeon2048/img/ghost1-4.png
 /dungeon2048/img/goblin1-0.png
 /dungeon2048/img/goblin1-3.png
 /dungeon2048/img/goblin1-4.png
