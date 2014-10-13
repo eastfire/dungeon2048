@@ -20,10 +20,14 @@ define(function(require,exports,module) {
             this.$el.html("<div><ul class='nav nav-tabs game-over-tabs' role='tablist'>" +
                 "<li class='active'><a href='#score' role='tab' data-toggle='tab'>排行榜</a></li>" +
                 "<li><a href='#message' role='tab' data-toggle='tab'>留言板</a></li>" +
+                "<li><a href='#unlock' role='tab' data-toggle='tab'>解锁</a></li>" +
+                "<li><a href='#achievement' role='tab' data-toggle='tab'>成就</a></li>" +
                 "</ul>" +
                 "<div class='tab-content'>" +
                 "<div class='tab-pane fade in active' id='score'></div>" +
                 "<div class='tab-pane fade' id='message'></div>" +
+                "<div class='tab-pane fade' id='unlock'></div>" +
+                "<div class='tab-pane fade' id='achievement'></div>" +
                 "</div></div>" +
                 "<p class='game-over-buttons'><button class='btn btn-default to-menu'>回主菜单</button><button class='btn btn-primary restart-game'>再来一局</button></p>")
 
@@ -108,7 +112,7 @@ define(function(require,exports,module) {
             this.scoreQuery = new Firebase("https://dungeon2048.firebaseio.com/score").endAt().limit(10);
             this.scoreRef = this.scoreQuery.ref();
             var self = this;
-            if ( options && options.currentScore){
+            if ( options && options.currentScore && options.currentScore.killBy ){
                 this.$el.addClass("loading");
                 this.scoreRef.push(options.currentScore, function(){
                     console.log("score upload complete");

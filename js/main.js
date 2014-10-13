@@ -505,7 +505,10 @@ define(function(require,exports,module){
     }
 
     var initEvent = function(){
-        var hammertime = Hammer($('.map')[0]).on("swipeup", function(event) {
+        var hammertime = Hammer($('.map')[0],{
+            swipe_velocity:0.1
+        })
+        hammertime.on("swipeup", function(event) {
             if ( window.isDirectionInputValid() )
                 directionInput(0);
         }).on("swiperight", function(event) {
@@ -756,7 +759,7 @@ define(function(require,exports,module){
         gameStatus.phase = PHASE_GAME_OVER;
         setTimeout(function(){
             var view = new ScoreBoard.GameOver();
-            $(".map").append(view.render().$el);
+            $(".main-window").append(view.render().$el);
             $(".hero-active-skill").hide();
             /*var scoreBoard = new ScoreBoard.ScoreBoard({currentScore:gameStatus.death})
             $(".map").append(scoreBoard.render().$el);

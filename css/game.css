@@ -498,9 +498,12 @@ body {
     position: absolute;
     text-align: center;
     width: 100%;
+    top:0;
+    left:0;
 }
 .game-over-title {
     display: block;
+    font-size: 2em;
 }
 .game-over-buttons {
     bottom: 0;
@@ -551,6 +554,9 @@ body {
     display: inline-block;
     margin-left: 10px;
     word-wrap: break-word;
+}
+.message-list {
+    overflow: auto;
 }
 
 .help {
