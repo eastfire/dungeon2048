@@ -320,10 +320,11 @@ define(function(require,exports,module){
         }
     }
 
-    var removeAllActiveSkillFromPool = function(){
+    var removeAllOtherActiveSkillFromPool = function(){
         var newPool = [];
         for ( var i = 0; i < window.gameStatus.skillPool.length ; i++) {
-            if ( window.gameStatus.skillPool[i].get("type") != "active" ) {
+            var skill = window.gameStatus.skillPool[i];
+            if ( skill.get("type") != "active" || window.heroView.hasSkill(skill)) {
                 newPool.push(window.gameStatus.skillPool[i])
             }
         }
@@ -349,7 +350,7 @@ define(function(require,exports,module){
                 } else {
                     window.heroView.getSkill(model);
                     if ( window.heroView.isSkillSlotFull() ){
-                        removeAllActiveSkillFromPool();
+                        removeAllOtherActiveSkillFromPool();
                     }
                 }
                 model.levelup();

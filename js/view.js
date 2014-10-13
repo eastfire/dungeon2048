@@ -91,6 +91,15 @@ define(function(require,exports,module){
             return this;
         },
         getSkill:function(skill){
+            var found = this.hasSkill(skill);
+            if ( found ) {
+                found.set("level", skill.get("level"));
+            } else {
+                this.skillList.push(skill.clone());
+            }
+            this.renderSkillList();
+        },
+        hasSkill:function(skill){
             var found = null;
             for ( var i = 0; i < this.skillList.length; i++) {
                 if ( this.skillList[i].get("name") == skill.get("name") ){
@@ -98,12 +107,7 @@ define(function(require,exports,module){
                     break;
                 }
             }
-            if ( found ) {
-                found.set("level", skill.get("level"));
-            } else {
-                this.skillList.push(skill.clone());
-            }
-            this.renderSkillList();
+            return found;
         },
         isSkillSlotFull:function(){
             return this.skillList.length >= this.model.get("skillSlot");
