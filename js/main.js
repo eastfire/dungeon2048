@@ -311,13 +311,23 @@ define(function(require,exports,module){
         },TIME_SLICE*5/4);
     }
 
-    window.removeSkillFromPool = function(skill){
+    var removeSkillFromPool = function(skill){
         for ( var i = 0; i < window.gameStatus.skillPool.length ; i++) {
             if ( window.gameStatus.skillPool[i].get("name") == skill.get("name") ) {
                 window.gameStatus.skillPool.splice(i,1);
                 return;
             }
         }
+    }
+
+    var removeAllActiveSkillFromPool = function(){
+        var newPool = [];
+        for ( var i = 0; i < window.gameStatus.skillPool.length ; i++) {
+            if ( window.gameStatus.skillPool[i].get("type") != "active" ) {
+                newPool.push(window.gameStatus.skillPool[i])
+            }
+        }
+        window.gameStatus.skillPool = newPool;
     }
 
     window.showLevelUpDialog = function(callback){
@@ -338,6 +348,9 @@ define(function(require,exports,module){
                     model.onGet.call(model);
                 } else {
                     window.heroView.getSkill(model);
+                    if ( window.heroView.isSkillSlotFull() ){
+                        removeAllActiveSkillFromPool();
+                    }
                 }
                 model.levelup();
                 if ( model.get("level") >= model.get("maxLevel") ) {
@@ -780,6 +793,7 @@ define(function(require,exports,module){
         heroView = new View.HeroView({model:hero});
         renderMap();
         mapEl.append(heroView.render().$el);
+        heroView.renderSkillList();
 
         heroStatusView = new View.HeroStatusView({el:$(".hero-status"), model:hero})
         heroStatusView.render();

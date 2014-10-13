@@ -105,12 +105,25 @@ define(function(require,exports,module){
             }
             this.renderSkillList();
         },
+        isSkillSlotFull:function(){
+            return this.skillList.length >= this.model.get("skillSlot");
+        },
         renderSkillList:function(){
             var list = $(".hero-active-skill");
             list.empty();
-            for ( var i = 0 ;i < this.skillList.length; i++ ) {
+            var i = 0;
+            for ( ;i < this.skillList.length; i++ ) {
                 var view = new Skill.SkillView({model:this.skillList[i] , mode:"list"})
                 list.append(view.render().$el)
+            }
+            for ( ; i < this.model.get("skillSlot") ; i++ ){
+                var emptySlot = $("<div class='empty-skill-slot'></div>")
+                emptySlot.css({
+                    width: blockSize.width*3/4,
+                    height: blockSize.height*3/4,
+                    margin: blockSize.width/8
+                })
+                list.append(emptySlot)
             }
         },
         levelUp:function(){

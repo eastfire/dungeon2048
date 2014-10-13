@@ -4,14 +4,26 @@ define(function(require,exports,module){
             return {
                 name:"",
                 displayName:"",
+                description:"",
                 cost:0
             }
         },
-        checkValid:function(){
+        isValid:function(){
 
         },
-        onUnlock:function(){
+        effect:function(){
 
+        },
+        isUnlocked:function(){
+            return localStorage.getItem("unlock-"+this.get("name"));
+        },
+        unlock:function(){
+            localStorage.setItem("unlock-"+this.get("name"), true);
+        },
+        onStartGame:function(){
+            if ( this.isUnlocked() ) {
+                this.effect();
+            }
         }
     })
 
@@ -23,10 +35,10 @@ define(function(require,exports,module){
                 reward:0
             }
         },
-        checkValid:function(){
+        isValid:function(){
 
         },
-        checkPass:function(){
+        isPassed:function(){
 
         },
         onReward:function(){

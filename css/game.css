@@ -671,7 +671,14 @@ body {
 .hero-active-skill .skill-level {
     font-size: 1em;
 }
-.main-window.portrait .hero-active-skill .skill {
+
+.empty-skill-slot {
+    border: 1px dashed black;
+    border-radius: 10px;
+    height: 90px;
+}
+
+.main-window.portrait .hero-active-skill .skill, .main-window.portrait .hero-active-skill .empty-skill-slot {
     display: inline-block;
 }
 .skill-level {
@@ -691,7 +698,6 @@ body {
 
 .skill-image-icon {
     position: relative;
-    margin: 5px;
 }
 
 .skill-cool-down {

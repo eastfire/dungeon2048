@@ -20,6 +20,7 @@ define(function (require, exports, module) {
                 attack: 1,
                 defend: 0,
                 direction: 2,
+                skillSlot:2,
                 position: {
                     x: 2,
                     y: 2
