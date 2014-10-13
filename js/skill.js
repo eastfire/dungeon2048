@@ -35,11 +35,14 @@ define(function(require,exports,module) {
                 this.$el.css({
                     "font-size":blockSize.height/6+"px"
                 })
-
-                this.$(".skill-image-icon").width(blockSize.width*3/4)
+                var w = blockSize.width*3/4;
+                var h = blockSize.height*3/4;
+                this.$(".skill-level").width(w)
+                this.$(".skill-image-icon").width(w)
                 var image = this.$(".skill-image");
-                image.height(blockSize.height*3/4).width(blockSize.width*3/4)
-                this.$(".skill-cool-down").css("line-height",blockSize.height*3/4+"px");
+                image.height(h).width(w)
+                this.$(".skill-image-icon").css("margin",(blockSize.width-w)/2)
+                this.$(".skill-cool-down").css("line-height",h+"px");
                 this.coolDown = this.$(".skill-cool-down");
                 this.renderCoolDown();
                 this.model.on("change:coolDown",this.renderCoolDown,this);
