@@ -26,8 +26,8 @@ define(function(require,exports,module) {
                 "<div class='tab-content'>" +
                 "<div class='tab-pane fade in active' id='score'></div>" +
                 "<div class='tab-pane fade' id='message'></div>" +
-                "<div class='tab-pane fade' id='unlock'></div>" +
-                "<div class='tab-pane fade' id='achievement'></div>" +
+                "<div class='tab-pane fade' id='unlock'>开发中……</div>" +
+                "<div class='tab-pane fade' id='achievement'>开发中……</div>" +
                 "</div></div>" +
                 "<p class='game-over-buttons'><button class='btn btn-default to-menu'>回主菜单</button><button class='btn btn-primary restart-game'>再来一局</button></p>")
 
