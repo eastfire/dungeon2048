@@ -4,6 +4,11 @@ define(function(require,exports,module){
             return Math.log(num)/Math.log(10)
         }
     }
+    if ( !String.prototype.contains ) {
+        String.prototype.contains = function(str){
+            return this.indexOf(str) > -1;
+        }
+    }
     window.clone = function(obj){
         return JSON.parse( JSON.stringify(obj) );
     }
