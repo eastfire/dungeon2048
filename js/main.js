@@ -783,9 +783,9 @@ define(function(require,exports,module){
     }
 
     document.ontouchmove = function(e){
-        var target = e.currentTarget;
+        var target = e.target;
         while(target) {
-            if(checkIfElementShouldScroll(target))
+            if($(target).hasClass("scrollable"))
                 return;
             target = target.parentNode;
         }

@@ -133,7 +133,7 @@ define(function(require,exports,module) {
             })
         },
         render:function(){
-            this.$el.html("<table class='score-list'></table>")
+            this.$el.html("<table class='score-list scrollable'></table>")
             this.$el.addClass("score-board");
             return this;
         },
@@ -198,7 +198,7 @@ define(function(require,exports,module) {
                 "<button class='btn btn-default send' type='button'>发送</button>"+
                 "</span>" +
                 "</div>" +
-                "<ul class='message-list'></ul>")
+                "<ul class='message-list scrollable'></ul>")
             this.$el.addClass("message-board");
             this.query = new Firebase("https://dungeon2048.firebaseio.com/message").endAt().limit(this.currentLimit);
             this.ref = this.query.ref();
