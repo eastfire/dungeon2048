@@ -782,8 +782,14 @@ define(function(require,exports,module){
         },TIME_SLICE);
     }
 
-    document.ontouchmove = function(event){
-        event.preventDefault();
+    document.ontouchmove = function(e){
+        var target = e.currentTarget;
+        while(target) {
+            if(checkIfElementShouldScroll(target))
+                return;
+            target = target.parentNode;
+        }
+        e.preventDefault();
     }
 
     window.startGame = function(){
