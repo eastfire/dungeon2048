@@ -560,6 +560,10 @@ body {
     padding: 0 5%;
 }
 
+.scrollable {
+    -webkit-overflow-scroll:touch;
+}
+
 .help {
     position:absolute;
     width: 100%;

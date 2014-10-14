@@ -135,6 +135,9 @@ define(function(require,exports,module) {
         render:function(){
             this.$el.html("<table class='score-list scrollable'></table>")
             this.$el.addClass("score-board");
+            this.$(".scrollable").ontouchmove = function(e) {
+                e.stopPropagation();
+            };
             return this;
         },
         renderList:function(){
@@ -200,6 +203,9 @@ define(function(require,exports,module) {
                 "</div>" +
                 "<ul class='message-list scrollable'></ul>")
             this.$el.addClass("message-board");
+            this.$(".scrollable").ontouchmove = function(e) {
+                e.stopPropagation();
+            };
             this.query = new Firebase("https://dungeon2048.firebaseio.com/message").endAt().limit(this.currentLimit);
             this.ref = this.query.ref();
             var self = this;
