@@ -557,6 +557,7 @@ body {
 }
 .message-list {
     overflow: auto;
+    padding: 0 5%;
 }
 
 .help {
