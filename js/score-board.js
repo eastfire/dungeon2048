@@ -48,7 +48,7 @@ define(function(require,exports,module) {
                 $(this).tab('show')
             })
             setTimeout(function(){
-                var h = self.$('.map').height() - self.$('.game-over-tabs').height() - self.$(".game-over-buttons").height();
+                var h = self.$('.main-window').height() - self.$('.game-over-tabs').height() - self.$(".game-over-buttons").height();
                 self.$(".score-board").height(h-25)
                 self.$(".message-list").height(h-75)
             },100);
@@ -112,12 +112,16 @@ define(function(require,exports,module) {
             this.scoreQuery = new Firebase("https://dungeon2048.firebaseio.com/score").endAt().limit(10);
             this.scoreRef = this.scoreQuery.ref();
             var self = this;
-            if ( options && options.currentScore && options.currentScore.killBy ){
-                this.$el.addClass("loading");
+            this.score = null;
+            this.$el.addClass("loading");
+            if ( options && options.currentScore && options.currentScore.killBy ) {
+                this.score = options.currentScore;
                 this.scoreRef.push(options.currentScore, function(){
                     console.log("score upload complete");
                     self.fetchScore.call(self);
                 })
+            } else {
+                this.fetchScore.call(self);
             }
         },
         fetchScore:function(){
@@ -143,7 +147,7 @@ define(function(require,exports,module) {
                     return;
 
                 var current;
-                if ( score.timestamp == gameStatus.death.timestamp ){
+                if ( this.score &&  score.timestamp == this.score.timestamp ){
                     current = "current";
                     found = true;
                 } else {
@@ -157,14 +161,14 @@ define(function(require,exports,module) {
                         "<td class='score-cell player-kill-by'>"+self.getReason(score)+"</td>"+
                     "</tr>")
             } )
-            if ( !found ) {
+            if ( !found && this.score ) {
                 list.append("<tr class='score-row placeholder'><td><b>……</b></td><td></td></td><td></td><td></td><td></td></tr>");
                 list.append("<tr class='score-row current'>" +
-                    "<td class='score-cell player-name'>"+gameStatus.death.name+"</td>"+
-                    "<td class='score-cell player-level'>"+"lv"+gameStatus.death.level+"</td>"+
-                    "<td class='score-cell player-type'>"+gameStatus.death.type+"</td>"+
-                    "<td class='score-cell player-score'>"+gameStatus.death.score+"分</td>"+
-                    "<td class='score-cell player-kill-by'>"+self.getReason(gameStatus.death)+"</td>"+
+                    "<td class='score-cell player-name'>"+this.score.name+"</td>"+
+                    "<td class='score-cell player-level'>"+"lv"+this.score.level+"</td>"+
+                    "<td class='score-cell player-type'>"+this.score.type+"</td>"+
+                    "<td class='score-cell player-score'>"+this.score.score+"分</td>"+
+                    "<td class='score-cell player-kill-by'>"+self.getReason(this.score)+"</td>"+
                     "</tr>")
             }
         },
