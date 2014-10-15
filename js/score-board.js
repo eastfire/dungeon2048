@@ -56,6 +56,7 @@ define(function(require,exports,module) {
                 var h = self.$('.main-window').height() - self.$('.game-over-tabs').height() - self.$(".game-over-buttons").height();
                 self.$(".score-board").height(h-25)
                 self.$(".message-list").height(h-75)
+                self.$(".unlock-list").height(h-75)
             },100);
         },
         restartGame:function(){
