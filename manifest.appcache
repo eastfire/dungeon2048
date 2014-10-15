@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-10-14 v1.0.2.21
+# 2014-10-15 v1.0.2.22
 /dungeon2048/index.html
 #css
 /dungeon2048/css/bootstrap.css
@@ -97,6 +97,9 @@ CACHE MANIFEST
 /dungeon2048/img/skill-slash.png
 /dungeon2048/img/skill-whirl.png
 /dungeon2048/img/skill-big-whirl.png
+/dungeon2048/img/skill-horizontal-slash.png
+/dungeon2048/img/skill-vertical-slash.png
+/dungeon2048/img/skill-cross-slash.png
 #misc
 /dungeon2048/img/loading.gif
 #libs js
@@ -119,7 +122,6 @@ CACHE MANIFEST
 /dungeon2048/js/help.js
 /dungeon2048/js/skill.js
 /dungeon2048/js/score-board.js
+/dungeon2048/js/unlock.js
 #layout
 /dungeon2048/layout/main_window.html
-
-

@@ -113,9 +113,10 @@ define(function(require,exports,module) {
             var block = getMapBlock(x,y);
             if ( block && block.type == "monster" ) {
                 var monsterView = block.view;
-                setTimeout(function(){
-                    monsterView.beAttacked(direction,window.hero.get("attack"), type);
-                },TIME_SLICE)
+                monsterView.beAttacked(direction,window.hero.get("attack"), type);
+//                setTimeout(function(){
+//
+//                },TIME_SLICE)
             }
         }
     })
@@ -247,7 +248,9 @@ define(function(require,exports,module) {
     })
 
     exports.SlashSkill = exports.Skill.extend({
-        modelClass:exports.SlashSkill,
+        initialize:function() {
+            this.modelClass = exports.SlashSkill
+        },
         defaults:function(){
             return {
                 name:"slash",
@@ -272,7 +275,10 @@ define(function(require,exports,module) {
             if ( this.get("skill-slash-active") ){
                 mx += increment[direction].x;
                 my += increment[direction].y;
-                this.attackBlock(mx,my,direction,"melee skill");
+                var self = this;
+                setTimeout(function(){
+                    self.attackBlock(mx,my,direction,"melee skill");
+                },TIME_SLICE);
             }
         },
         onNewRound:function(){
@@ -282,7 +288,9 @@ define(function(require,exports,module) {
     })
 
     exports.WhirlSkill = exports.Skill.extend({
-        modelClass:exports.WhirlSkill,
+        initialize:function() {
+            this.modelClass = exports.WhirlSkill
+        },
         defaults:function(){
             return {
                 name:"whirl",
@@ -300,17 +308,22 @@ define(function(require,exports,module) {
         onActive:function(){
             var x = window.hero.get("position").x;
             var y = window.hero.get("position").y;
+            var totalHit = 0;
             for ( var i in [0,1,2,3]) {
                 var mx = x + increment[i].x;
                 var my = y + increment[i].y;
-                this.attackBlock(mx, my,i,"melee skill");
+                var result = this.attackBlock(mx, my,i,"melee skill");
+                if ( result )
+                    totalHit++;
             }
             this.used();
         }
     })
 
     exports.BigWhirlSkill = exports.Skill.extend({
-        modelClass:exports.BigWhirlSkill,
+        initialize:function() {
+            this.modelClass = exports.BigWhirlSkill
+        },
         defaults:function(){
             return {
                 name:"big-whirl",
@@ -328,14 +341,149 @@ define(function(require,exports,module) {
         onActive:function(){
             var x = window.hero.get("position").x;
             var y = window.hero.get("position").y;
-            this.attackBlock(x-1, y-1,0,"melee skill");
-            this.attackBlock(x, y-1,0,"melee skill");
-            this.attackBlock(x+1, y-1,0,"melee skill");
-            this.attackBlock(x-1, y,3,"melee skill");
-            this.attackBlock(x+1, y,1,"melee skill");
-            this.attackBlock(x-1, y+1,2,"melee skill");
-            this.attackBlock(x, y+1,2,"melee skill");
-            this.attackBlock(x+1, y+1,2,"melee skill");
+            var totalHit = 0;
+            var result = this.attackBlock(x-1, y-1,0,"melee skill");
+            if ( result )
+                totalHit++;
+            result = this.attackBlock(x, y-1,0,"melee skill");
+            if ( result )
+                totalHit++;
+            result = this.attackBlock(x+1, y-1,0,"melee skill");
+            if ( result )
+                totalHit++;
+            result = this.attackBlock(x-1, y,3,"melee skill");
+            if ( result )
+                totalHit++;
+            result = this.attackBlock(x+1, y,1,"melee skill");
+            if ( result )
+                totalHit++;
+            result = this.attackBlock(x-1, y+1,2,"melee skill");
+            if ( result )
+                totalHit++;
+            result = this.attackBlock(x, y+1,2,"melee skill");
+            if ( result )
+                totalHit++;
+            result = this.attackBlock(x+1, y+1,2,"melee skill");
+            if ( result )
+                totalHit++;
+            this.used();
+        }
+    })
+
+    exports.HorizontalSlashSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.HorizontalSlashSkill
+        },
+        defaults:function(){
+            return {
+                name:"horizontal-slash",
+                type:"active",
+                displayName:"横斩",
+                level:1,
+                maxLevel:1,
+                currentCount:20,
+                coolDown:20
+            }
+        },
+        generateDescription:function(){
+            return "杀死与英雄同一行的所有怪物"
+        },
+        onActive:function(){
+            var x = window.hero.get("position").x;
+            var y = window.hero.get("position").y;
+            var totalHit = 0;
+            for ( var i = 0 ; i < x ; i++ ) {
+                var result = this.attackBlock(i, y, 0, "melee skill");
+                if ( result )
+                    totalHit++;
+            }
+            for ( var i = x+1 ; i < mapWidth ; i++ ) {
+                var result = this.attackBlock(i, y, 0, "melee skill");
+                if ( result )
+                    totalHit++;
+            }
+            this.used();
+        }
+    })
+
+    exports.VerticalSlashSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.VerticalSlashSkill
+        },
+        defaults:function(){
+            return {
+                name:"vertical-slash",
+                type:"active",
+                displayName:"纵斩",
+                level:1,
+                maxLevel:1,
+                currentCount:20,
+                coolDown:20
+            }
+        },
+        generateDescription:function(){
+            return "杀死与英雄同一列的所有怪物"
+        },
+        onActive:function(){
+            var x = window.hero.get("position").x;
+            var y = window.hero.get("position").y;
+            var totalHit = 0;
+            for ( var i = 0 ; i < y ; i++ ) {
+                var result = this.attackBlock(x, i, 0, "melee skill");
+                if ( result )
+                    totalHit++;
+            }
+            for ( var i = y+1 ; i < mapHeight ; i++ ) {
+                var result = this.attackBlock(x, i, 0, "melee skill");
+                if ( result )
+                    totalHit++;
+            }
+            this.used();
+        }
+    })
+
+    exports.CrossSlashSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.CrossSlashSkill
+        },
+        defaults:function(){
+            return {
+                name:"cross-slash",
+                type:"active",
+                displayName:"十字斩",
+                level:1,
+                maxLevel:1,
+                currentCount:38,
+                coolDown:38
+            }
+        },
+        generateDescription:function(){
+            return "杀死与英雄同一行和同一列的所有怪物"
+        },
+        onActive:function(){
+            var x = window.hero.get("position").x;
+            var y = window.hero.get("position").y;
+            var totalHit = 0;
+            for ( var i = 0 ; i < x ; i++ ) {
+                var result = this.attackBlock(i, y, 0, "melee skill");
+                if ( result )
+                    totalHit++;
+            }
+            for ( var i = x+1 ; i < mapWidth ; i++ ) {
+                var result = this.attackBlock(i, y, 0, "melee skill");
+                if ( result )
+                    totalHit++;
+            }
+            for ( var i = 0 ; i < y ; i++ ) {
+                var result = this.attackBlock(x, i, 0, "melee skill");
+                if ( result )
+                    totalHit++;
+            }
+            for ( var i = y+1 ; i < mapHeight ; i++ ) {
+                var result = this.attackBlock(x, i, 0, "melee skill");
+                if ( result )
+                    totalHit++;
+            }
             this.used();
         }
     })
@@ -350,11 +498,11 @@ define(function(require,exports,module) {
         exports.RecoverSkill
     ]
 
-    exports.warriorSkillPoolEntry = [
+    exports.warriorBasicSkillPoolEntry = [
         exports.SlashSkill,
-        exports.WhirlSkill,
-        exports.BigWhirlSkill,
+        exports.WhirlSkill
     ]
+    //exports.BigWhirlSkill
 
     exports.getSkillPool = function(type){
         var array = [];
@@ -363,7 +511,7 @@ define(function(require,exports,module) {
              s.modelClass = skill;
              array.push(s)
         });
-        var pool2 = exports[type+"SkillPoolEntry"];
+        var pool2 = exports[type+"BasicSkillPoolEntry"];
         if ( pool2 ) {
             _.each( pool2, function(skill){
                 var s = new skill();
@@ -371,6 +519,10 @@ define(function(require,exports,module) {
                 array.push(s)
             });
         }
+//
+//        array = [new exports.HorizonalSlashSkill(),
+//            new exports.VerticalSlashSkill(),
+//            new exports.CrossSlashSkill()]
         return array;
     }
 })

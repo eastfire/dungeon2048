@@ -89,6 +89,9 @@ define(function(require,exports,module) {
         "skill-slash.png",
         "skill-whirl.png",
         "skill-big-whirl.png",
+        "skill-horizontal-slash.png",
+        "skill-vertical-slash.png",
+        "skill-cross-slash.png",
 
         "loading.gif"
     ];

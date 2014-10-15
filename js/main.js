@@ -53,6 +53,7 @@ define(function(require,exports,module){
     var Skill = require("./skill");
     var HelpView = Help.HelpView;
     var ScoreBoard = require("./score-board");
+    var Unlock = require("./unlock")
 
     window.PHASE_GENERATE = 0;
     window.PHASE_USER = 1;
@@ -102,6 +103,12 @@ define(function(require,exports,module){
 
     var initSkillPool = function(){
         window.gameStatus.skillPool = Skill.getSkillPool("warrior");
+    }
+
+    var initUnlock = function(){
+        _.each(Unlock.AllUnlocks,function(unlock){
+            unlock.onStartGame.call(unlock);
+        })
     }
 
     var calculateBlockSize = function(){
@@ -795,7 +802,7 @@ define(function(require,exports,module){
     window.startGame = function(){
         $("body .main-window-wrapper").empty();
         initGameStatus();
-        initSkillPool();
+
         window.map = initMap();
         window.getMapBlock = function(x,y){
             if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
@@ -808,10 +815,15 @@ define(function(require,exports,module){
         heroView = new View.HeroView({model:hero});
         renderMap();
         mapEl.append(heroView.render().$el);
-        heroView.renderSkillList();
 
         heroStatusView = new View.HeroStatusView({el:$(".hero-status"), model:hero})
         heroStatusView.render();
+
+        initSkillPool();
+
+        initUnlock();
+
+        heroView.renderSkillList();
 
         initEvent();
 
