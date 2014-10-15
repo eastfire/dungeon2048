@@ -560,6 +560,59 @@ body {
     padding: 0 5%;
 }
 
+.unlock-title {
+    font-size: 1.4em;
+    margin: 5px 15px;
+    text-align: left;
+}
+
+.unlock-list {
+    overflow: auto;
+}
+
+.unlock-it {
+    position: absolute;
+    right: 0;
+}
+
+.unlock-icon {
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: inline-block;
+    height: 46px;
+    width: 46px;
+    left: 0px;
+    position: absolute;
+}
+
+.unlock-item {
+    border: 1px solid black;
+    border-radius: 6px;
+    display: block;
+    height: 48px;
+    margin: 5px 10px;
+    position: relative;
+}
+
+.unlock-description {
+    border: 0 none;
+    display: inline-block;
+    left: 50px;
+    position: absolute;
+    right: 75px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.star {
+    background-image: url("../img/status-elite.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 15px;
+    width: 15px;
+    display: inline-block;
+}
+
 .scrollable {
     -webkit-overflow-scroll:touch;
 }
@@ -750,6 +803,15 @@ body {
 .skill-image-whirl {
     background-image: url("../img/skill-whirl.png");
 }
-.skill-image-big-whirl {
+.skill-image-big-whirl, .unlock-icon-big-whirl {
     background-image: url("../img/skill-big-whirl.png");
+}
+.skill-image-horizontal-slash, .unlock-icon-horizontal-slash {
+    background-image: url("../img/skill-horizontal-slash.png");
+}
+.skill-image-vertical-slash, .unlock-icon-vertical-slash {
+    background-image: url("../img/skill-vertical-slash.png");
+}
+.skill-image-cross-slash, .unlock-icon-cross-slash {
+    background-image: url("../img/skill-cross-slash.png");
 }

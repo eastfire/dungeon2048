@@ -1,5 +1,7 @@
 define(function(require,exports,module) {
     var Help = require("./help");
+    var Unlock = require("./unlock");
+
     exports.GameOver = Backbone.View.extend({
         events:{
             "click .restart-game":"restartGame",
@@ -26,10 +28,10 @@ define(function(require,exports,module) {
                 "<div class='tab-content'>" +
                 "<div class='tab-pane fade in active' id='score'></div>" +
                 "<div class='tab-pane fade' id='message'></div>" +
-                "<div class='tab-pane fade' id='unlock'>开发中……</div>" +
+                "<div class='tab-pane fade' id='unlock'></div>" +
                 "<div class='tab-pane fade' id='achievement'>开发中……</div>" +
                 "</div></div>" +
-                "<p class='game-over-buttons'><button class='btn btn-default to-menu'>回主菜单</button><button class='btn btn-primary restart-game'>再来一局</button></p>")
+                "<p class='game-over-buttons'><button class='btn btn-primary restart-game'>再来一局</button></p>")
 
             var view = new exports.InputPlayerName({callback:this.onPlayerNameInput, context:this});
             this.$el.append(view.render().$el);
@@ -42,6 +44,9 @@ define(function(require,exports,module) {
 
             var messageView = new exports.MessageBoard()
             this.$("#message").append(messageView.render().$el)
+
+            var unlockBoard = new exports.UnlockBoard();
+            this.$("#unlock").append(unlockBoard.render().$el)
 
             this.$('.game-over-tabs a').click(function (e) {
                 e.preventDefault()
@@ -163,7 +168,7 @@ define(function(require,exports,module) {
                         "<td class='score-cell player-score'>"+score.score+"分</td>"+
                         "<td class='score-cell player-kill-by'>"+self.getReason(score)+"</td>"+
                     "</tr>")
-            } )
+            }, this )
             if ( !found && this.score ) {
                 list.append("<tr class='score-row placeholder'><td><b>……</b></td><td></td></td><td></td><td></td><td></td></tr>");
                 list.append("<tr class='score-row current'>" +
@@ -243,6 +248,53 @@ define(function(require,exports,module) {
         },
         render:function(){
             return this;
+        }
+    })
+
+    exports.UnlockBoard = Backbone.View.extend({
+        events:{
+            "click .unlock-it":"onUnlock"
+        },
+        initialize:function(options){
+            this.$el.html("<div class='unlock-title'><span>你拥有</span></span><span class='my-star'></span><span class='star'></span></div>" +
+                "<div class='unlock-list scrollable'></div>")
+            this.$el.addClass("unlock-board");
+            this.list = this.$(".unlock-list");
+            this.$(".scrollable").ontouchmove = function(e) {
+                e.stopPropagation();
+            };
+            this.renderList();
+        },
+        render:function(){
+            return this;
+        },
+        renderList:function(){
+            this.list.empty();
+            var myStar = localStorage.getItem("player-star");
+            this.$(".my-star").html(myStar||0)
+            _.each(Unlock.AllUnlocks, function(unlock){
+                if ( unlock.isValid.call(unlock) && !unlock.isUnlocked.call(unlock) ) {
+                    var el = $("<div class='unlock-item' name='"+unlock.get("name")+"'>" +
+                        "<span class='unlock-icon unlock-icon-"+unlock.get("name")+"'></span>" +
+                        "<span class='unlock-description'>"+unlock.get("description")+"</span>" +
+                        "<button class='btn btn-success btn-lg unlock-it'>"+unlock.get("cost")+"<span class='star'/></button>"+
+                        "</div>")
+                    this.list.append(el);
+                    el.data("unlock",unlock);
+                    if ( myStar < unlock.get("cost") )
+                        el.find(".unlock-it").removeClass("btn-success").addClass("disabled btn-danger")
+                }
+            },this);
+        },
+        onUnlock:function(event){
+            var target = $(event.currentTarget);
+            var unlockItem = target.parent(".unlock-item");
+            var unlock = unlockItem.data("unlock");
+            var myStar = localStorage.getItem("player-star");
+            myStar -= unlock.get("cost");
+            localStorage.setItem("player-star", myStar)
+            unlock.unlock();
+            this.renderList();
         }
     })
 })
