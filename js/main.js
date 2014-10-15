@@ -46,6 +46,18 @@ define(function(require,exports,module){
         return false;
     }
 
+    try {
+        var appCache = window.applicationCache;
+
+        appCache.update(); // 开始更新
+
+        if (appCache.status == window.applicationCache.UPDATEREADY) {
+            appCache.swapCache();  // 得到最新版本缓存列表，并且成功下载资源，更新缓存到最新
+        }
+    } catch ( e ){
+        console.log(e)
+    }
+
     var Model = require("./datamodel");
     var View = require("./view");
     var mainTemplate = _.template(require("../layout/main_window.html"));
