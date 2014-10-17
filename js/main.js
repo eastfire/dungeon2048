@@ -869,7 +869,9 @@ define(function(require,exports,module){
                     level:1,
                     hp:1
                 },
-                items:{}
+                items:{
+                    total:0
+                }
             }
 
         setTimeout(generateMonster, TIME_SLICE);

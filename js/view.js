@@ -700,6 +700,24 @@ define(function(require,exports,module){
             }
         },
         beTaken:function(){
+            //statistic
+            statistic.items.total = statistic.items.total?statistic.items.total+1:1;
+            var type = this.model.get("type");
+            statistic.items.itemCount = statistic.items.itemCount || {};
+            statistic.items.itemLevel = statistic.items.itemLevel || {};
+            if ( statistic.items.itemCount[type] ){
+                statistic.items.itemCount[type]++
+            } else
+                statistic.items.itemCount[type] = 1;
+
+            if ( statistic.items.itemLevel[type] ) {
+                if ( this.model.get("level") > statistic.items.itemLevel[type] )
+                    statistic.items.itemLevel[type] = this.model.get("level")
+            } else {
+                statistic.items.itemLevel[type] = this.model.get("level")
+            }
+            //end of statistic
+
             this.model.effectHappen();
             var self = this;
             this.$el.css({transition: "all "+TIME_SLICE/1000+"s ease-in-out 0s", "margin-top":-blockSize.height/2,opacity:0.4});

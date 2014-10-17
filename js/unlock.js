@@ -559,6 +559,20 @@ define(function(require,exports,module){
         }
     })
 
+    exports.PotionLevelAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"potion-level",
+                displayName:"灵丹妙药",
+                description:"获得一个3<span class='star'></span>级回复药",
+                reward:10
+            }
+        },
+        isPassed:function(){
+            return statistic.items.itemLevel["potion"] >= 3*WISDOM_THRESHOLD;
+        }
+    })
+
     exports.SkillWhirlAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
@@ -623,6 +637,8 @@ define(function(require,exports,module){
 
         new exports.KillByPoisonAchievement(),
         new exports.KillByFullAchievement(),
+
+        new exports.PotionLevelAchievement(),
 
         new exports.SkillWhirlAchievement(),
         new exports.SkillBigWhirlAchievement
