@@ -527,10 +527,9 @@ define(function(require,exports,module) {
             });
         }
 
-        array = [new exports.BigWhirlSkill(),
-            new exports.WhirlSkill()]
-//            new exports.VerticalSlashSkill(),
-//            new exports.CrossSlashSkill()]
+//        array = [new exports.BigWhirlSkill(),
+//            new exports.WhirlSkill()]
+
         return array;
     }
 })
