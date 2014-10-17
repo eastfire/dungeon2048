@@ -566,16 +566,17 @@ body {
     text-align: left;
 }
 
-.unlock-list {
+.unlock-list, .achievement-list {
     overflow: auto;
 }
 
-.unlock-it {
+.unlock-it, .get-reward {
     position: absolute;
-    right: 0;
+    right: 6px;
+    top: 6px;
 }
 
-.unlock-icon {
+.unlock-icon , .achievement-icon{
     background-repeat: no-repeat;
     background-size: cover;
     display: inline-block;
@@ -585,7 +586,7 @@ body {
     position: absolute;
 }
 
-.unlock-item {
+.unlock-item , .achievement-item{
     border: 1px solid black;
     border-radius: 6px;
     display: block;
@@ -595,9 +596,17 @@ body {
 }
 
 .unlock-description {
-    border: 0 none;
     display: inline-block;
     left: 50px;
+    position: absolute;
+    right: 75px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.achievement-description {
+    display: inline-block;
+    left: 0px;
     position: absolute;
     right: 75px;
     text-align: center;
@@ -796,7 +805,7 @@ body {
     background-image: url("../img/skill-treasurehunting.png");
 }
 
-/*warrior*/
+/*warrior skill*/
 .skill-image-slash {
     background-image: url("../img/skill-slash.png");
 }
@@ -815,3 +824,19 @@ body {
 .skill-image-cross-slash, .unlock-icon-cross-slash {
     background-image: url("../img/skill-cross-slash.png");
 }
+
+
+/*achievement*/
+/*.achievement-icon-goblin-level , .achievement-icon-goblin-count, .achievement-icon-goblin-count2, .achievement-icon-goblin-count3 {
+    background-image: url("../img/goblin1-0.png");
+}
+.achievement-icon-skeleton-level , .achievement-icon-skeleton-count, .achievement-icon-skeleton-count2, .achievement-icon-skeleton-count3{
+    background-image: url("../img/skeleton2-0.png");
+}
+.achievement-icon-slime-level , .achievement-icon-slime-count, .achievement-icon-slime-count2, .achievement-icon-slime-count3{
+    background-image: url("../img/slime2-0.png");
+}
+.achievement-icon-orc-level , .achievement-icon-orc-count, .achievement-icon-orc-count2, .achievement-icon-orc-count3 {
+    background-image: url("../img/orc1-0.png");
+}
+*/

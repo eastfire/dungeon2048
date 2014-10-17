@@ -772,15 +772,19 @@ define(function(require,exports,module){
     window.gameOver = function(){
         if (gameStatus.phase == PHASE_GAME_OVER )
             return
-        gameStatus.death = {
-            name : window.hero.get("name"),
-            type : window.hero.get("typeDisplayName"),
-            score : window.hero.get("score"),
-            level : window.hero.get("level"),
-            killBy :gameStatus.killBy,
-            timestamp : (new Date()).getTime(),
-            ".priority":window.hero.get("score")
-        }
+        if ( gameStatus.killBy )
+            gameStatus.death = {
+                name : window.hero.get("name"),
+                type : window.hero.get("typeDisplayName"),
+                score : window.hero.get("score"),
+                level : window.hero.get("level"),
+                killBy :gameStatus.killBy,
+                timestamp : (new Date()).getTime(),
+                ".priority":window.hero.get("score")
+            }
+        else
+            gameStatus.death = null;
+
         gameStatus.phase = PHASE_GAME_OVER;
         setTimeout(function(){
             var view = new ScoreBoard.GameOver();
@@ -843,6 +847,30 @@ define(function(require,exports,module){
         block.type = "hero";
         block.model = hero;
         block.view = heroView;
+
+        var json = localStorage.getItem("statistic")
+        if ( json )
+            window.statistic = JSON.parse(json);
+        else
+            window.statistic = {
+                kill:{
+                    total:0,
+                    monsterCount:{},
+                    monsterLevel:{}
+                },
+                killed:{
+                    total:0,
+                    byPoison:0,
+                    byFull:0,
+                    byMonsters:{}
+                },
+                skills:{},
+                most:{
+                    level:1,
+                    hp:1
+                },
+                items:{}
+            }
 
         setTimeout(generateMonster, TIME_SLICE);
     }

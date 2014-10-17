@@ -360,6 +360,22 @@ define(function(require,exports,module){
         },
         checkLive:function(){
             if ( this.model.get("hp") <= 0 ) {
+                //statistic
+                statistic.kill.total++;
+                var type = this.model.get("type");
+                if ( statistic.kill.monsterCount[type] ){
+                    statistic.kill.monsterCount[type]++
+                } else
+                    statistic.kill.monsterCount[type] = 1;
+
+                if ( statistic.kill.monsterLevel[type] ) {
+                    if ( this.model.get("level") > statistic.kill.monsterLevel[type] )
+                        statistic.kill.monsterLevel[type] = this.model.get("level")
+                } else {
+                    statistic.kill.monsterLevel[type] = this.model.get("level")
+                }
+                //end of statistic
+
                 //move star to hero
                 this.moveStar(this.$(".star1"));
                 this.moveStar(this.$(".star2"));

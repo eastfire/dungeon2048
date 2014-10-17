@@ -13,9 +13,29 @@ define(function(require,exports,module) {
                 star = 0;
             else
                 star = parseInt(star);
-            //console.log("gain "+gameStatus.gainStar+" star");
+
             localStorage.setItem("player-star", star + gameStatus.gainStar);
-            //console.log("total "+(star+gameStatus.gainStar)+" star");
+
+            if ( gameStatus.death) {
+                if (gameStatus.death.level > statistic.most.level)
+                    statistic.most.level = gameStatus.death.level;
+                if (hero.get("maxHp") > statistic.most.hp)
+                    statistic.most.hp = hero.get("maxHp");
+
+                statistic.killed.total++;
+                if ( gameStatus.death.killBy.type == "poison" ) {
+                    statistic.killed.byPoison ++;
+                } else if ( gameStatus.death.killBy.type == "full" ) {
+                    statistic.killed.byFull ++;
+                } else if ( gameStatus.death.killBy.type == "monster" ) {
+                    var type = gameStatus.death.killBy.monsterType;
+                    if ( statistic.killed.byMonsters[type] ) {
+                        statistic.killed.byMonsters[type]++;
+                    } else
+                        statistic.killed.byMonsters[type] = 1;
+                }
+                localStorage.setItem("statistic", JSON.stringify(statistic));
+            }
         },
         render:function(){
             this.$el.addClass("game-over");
@@ -29,7 +49,7 @@ define(function(require,exports,module) {
                 "<div class='tab-pane fade in active' id='score'></div>" +
                 "<div class='tab-pane fade' id='message'></div>" +
                 "<div class='tab-pane fade' id='unlock'></div>" +
-                "<div class='tab-pane fade' id='achievement'>开发中……</div>" +
+                "<div class='tab-pane fade' id='achievement'></div>" +
                 "</div></div>" +
                 "<p class='game-over-buttons'><button class='btn btn-primary restart-game'>再来一局</button></p>")
 
@@ -48,6 +68,9 @@ define(function(require,exports,module) {
             var unlockBoard = new exports.UnlockBoard();
             this.$("#unlock").append(unlockBoard.render().$el)
 
+            var achievementBoard = new exports.AchievementBoard();
+            this.$("#achievement").append(achievementBoard.render().$el)
+
             this.$('.game-over-tabs a').click(function (e) {
                 e.preventDefault()
                 $(this).tab('show')
@@ -57,6 +80,7 @@ define(function(require,exports,module) {
                 self.$(".score-board").height(h-25)
                 self.$(".message-list").height(h-75)
                 self.$(".unlock-list").height(h-75)
+                self.$(".achievement-list").height(h-75)
             },100);
         },
         restartGame:function(){
@@ -69,7 +93,8 @@ define(function(require,exports,module) {
 
     var endingWord = [
         "英雄，虽然你死了，我们会记住你的，请输入你的名号",
-        "地城深处，有一块墓碑，上面刻着死去英雄的名号"
+        "地城深处，有一块墓碑，上面刻着死去英雄的名号",
+        "一个英雄的灵魂在地城飘荡，吼着自己的名号"
     ]
 
     exports.InputPlayerName = Backbone.View.extend({
@@ -106,7 +131,9 @@ define(function(require,exports,module) {
             var name = this.$(".player-name").val().trim();
             if ( name ) {
                 localStorage.setItem("player-name", name);
-                gameStatus.playerName = gameStatus.death.name = name;
+                if ( gameStatus.death )
+                    gameStatus.death.name = name;
+                gameStatus.playerName = name;
                 this.remove();
                 this.callback.call(this.callbackcontext);
             }
@@ -278,7 +305,7 @@ define(function(require,exports,module) {
                     var el = $("<div class='unlock-item' name='"+unlock.get("name")+"'>" +
                         "<span class='unlock-icon unlock-icon-"+unlock.get("name")+"'></span>" +
                         "<span class='unlock-description'>"+unlock.get("description")+"</span>" +
-                        "<button class='btn btn-success btn-lg unlock-it'>"+unlock.get("cost")+"<span class='star'/></button>"+
+                        "<button class='btn btn-success unlock-it'>"+unlock.get("cost")+"<span class='star'/></button>"+
                         "</div>")
                     this.list.append(el);
                     el.data("unlock",unlock);
@@ -295,6 +322,52 @@ define(function(require,exports,module) {
             myStar -= unlock.get("cost");
             localStorage.setItem("player-star", myStar)
             unlock.unlock();
+            this.renderList();
+        }
+    })
+
+    exports.AchievementBoard = Backbone.View.extend({
+        events:{
+            "click .get-reward":"getReward"
+        },
+        initialize:function(options){
+            this.$el.html("<div class='unlock-title'><span>你拥有</span></span><span class='my-star'></span><span class='star'></span></div>" +
+                "<div class='achievement-list scrollable'></div>")
+            this.$el.addClass("achievement-board");
+            this.list = this.$(".achievement-list");
+            this.$(".scrollable").ontouchmove = function(e) {
+                e.stopPropagation();
+            };
+            this.renderList();
+        },
+        render:function(){
+            return this;
+        },
+        renderList:function(){
+            this.list.empty();
+            var myStar = localStorage.getItem("player-star");
+            this.$(".my-star").html(myStar||0)
+            _.each(Unlock.AllAchievements, function(achievement){
+                if ( achievement.isValid.call(achievement) && !achievement.isGotten.call(achievement) ) {
+                    var passed = achievement.isPassed.call(achievement)
+                    if ( !passed && achievement.get("hidden") )
+                        return;
+                    var el = $("<div class='achievement-item' name='"+achievement.get("name")+"'>" +
+                        "<span class='achievement-description'><label>"+achievement.get("displayName")+"</label><br/>"+achievement.get("description")+"</span>" +
+                        "<button class='btn btn-success get-reward'>获得"+achievement.get("reward")+"<span class='star'/></button>"+
+                        "</div>")
+                    this.list.append(el);
+                    el.data("achievement",achievement);
+                    if ( !passed )
+                        el.find(".get-reward").removeClass("btn-success").addClass("disabled btn-default")
+                }
+            },this);
+        },
+        getReward:function(event){
+            var target = $(event.currentTarget);
+            var achievementItem = target.parent(".achievement-item");
+            var achievement = achievementItem.data("achievement");
+            achievement.getReward();
             this.renderList();
         }
     })

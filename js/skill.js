@@ -113,11 +113,12 @@ define(function(require,exports,module) {
             var block = getMapBlock(x,y);
             if ( block && block.type == "monster" ) {
                 var monsterView = block.view;
-                monsterView.beAttacked(direction,window.hero.get("attack"), type);
+                return monsterView.beAttacked(direction,window.hero.get("attack"), type);
 //                setTimeout(function(){
 //
 //                },TIME_SLICE)
             }
+            return false;
         }
     })
 
@@ -316,6 +317,9 @@ define(function(require,exports,module) {
                 if ( result )
                     totalHit++;
             }
+            if ( totalHit == 4 ){
+                statistic.skills[this.get("name")]=true;
+            }
             this.used();
         }
     })
@@ -366,6 +370,9 @@ define(function(require,exports,module) {
             result = this.attackBlock(x+1, y+1,2,"melee skill");
             if ( result )
                 totalHit++;
+            if ( totalHit == 8 ){
+                statistic.skills[this.get("name")]=true;
+            }
             this.used();
         }
     })
@@ -519,8 +526,9 @@ define(function(require,exports,module) {
                 array.push(s)
             });
         }
-//
-//        array = [new exports.HorizonalSlashSkill(),
+
+        array = [new exports.BigWhirlSkill(),
+            new exports.WhirlSkill()]
 //            new exports.VerticalSlashSkill(),
 //            new exports.CrossSlashSkill()]
         return array;
