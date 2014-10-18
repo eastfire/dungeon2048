@@ -205,7 +205,7 @@ define(function(require,exports,module){
             this.model.set("score",this.model.get("score")+hp);
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
             if ( realHeal > 0 ){
-                this.effecQueue.add.call(this.effecQueue,"♥+"+realHeal);
+                this.effecQueue.add.call(this.effecQueue,"♥+"+realHeal, "effect-get-hp");
                 this.model.set({
                     hp:this.model.get("hp")+realHeal,
                     poison:0
@@ -769,22 +769,24 @@ define(function(require,exports,module){
         initialize:function(){
             this.queue = [];
         },
-        add:function(string){
-            this.queue.push(string);
+        add:function(string, stringClass){
+            this.queue.push({string:string, stringClass:stringClass});
             if ( !this.isRunning ){
                 this.start();
             }
         },
         start:function(){
             this.isRunning = true;
-            var str = this.queue.shift();
-            if ( !str ) {
+            var obj = this.queue.shift();
+            if ( !obj ) {
                 this.isRunning = false;
                 return;
             }
 
-            (function(str1) {
+            (function(str1, stringClass1) {
                 var el = $("<label class='effect-label unselectable'>"+str1+"</label>");
+                if ( stringClass1 )
+                    el.addClass(stringClass1)
                 this.$el.append(el);
                 setTimeout(function () {
                     el.css({
@@ -794,13 +796,13 @@ define(function(require,exports,module){
 
                 setTimeout(function () {
                     el.remove();
-                }, 600);
+                }, 650);
 
                 var self = this;
                 setTimeout(function(){
                     self.start.call(self);
                 }, 200);
-            }).call(this, str);
+            }).call(this, obj.string, obj.stringClass);
         },
         isRunning : false,
         render:function(){

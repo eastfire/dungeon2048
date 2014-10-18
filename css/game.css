@@ -469,8 +469,12 @@ body {
     left: 0;
     position: absolute;
     text-align: center;
-    transition: all 0.5s ease-in-out 0s;
+    transition: all 0.55s ease-in-out 0s;
     width: 100%;
+}
+
+.effect-label.effect-get-hp {
+    color:green;
 }
 
 .monster.attacking0 .monster-level , .monster.attacking1 .monster-level, .monster.attacking2 .monster-level{
