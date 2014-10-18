@@ -353,14 +353,19 @@ define(function(require,exports,module) {
             var myStar = localStorage.getItem("player-star");
             this.$(".my-star").html(myStar||0)
             _.each(Unlock.AllAchievements, function(achievement){
-                if ( achievement.isValid.call(achievement) && !achievement.isGotten.call(achievement) ) {
+                if ( achievement.isValid.call(achievement) ) {
                     var passed = achievement.isPassed.call(achievement)
                     if ( !passed && achievement.get("hidden") )
                         return;
+                    var getButton;
+                    if ( achievement.isGotten.call(achievement) ){
+                        getButton = "<label class='gotten'>已获得</label>"
+                    } else {
+                        getButton = "<button class='btn btn-success get-reward'>获得"+achievement.get("reward")+"<span class='star'/></button>"
+                    }
                     var el = $("<div class='achievement-item' name='"+achievement.get("name")+"'>" +
                         "<span class='achievement-description'><label>"+achievement.get("displayName")+"</label><br/>"+achievement.get("description")+"</span>" +
-                        "<button class='btn btn-success get-reward'>获得"+achievement.get("reward")+"<span class='star'/></button>"+
-                        "</div>")
+                        getButton+ "</div>")
                     this.list.append(el);
                     el.data("achievement",achievement);
                     if ( !passed )

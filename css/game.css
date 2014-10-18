@@ -587,6 +587,12 @@ body {
     top: 6px;
 }
 
+.gotten {
+    position: absolute;
+    right: 6px;
+    top: 14px;
+}
+
 .unlock-icon , .achievement-icon{
     background-repeat: no-repeat;
     background-size: cover;

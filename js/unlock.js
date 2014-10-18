@@ -620,7 +620,7 @@ define(function(require,exports,module){
     exports.SkillBigWhirlAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
-                name:"skill-whirl",
+                name:"skill-big-whirl",
                 displayName:"风卷残云",
                 description:"战士的大回旋斩同时杀死8个怪物",
                 reward:50

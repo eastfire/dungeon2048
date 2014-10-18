@@ -596,7 +596,7 @@ define(function(require,exports,module){
 
     var initEvent = function(){
         var hammertime = Hammer($('.map')[0],{
-            swipe_velocity:0.1
+            swipe_velocity:0.08
         })
         hammertime.on("swipeup", function(event) {
             if ( window.isDirectionInputValid() )
