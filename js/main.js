@@ -213,7 +213,7 @@ define(function(require,exports,module){
 
     var generateBoss = function(){
         if ( checkAllFarFill() )
-            return;
+            return false;
         var x;
         var y;
         do {
@@ -234,6 +234,7 @@ define(function(require,exports,module){
                 }, TIME_SLICE );
             })(monsterType);
         }
+        return true;
     }
 
     var generateOneMonster = function(){
@@ -833,8 +834,12 @@ define(function(require,exports,module){
 
         generateMonster();
 
-        if ( gameStatus.turn % 317 == 0 ) {
-            generateBoss();
+        if ( gameStatus.turn % 211 == 0 || gameStatus.tryingToGenerateBoss ) {
+            gameStatus.tryingToGenerateBoss = true;
+            var success = generateBoss();
+            if ( success ) {
+                gameStatus.tryingToGenerateBoss = false;
+            }
         }
     }
 
