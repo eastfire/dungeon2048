@@ -598,6 +598,7 @@ define(function(require,exports,module){
             }
         },
         isPassed:function(){
+            statistic.items.itemLevel = statistic.items.itemLevel || {};
             return statistic.items.itemLevel["potion"] >= 3*WISDOM_THRESHOLD;
         }
     })
