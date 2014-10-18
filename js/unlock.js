@@ -532,8 +532,7 @@ define(function(require,exports,module){
     exports.KillBossAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
-                hidden:true,
-                name:"snake-level",
+                name:"kill-a-boss",
                 displayName:"漫长的等待",
                 description:"杀死1个Boss",
                 reward:10
