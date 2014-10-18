@@ -13,8 +13,10 @@ define(function(require,exports,module) {
                 star = 0;
             else
                 star = parseInt(star);
-
             localStorage.setItem("player-star", star + gameStatus.gainStar);
+            window.playerModel = new Backbone.Model({
+                star:localStorage.getItem("player-star")
+            })
 
             if ( gameStatus.death) {
                 if (gameStatus.death.level > statistic.most.level)
@@ -297,6 +299,7 @@ define(function(require,exports,module) {
                 e.stopPropagation();
             };
             this.renderList();
+            window.playerModel.on("change",this.renderList,this);
         },
         render:function(){
             return this;
@@ -324,10 +327,11 @@ define(function(require,exports,module) {
             var unlockItem = target.parent(".unlock-item");
             var unlock = unlockItem.data("unlock");
             var myStar = localStorage.getItem("player-star");
+            unlock.unlock();
             myStar -= unlock.get("cost");
             localStorage.setItem("player-star", myStar)
-            unlock.unlock();
-            this.renderList();
+            window.playerModel.set("star",myStar);
+            //this.renderList();
         }
     })
 
@@ -344,6 +348,7 @@ define(function(require,exports,module) {
                 e.stopPropagation();
             };
             this.renderList();
+            window.playerModel.on("change",this.renderList,this);
         },
         render:function(){
             return this;
@@ -378,7 +383,8 @@ define(function(require,exports,module) {
             var achievementItem = target.parent(".achievement-item");
             var achievement = achievementItem.data("achievement");
             achievement.getReward();
-            this.renderList();
+            window.playerModel.set("star",localStorage.getItem("player-star"));
+            //this.renderList();
         }
     })
 })
