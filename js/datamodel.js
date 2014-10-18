@@ -97,6 +97,23 @@ define(function (require, exports, module) {
         },
         calMaxHp: function (lv) {
             return lv * 10 + this.get("constitution") * CONSTITUTION_EFFECT;
+        },
+        isPositionNear:function(x,y){
+            var heroX = window.hero.get("position").x;
+            var heroY = window.hero.get("position").y;
+            var attackDirection = null;
+            if ( x == heroX && y == heroY-1 ){
+                attackDirection = 2;
+            } else if ( x == heroX && y == heroY+1 ){
+                attackDirection = 0;
+            } else if ( y == heroY && x == heroX+1 ){
+                attackDirection = 3;
+            } else if ( y == heroY && x == heroX-1 ){
+                attackDirection = 1;
+            }
+            if ( attackDirection == null )
+                return null;
+            return {direction:attackDirection};
         }
     })
 
@@ -141,6 +158,14 @@ define(function (require, exports, module) {
             if (mergeToModel.get("angry")) {
                 this.set("angry", mergeToModel.get("angry"))
             }
+        }
+    })
+
+    exports.Boss = exports.Monster.extend({
+        defaults:function(){
+            var ret = exports.Monster.prototype.defaults.call(this);
+            ret.subType = "boss";
+            return ret;
         }
     })
 
@@ -262,6 +287,15 @@ define(function (require, exports, module) {
     })
 
 
+    exports.BossDeath = exports.Boss.extend({
+        calAttack: function (level) {
+            return Math.floor(window.hero.get("maxHp")/2);
+        },
+        calExp: function (level) {
+            return Math.floor(window.hero.get("maxExp") / 2);
+        }
+    })
+
     exports.ModelMap = {
         archer: exports.Archer,
         ghost: exports.Ghost,
@@ -275,7 +309,9 @@ define(function (require, exports, module) {
         slime: exports.Slime,
         snake: exports.Snake,
         vampire: exports.Vampire,
-        minotaur: exports.Minotaur
+        minotaur: exports.Minotaur,
+
+        "boss-death":exports.BossDeath
     }
 
     exports.Item = Backbone.Model.extend({

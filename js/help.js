@@ -41,7 +41,9 @@ define(function(require,exports,module) {
         "skeleton":"骷髅",
         "slime":"史莱姆",
         "snake":"毒蛇",
-        "vampire":"吸血鬼"
+        "vampire":"吸血鬼",
+
+        "boss-death":"Boss死神"
     }
     exports.monsterDescription = {
         "archer":{
@@ -95,6 +97,11 @@ define(function(require,exports,module) {
         "vampire":{
             text:"击中英雄后升级<br/>攻击力：非常强（为等级的平方）<br/>经验值：非常高",
             imageClass:"vampire-help"
+        },
+
+        "boss-death":{
+            text:"<br/>攻击力：英雄最大生命值的1/2<br/>经验值：超高",
+            imageClass:"boss-death-help"
         }
     }
 });

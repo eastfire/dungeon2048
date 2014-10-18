@@ -33,6 +33,8 @@ define(function(require,exports,module) {
                         statistic.killed.byMonsters[type]++;
                     } else
                         statistic.killed.byMonsters[type] = 1;
+                    if ( gameStatus.death.killBy.isBoss )
+                        statistic.killed.byBoss = statistic.killed.byBoss ? statistic.killed.byBoss + 1 : 1;
                 }
                 localStorage.setItem("statistic", JSON.stringify(statistic));
             }
@@ -215,7 +217,10 @@ define(function(require,exports,module) {
             } else if ( score.killBy.type == "full" ){
                 reason="死于地城爆满"
             } else if ( score.killBy.type == "monster" ){
-                reason="被lv"+score.killBy.monsterLevel+Help.monsterDisplayName[score.killBy.monsterType]+"杀死";
+                var lvStr = "lv"+score.killBy.monsterLevel;
+                if ( score.killBy.isBoss )
+                    lvStr = "";
+                reason="被"+lvStr+Help.monsterDisplayName[score.killBy.monsterType]+"杀死";
             }
             return reason;
         }

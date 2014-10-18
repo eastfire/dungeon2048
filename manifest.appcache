@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-10-17 v1.0.2.27
+# 2014-10-18 v1.0.3.1
 /dungeon2048/index.html
 #css
 /dungeon2048/css/bootstrap.css
@@ -57,6 +57,10 @@ CACHE MANIFEST
 /dungeon2048/img/vampire2-0.png
 /dungeon2048/img/vampire2-3.png
 /dungeon2048/img/vampire2-4.png
+#boss-monster
+/dungeon2048/img/boss-death2-0.png
+/dungeon2048/img/boss-death2-3.png
+/dungeon2048/img/boss-death2-4.png
 #item
 /dungeon2048/img/potion.png
 #status
