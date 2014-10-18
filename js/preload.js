@@ -72,6 +72,10 @@ define(function(require,exports,module) {
         "vampire2-3.png",
         "vampire2-4.png",
 
+        "boss-death2-0.png",
+        "boss-death2-3.png",
+        "boss-death2-4.png",
+
         "potion.png",
 
         "status-angry.png",

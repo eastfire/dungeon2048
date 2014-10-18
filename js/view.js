@@ -374,6 +374,9 @@ define(function(require,exports,module){
                 } else {
                     statistic.kill.monsterLevel[type] = this.model.get("level")
                 }
+                if ( this.model.get("subType") == "boss") {
+                    statistic.kill.bossCount = statistic.kill.bossCount ? statistic.kill.bossCount + 1 : 1;
+                }
                 //end of statistic
 
                 //move star to hero
@@ -410,6 +413,8 @@ define(function(require,exports,module){
                             monsterLevel:self.model.get("level"),
                             monsterType:self.model.get("type")
                         }
+                        if ( self.model.get("subType") == "boss" )
+                            gameStatus.killBy.isBoss = true
                         var hit = heroView.takeDamage(att, self.model.get("attackType"));
                         if (!hit) {
                             self.effecQueue.add.call(self.effecQueue, "Miss!");
@@ -458,19 +463,19 @@ define(function(require,exports,module){
         checkInRange:function(){
             var x = this.model.get("position").x;
             var y = this.model.get("position").y;
-            var heroX = window.hero.get("position").x;
-            var heroY = window.hero.get("position").y;
-            var attackDirection = null;
-            if ( x == heroX && y == heroY-1 ){
-                attackDirection = 2;
-            } else if ( x == heroX && y == heroY+1 ){
-                attackDirection = 0;
-            } else if ( y == heroY && x == heroX+1 ){
-                attackDirection = 3;
-            } else if ( y == heroY && x == heroX-1 ){
-                attackDirection = 1;
-            }
+            var ret = window.hero.isPositionNear(x,y);
+            if ( ret )
+                return ret.direction;
+            else
+                return null;
             return attackDirection;
+        }
+    })
+
+    exports.BossView = exports.MonsterView.extend({
+        render:function(){
+            exports.MonsterView.prototype.render.call(this)
+            this.levelEl.css("visibility","hidden")
         }
     })
 
@@ -615,7 +620,9 @@ define(function(require,exports,module){
         }
     })
 
+    exports.BossDeathView = exports.BossView.extend({
 
+    })
 
     exports.ViewMap = {
         archer:exports.ArcherView,
@@ -630,7 +637,9 @@ define(function(require,exports,module){
         slime:exports.SlimeView,
         skeleton:exports.SkeletonView,
         snake:exports.SnakeView,
-        vampire:exports.VampireView
+        vampire:exports.VampireView,
+
+        "boss-death": exports.BossDeathView
     };
 
     exports.ItemView = MovableView.extend({

@@ -98,6 +98,7 @@ define(function(require,exports,module){
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             currentMonsterMaxLevel : 1,
+            currentBossTypes:["boss-death"],
             generateItemRate: 0,
             currentItemTypes:["potion"],
             tutorial:{
@@ -210,6 +211,31 @@ define(function(require,exports,module){
         }
     }
 
+    var generateBoss = function(){
+        if ( checkAllFarFill() )
+            return;
+        var x;
+        var y;
+        do {
+            x = Math.floor(Math.random()*window.mapWidth);
+            y = Math.floor(Math.random()*window.mapHeight);
+        } while ( map[x][y].type != "blank" || hero.isPositionNear(x,y) );
+
+        var monsterType = getRandomItem(gameStatus.currentBossTypes);
+        createOneMonster(monsterType, x,y);
+
+        if ( !gameStatus.tutorial.on && !gameStatus.tutorial[monsterType] ) {
+            gameStatus.tutorial[monsterType] = true;
+            (function(monsterType) {
+                setTimeout(function () {
+                    var description = Help.monsterDisplayName[monsterType] + "<br/>" + Help.monsterDescription[monsterType].text;
+                    var view = new HelpView({text: description, imageClass: Help.monsterDescription[monsterType].imageClass});
+                    view.show();
+                }, TIME_SLICE );
+            })(monsterType);
+        }
+    }
+
     var generateOneMonster = function(){
         if ( checkAllFill() )
             return;
@@ -258,6 +284,33 @@ define(function(require,exports,module){
         /*setTimeout(function(){
             monsterView.onGenerate.call(monsterView);
         },10)*/
+    }
+
+    var generateOneMonster = function(){
+        if ( checkAllFill() )
+            return;
+
+        var x;
+        var y;
+        do {
+            x = Math.floor(Math.random()*window.mapWidth);
+            y = Math.floor(Math.random()*window.mapHeight);
+        } while ( map[x][y].type != "blank" );
+
+        var monsterType = getRandomItem(gameStatus.currentMonsterTypes);
+
+        createOneMonster(monsterType, x,y);
+
+        if ( !gameStatus.tutorial.on && !gameStatus.tutorial[monsterType] ) {
+            gameStatus.tutorial[monsterType] = true;
+            (function(monsterType) {
+                setTimeout(function () {
+                    var description = Help.monsterDisplayName[monsterType] + "<br/>" + Help.monsterDescription[monsterType].text;
+                    var view = new HelpView({text: description, imageClass: Help.monsterDescription[monsterType].imageClass});
+                    view.show();
+                }, TIME_SLICE );
+            })(monsterType);
+        }
     }
 
     var generateMonster = function(){
@@ -392,6 +445,18 @@ define(function(require,exports,module){
         for ( var i = 0 ; i < mapWidth; i++){
             for ( var j = 0 ; j < mapHeight; j++){
                 if ( map[i][j].type == "blank" )
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    var checkAllFarFill = function(){
+        var hx = hero.get("position").x;
+        var hy = hero.get("position").y;
+        for ( var i = 0 ; i < mapWidth; i++){
+            for ( var j = 0 ; j < mapHeight; j++){
+                if ( map[i][j].type == "blank" && !hero.isPositionNear(i,j) )
                     return false;
             }
         }
@@ -767,6 +832,10 @@ define(function(require,exports,module){
         }
 
         generateMonster();
+
+        if ( gameStatus.turn % 317 == 0 ) {
+            generateBoss();
+        }
     }
 
     window.gameOver = function(){

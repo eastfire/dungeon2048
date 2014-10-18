@@ -89,7 +89,7 @@ define(function(require,exports,module){
             return {
                 name:"warrior-third-skill",
                 description:"战士 的 第3个技能槽",
-                cost:40
+                cost:50
             }
         },
         effect:function(){
@@ -104,7 +104,7 @@ define(function(require,exports,module){
             return {
                 name:"warrior-fourth-skill",
                 description:"战士 的 第4个技能槽",
-                cost:100
+                cost:200
             }
         },
         isValid:function(){
@@ -529,12 +529,27 @@ define(function(require,exports,module){
         }
     })
 
+    exports.KillBossAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                hidden:true,
+                name:"snake-level",
+                displayName:"漫长的等待",
+                description:"杀死1个Boss",
+                reward:10
+            }
+        },
+        isPassed:function(){
+            return statistic.kill.bossCount > 0;
+        }
+    })
+
     exports.KillByPoisonAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
                 hidden:true,
                 name:"killed-by-poison",
-                displayName:"毒发身亡",
+                displayName:"病入膏肓",
                 description:"毒发身亡",
                 reward:40
             }
@@ -556,6 +571,21 @@ define(function(require,exports,module){
         },
         isPassed:function(){
             return statistic.killed.byFull > 0;
+        }
+    })
+
+    exports.KillByBossAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                hidden:true,
+                name:"killed-by-boss",
+                displayName:"死而无憾",
+                description:"被Boss杀死",
+                reward:30
+            }
+        },
+        isPassed:function(){
+            return statistic.killed.byBoss > 0;
         }
     })
 
@@ -634,9 +664,11 @@ define(function(require,exports,module){
         new exports.SlimeLevelAchievement(),
         new exports.SnakeLevelAchievement(),
         new exports.VampireLevelAchievement(),
+        new exports.KillBossAchievement(),
 
         new exports.KillByPoisonAchievement(),
         new exports.KillByFullAchievement(),
+        new exports.KillByBossAchievement(),
 
         new exports.PotionLevelAchievement(),
 
