@@ -144,7 +144,7 @@ define(function(require,exports,module) {
 
     exports.ScoreBoard = Backbone.View.extend({
         initialize:function(options){
-            this.scoreQuery = new Firebase("https://dungeon2048.firebaseio.com/score").endAt().limit(10);
+            this.scoreQuery = new Firebase("https://dungeon2048.firebaseio.com/score").endAt().limit(20);
             this.scoreRef = this.scoreQuery.ref();
             var self = this;
             this.score = null;
