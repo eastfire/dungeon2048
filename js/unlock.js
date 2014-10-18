@@ -80,7 +80,7 @@ define(function(require,exports,module){
         },
         effect:function(){
             if ( hero.get("type") == "warrior" ){
-                gameStatus.skillPool.push(Skill.CrossSlashSkill)
+                gameStatus.skillPool.push(new Skill.CrossSlashSkill())
             }
         }
     })

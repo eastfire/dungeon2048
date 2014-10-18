@@ -11,10 +11,14 @@ define(function(require,exports,module) {
         initialize:function(options){
             if ( options.mode == "select" ) {
                 this.$el.addClass("skill");
+                var lvStr = "";
+                if ( this.model.get("maxLevel") > 1 ) {
+                    lvStr = "lv"+this.model.get("level");
+                }
                 this.$el.html("<span class='skill-image-icon'>" +
                     "<div class='skill-image skill-image-"+this.model.get("name")+"'></div></span>" +
                     "<span class='skill-description'>" +
-                    "<div class='skill-level'>"+this.model.get("displayName")+"lv" + this.model.get("level") + "</div>" +
+                    "<div class='skill-level'>"+this.model.get("displayName")+lvStr + "</div>" +
                     "<label class='skill-text'>"+this.model.generateDescription()+"</label>" +
                     "</span>")
                 this.$el.css({
@@ -26,11 +30,11 @@ define(function(require,exports,module) {
                 },100)
             } else if ( options.mode == "list") {
                 this.$el.addClass("skill");
-                var lvStr = this.model.get("maxLevel") > 1 ? ( "lv" + this.model.get("level") ) : "";
+//                var lvStr = this.model.get("maxLevel") > 1 ? ( "lv" + this.model.get("level") ) : "";
                 this.$el.html("<div class='skill-image-icon'>" +
                     "<div class='skill-image skill-image-"+this.model.get("name")+"'></div>" +
                     "<div class='skill-cool-down'></div>"+
-                    "<div class='skill-level'>" + this.model.get("displayName")+ lvStr + "</div>"+
+                    "<div class='skill-level'>" + this.model.get("displayName")+ "</div>"+
                     "</div>")
                 this.$el.css({
                     "font-size":blockSize.height/6+"px"
