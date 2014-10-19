@@ -154,6 +154,11 @@ define(function (require, exports, module) {
         onHitHero: function () {
 
         },
+        getFreezePower:function(){
+            if ( gameStatus.globalEffect.madness )
+                return Math.min( this.get("level") * gameStatus.monsterPower.freeze, 96 ) / 100;
+            return 0;
+        },
         mergeStatus: function (mergeToModel) {
             if (mergeToModel.get("angry")) {
                 this.set("angry", mergeToModel.get("angry"))
@@ -190,8 +195,8 @@ define(function (require, exports, module) {
         calExp: function (level) {
             return Math.floor(level * 5 / 2);
         },
-        getDodgeRate:function(){
-            return Math.min( this.get("level")*6 , 66)/100;
+        getDodgePower:function(){
+            return Math.min( this.get("level")*gameStatus.monsterPower.dodge , 66)/100;
         }
     })
 
@@ -205,8 +210,8 @@ define(function (require, exports, module) {
         calExp: function (level) {
             return level*3-1;
         },
-        getFreezeRate:function(){
-            return Math.min( this.get("level") * 6, 66 ) / 100;
+        getFreezePower:function(){
+            return Math.min( this.get("level") * gameStatus.monsterPower.freeze, 96 ) / 100;
         }
     })
 
@@ -296,6 +301,15 @@ define(function (require, exports, module) {
         }
     })
 
+    exports.BossBeholder = exports.Boss.extend({
+        calAttack: function (level) {
+            return Math.floor(window.hero.get("maxHp")/3);
+        },
+        calExp: function (level) {
+            return Math.floor(window.hero.get("maxExp") * 2 / 3);
+        }
+    })
+
     exports.ModelMap = {
         archer: exports.Archer,
         ghost: exports.Ghost,
@@ -311,6 +325,7 @@ define(function (require, exports, module) {
         vampire: exports.Vampire,
         minotaur: exports.Minotaur,
 
+        "boss-beholder":exports.BossBeholder,
         "boss-death":exports.BossDeath
     }
 

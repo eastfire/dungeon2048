@@ -376,6 +376,16 @@ body {
     background-image: url("../img/ogre2-4.png");
 }
 
+/*boss image*/
+.monster.boss-beholder {
+    background-image: url("../img/boss-beholder2-0.png");
+}
+.monster.boss-beholder.attacking1 {
+    background-image: url("../img/boss-beholder2-4.png");
+}
+.monster.boss-beholder.attacking2 {
+    background-image: url("../img/boss-beholder2-4.png");
+}
 
 .monster.boss-death {
     background-image: url("../img/boss-death2-0.png");
@@ -730,6 +740,9 @@ body {
 /*boss-help*/
 .boss-death-help {
     background-image: url("../img/boss-death2-0.png");
+}
+.boss-beholder-help {
+    background-image: url("../img/boss-beholder2-0.png");
 }
 
 .levelup-body {

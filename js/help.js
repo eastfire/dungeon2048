@@ -43,6 +43,7 @@ define(function(require,exports,module) {
         "snake":"毒蛇",
         "vampire":"吸血鬼",
 
+        "boss-beholder":"Boss眼魔",
         "boss-death":"Boss死神"
     }
     exports.monsterDescription = {
@@ -99,6 +100,11 @@ define(function(require,exports,module) {
             imageClass:"vampire-help"
         },
 
+        //boss help
+        "boss-beholder":{
+            text:"所有怪物击中英雄后一定概率使英雄<u><i>麻痹</i></u>（无法移动）直到下回合。<br/>攻击力：英雄最大生命值的1/3<br/>经验值：超高",
+            imageClass:"boss-beholder-help"
+        },
         "boss-death":{
             text:"<br/>攻击力：英雄最大生命值的1/2<br/>经验值：超高",
             imageClass:"boss-death-help"

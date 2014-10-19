@@ -390,8 +390,9 @@ define(function(require,exports,module){
                 this.moveStar(this.$(".star1"));
                 this.moveStar(this.$(".star2"));
                 this.moveStar(this.$(".star3"));
+                this.onDie();
                 var level = this.model.get("level");
-                window.hero.getExp(this.model.get("exp"), level);
+                window.hero.getExp(this.model.calExp(level), level);
                 this.model.destroy();
                 clearMapBlock(this.model.get("position").x, this.model.get("position").y);
                 this.onDropItem(this.model.get("position").x, this.model.get("position").y);
@@ -412,7 +413,7 @@ define(function(require,exports,module){
                 this.$el.removeClass("d0 d1 d2 d3").addClass("d"+attackDirection);
                 (function t(self) {
                     setTimeout(function () {
-                        var att = self.model.get("attack");
+                        var att = self.model.calAttack.call(self, self.model.get("level"));
                         if (self.model.get("angry"))
                             att = att * 3;
                         gameStatus.killBy = {
@@ -446,6 +447,8 @@ define(function(require,exports,module){
 
         onGenerate:function(){
         },
+        onDie:function(){
+        },
         onNewRound:function(){
             this.model.set({
                 angry:0
@@ -453,6 +456,10 @@ define(function(require,exports,module){
         },
         onHitHero:function(){
             this.model.onHitHero();
+            var freezeRate = this.model.getFreezePower();
+            if ( Math.random() < freezeRate ) {
+                hero.set("freeze",2);
+            }
         },
 
         onDropItem:function(x,y){
@@ -483,6 +490,17 @@ define(function(require,exports,module){
         render:function(){
             exports.MonsterView.prototype.render.call(this)
             this.levelEl.css("visibility","hidden")
+        },
+        onMerged:function(){
+            if ( this.model.get("level") == 2 ){ //no star + no star = 1 star
+                this.model.set("level", 6);
+            } else if ( this.model.get("level") == 7 ) { //no star + 1 star = 2 star
+                this.model.set("level",12)
+            } else if ( this.model.get("level") == 13 ) { //no star + 2 star = 3 star
+                this.model.set("level",18)
+            } else if ( this.model.get("level") == 12 ) { //1 star + 1 star = 3 star
+                this.model.set("level",18)
+            }
         }
     })
 
@@ -526,7 +544,7 @@ define(function(require,exports,module){
     exports.GhostView = exports.MonsterView.extend({
         beAttacked:function(direction, attack, type){
             if ( type.contains("normal") ) {
-                var dodgeRate = this.model.getDodgeRate();
+                var dodgeRate = this.model.getDodgePower();
                 if ( Math.random() < dodgeRate ) {
 //                    this.effecQueue.add.call(this.effecQueue, "Dodge");
                     return false;
@@ -544,13 +562,6 @@ define(function(require,exports,module){
     })
 
     exports.MedusaView = exports.MonsterView.extend({
-        onHitHero:function(){
-            exports.MonsterView.prototype.onHitHero.call(this);
-            var freezeRate = this.model.getFreezeRate();
-            if ( Math.random() < freezeRate ) {
-                hero.set("freeze",2);
-            }
-        }
     })
 
     exports.MimicView = exports.MonsterView.extend({
@@ -627,6 +638,18 @@ define(function(require,exports,module){
         }
     })
 
+    exports.BossBeholderView = exports.BossView.extend({
+        onGenerate:function(){
+            if ( gameStatus.globalEffect.madness )
+                gameStatus.globalEffect.madness++;
+            else
+                gameStatus.globalEffect.madness = 1;
+        },
+        onDie:function(){
+            gameStatus.globalEffect.madness--;
+        }
+    })
+
     exports.BossDeathView = exports.BossView.extend({
 
     })
@@ -646,6 +669,7 @@ define(function(require,exports,module){
         snake:exports.SnakeView,
         vampire:exports.VampireView,
 
+        "boss-beholder":exports.BossBeholderView,
         "boss-death": exports.BossDeathView
     };
 

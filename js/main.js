@@ -45,18 +45,23 @@ define(function(require,exports,module){
         window.gameStatus = {
             phase: PHASE_GENERATE,
             turn: 0,
+            globalEffect:{},
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
             monsterPool:["archer","ghost","goblin","medusa","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             currentMonsterMaxLevel : 1,
-            currentBossTypes:["boss-death"],
+            currentBossTypes:["boss-death","boss-beholder"],
             generateItemRate: 0,
             currentItemTypes:["potion"],
             tutorial:{
                 on:true,
                 step:0
+            },
+            monsterPower:{
+                freeze:8,
+                dodge:6
             },
             gainStar:0
         }
