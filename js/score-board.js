@@ -187,7 +187,7 @@ define(function(require,exports,module) {
                     return;
 
                 var current;
-                if ( this.score &&  score.timestamp == this.score.timestamp ){
+                if ( this.score &&  score.r == this.score.r ){
                     current = "current";
                     found = true;
                 } else {

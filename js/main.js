@@ -812,6 +812,7 @@ define(function(require,exports,module){
                 level : window.hero.get("level"),
                 killBy :gameStatus.killBy,
                 timestamp : Firebase.ServerValue.TIMESTAMP,//(new Date()).getTime(),
+                r: Math.random(),
                 ".priority":window.hero.get("score")
             }
         else
