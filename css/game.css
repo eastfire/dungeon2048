@@ -836,7 +836,11 @@ body {
 
 /*warrior skill*/
 .skill-image-slash {
+     background-image: url("../img/skill-slash.png");
+ }
+.skill-image-revert-slash, .unlock-icon-revert-slash {
     background-image: url("../img/skill-slash.png");
+    transform:scaleY(-1);
 }
 .skill-image-whirl {
     background-image: url("../img/skill-whirl.png");

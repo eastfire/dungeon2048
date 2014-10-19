@@ -148,6 +148,14 @@ define(function(require,exports,module){
             x += increment[direction].x;
             y += increment[direction].y;
             var block = getMapBlock(x,y);
+            var willAttack = false;
+            _.each(this.skillList, function(skill){
+                if ( skill.onCheckAttack ){
+                    var ret = skill.onCheckAttack.call(skill, x, y, direction);
+                    if ( ret )
+                        willAttack = true;
+                }
+            },this);
             if ( block && block.type == "monster" ){
                 var monsterView = block.view;
                 this.$el.addClass("attacking0");
@@ -171,10 +179,9 @@ define(function(require,exports,module){
                         skill.onAttack.call(skill, x, y, direction);
                     }
                 },this);
-                return false;
-            } else {
-                return true;
+                willAttack = true
             }
+            return willAttack;
         },
         takeItem:function(direction){
             var x = this.model.get("position").x;

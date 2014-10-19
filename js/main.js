@@ -734,11 +734,11 @@ define(function(require,exports,module){
     var heroAttack = function(){
         var direction = window.moveDirection;
         window.prevLevel = hero.get("level");
-        var pass = heroView.attack(direction);
+        var willAttack = heroView.attack(direction);
         setTimeout(function(){
             gameStatus.phase = PHASE_MONSTER_ATTACK;
             waitForMonsterAttack();
-        },pass ? 1 : 4*TIME_SLICE+1);
+        },willAttack ? 4*TIME_SLICE+1 : 1);
     }
 
     var monsterAttack = function(){

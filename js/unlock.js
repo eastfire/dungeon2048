@@ -28,6 +28,20 @@ define(function(require,exports,module){
         }
     })
 
+    exports.RevertSlashUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"revert-slash",
+                description:"战士 的 拖刀计技能",
+                cost:20
+            }
+        },
+        effect:function(){
+            if ( hero.get("type") == "warrior" ){
+                gameStatus.skillPool.push(new Skill.RevertSlashSkill())
+            }
+        }
+    })
     exports.BigWhirlUnlock = exports.Unlockable.extend({
         defaults:function(){
             return {
@@ -118,6 +132,7 @@ define(function(require,exports,module){
     })
 
     exports.AllUnlocks = [
+        new exports.RevertSlashUnlock(),
         new exports.BigWhirlUnlock(),
         new exports.HorizontalSlashUnlock(),
         new exports.VerticalSlashUnlock(),

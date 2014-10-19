@@ -268,7 +268,7 @@ define(function(require,exports,module) {
             }
         },
         generateDescription:function(){
-            return "英雄下次攻击同时攻击怪物后面的一个怪物";
+            return "英雄下次攻击同时攻击被击中的怪物后面的一个怪物";
         },
         onActive:function(){
             this.set("skill-slash-active",1);
@@ -289,6 +289,51 @@ define(function(require,exports,module) {
         onNewRound:function(){
             exports.Skill.prototype.onNewRound.call(this);
             this.set("skill-slash-active",0);
+        }
+    })
+
+    exports.RevertSlashSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.RevertSlashSkill
+        },
+        defaults:function(){
+            return {
+                name:"revert-slash",
+                type:"active",
+                displayName:"拖刀计",
+                level:1,
+                maxLevel:1,
+                currentCount:10,
+                coolDown:10
+            }
+        },
+        generateDescription:function(){
+            return "英雄下次攻击同时攻击自己身后的一个怪物";
+        },
+        onActive:function(){
+            this.set("skill-revert-slash-active",1);
+            this.used();
+        },
+        onCheckAttack:function(x,y, direction){
+            var mx = x;
+            var my = y;
+            if ( this.get("skill-revert-slash-active") ){
+                var d = (direction+2)%4;
+                mx += increment[d].x;
+                my += increment[d].y;
+                mx += increment[d].x;
+                my += increment[d].y;
+                var self = this;
+                setTimeout(function(){
+                    self.attackBlock(mx,my,d,"melee skill");
+                },TIME_SLICE);
+                return true;
+            }
+            return false;
+        },
+        onNewRound:function(){
+            exports.Skill.prototype.onNewRound.call(this);
+            this.set("skill-revert-slash-active",0);
         }
     })
 
