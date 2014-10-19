@@ -15,11 +15,12 @@ define(function(require,exports,module) {
                 if ( this.model.get("maxLevel") > 1 ) {
                     lvStr = "lv"+this.model.get("level");
                 }
+                this.$el.addClass("btn btn-default");
                 this.$el.html("<span class='skill-image-icon'>" +
                     "<div class='skill-image skill-image-"+this.model.get("name")+"'></div></span>" +
                     "<span class='skill-description'>" +
                     "<div class='skill-level'>"+this.model.get("displayName")+lvStr + "</div>" +
-                    "<label class='skill-text'>"+this.model.generateDescription()+"</label>" +
+                    "<div class='skill-text'>"+this.model.generateDescription()+"</div>" +
                     "</span>")
                 this.$el.css({
                     "font-size":blockSize.height/5+"px"
@@ -540,6 +541,30 @@ define(function(require,exports,module) {
                 if ( result )
                     totalHit++;
             }
+            this.used();
+        }
+    })
+
+    exports.HealSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.HealSkill
+        },
+        defaults:function(){
+            return {
+                name:"heal",
+                type:"active",
+                displayName:"治疗术",
+                level:1,
+                maxLevel:1,
+                currentCount:10,
+                coolDown:10
+            }
+        },
+        generateDescription:function(){
+            return "＋１０♥（可被恢复技能影响）"
+        },
+        onActive:function(){
+            window.heroView.getHp(10);
             this.used();
         }
     })

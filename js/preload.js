@@ -3,25 +3,32 @@ define(function(require,exports,module) {
         "dungeon-tile.jpg",
 
         "warrior0-0.png",
-        "warrior0-1.png",
-        "warrior0-2.png",
         "warrior0-3.png",
         "warrior0-4.png",
         "warrior1-0.png",
-        "warrior1-1.png",
-        "warrior1-2.png",
         "warrior1-3.png",
         "warrior1-4.png",
         "warrior2-0.png",
-        "warrior2-1.png",
-        "warrior2-2.png",
         "warrior2-3.png",
         "warrior2-4.png",
         "warrior3-0.png",
-        "warrior3-1.png",
-        "warrior3-2.png",
         "warrior3-3.png",
         "warrior3-4.png",
+
+/*        "priest0-0.png",
+        "priest0-3.png",
+        "priest0-4.png",
+        "priest1-0.png",
+        "priest1-3.png",
+        "priest1-4.png",
+        "priest2-0.png",
+        "priest2-3.png",
+        "priest2-4.png",
+        "priest3-0.png",
+        "priest3-3.png",
+        "priest3-4.png",
+        "priest2-5.png",
+        "priest2-6.png",*/
 
         "archer3-0.png",
         "archer3-3.png",
@@ -93,12 +100,16 @@ define(function(require,exports,module) {
         "skill-wisdom.png",
         "skill-recover.png",
         "skill-treasurehunting.png",
+
         "skill-slash.png",
         "skill-whirl.png",
         "skill-big-whirl.png",
         "skill-horizontal-slash.png",
         "skill-vertical-slash.png",
         "skill-cross-slash.png",
+
+        "skill-heal.png",
+        "skill-blind-undead.png",
 
         "loading.gif"
     ];

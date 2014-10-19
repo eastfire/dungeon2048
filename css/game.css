@@ -58,15 +58,17 @@ body {
     background-size: cover;
 }
 
+/*hero image*/
+/*warrior*/
 .hero.warrior.d0 {
     background-image: url("../img/warrior0-0.png");
 }
-.hero.warrior.d0.moving0 {
+/*.hero.warrior.d0.moving0 {
     background-image: url("../img/warrior0-1.png");
 }
 .hero.warrior.d0.moving1 {
     background-image: url("../img/warrior0-2.png");
-}
+}*/
 .hero.warrior.d0.attacking0 {
     background-image: url("../img/warrior0-3.png");
 }
@@ -77,12 +79,12 @@ body {
 .hero.warrior.d1 {
     background-image: url("../img/warrior1-0.png");
 }
-.hero.warrior.d1.moving0 {
+/*.hero.warrior.d1.moving0 {
     background-image: url("../img/warrior1-1.png");
 }
 .hero.warrior.d1.moving1 {
     background-image: url("../img/warrior1-2.png");
-}
+}*/
 .hero.warrior.d1.attacking0 {
     background-image: url("../img/warrior1-3.png");
 }
@@ -93,12 +95,12 @@ body {
 .hero.warrior.d2 {
     background-image: url("../img/warrior2-0.png");
 }
-.hero.warrior.d2.moving0 {
+/*.hero.warrior.d2.moving0 {
     background-image: url("../img/warrior2-1.png");
 }
 .hero.warrior.d2.moving1 {
     background-image: url("../img/warrior2-2.png");
-}
+}*/
 .hero.warrior.d2.attacking0 {
     background-image: url("../img/warrior2-3.png");
 }
@@ -109,12 +111,12 @@ body {
 .hero.warrior.d3 {
     background-image: url("../img/warrior3-0.png");
 }
-.hero.warrior.d3.moving0 {
+/*.hero.warrior.d3.moving0 {
     background-image: url("../img/warrior3-1.png");
 }
 .hero.warrior.d3.moving1 {
     background-image: url("../img/warrior3-2.png");
-}
+}*/
 .hero.warrior.d3.attacking0 {
     background-image: url("../img/warrior3-3.png");
 }
@@ -122,6 +124,49 @@ body {
     background-image: url("../img/warrior3-4.png");
 }
 
+/*priest*/
+.hero.priest.d0 {
+    background-image: url("../img/priest0-0.png");
+}
+.hero.priest.d0.attacking0 {
+    background-image: url("../img/priest0-3.png");
+}
+.hero.priest.d0.attacking1 {
+    background-image: url("../img/priest0-4.png");
+}
+
+.hero.priest.d1 {
+    background-image: url("../img/priest1-0.png");
+}
+.hero.priest.d1.attacking0 {
+    background-image: url("../img/priest1-3.png");
+}
+.hero.priest.d1.attacking1 {
+    background-image: url("../img/priest1-4.png");
+}
+
+.hero.priest.d2 {
+    background-image: url("../img/priest2-0.png");
+}
+.hero.priest.d2.attacking0 {
+    background-image: url("../img/priest2-3.png");
+}
+.hero.priest.d2.attacking1 {
+    background-image: url("../img/priest2-4.png");
+}
+
+.hero.priest.d3 {
+    background-image: url("../img/priest3-0.png");
+}
+.hero.priest.d3.attacking0 {
+    background-image: url("../img/priest3-3.png");
+}
+.hero.priest.d3.attacking1 {
+    background-image: url("../img/priest3-4.png");
+}
+
+
+/*monster image*/
 .monster.archer.d0 {
     background-image: url("../img/archer3-0.png");
 }
@@ -760,9 +805,6 @@ body {
 .levelup-body .skill {
     height: auto;
     width:90%;
-    margin:5% 5%;
-    border:1px solid #808080;
-    border-radius: 5px;
 }
 
 .levelup-body .skill-image-icon {
@@ -775,12 +817,17 @@ body {
 .levelup-body .skill-description {
     display: inline-block;
     width: 70%;
-    padding: 0% 10%;
+    padding: 0;
     vertical-align: middle;
 }
 
-.levelup-body .skill-level , .levelup-body .skill-text{
-     font-size:1.2em;
+.levelup-body .skill-level {
+    font-size:1.1em;
+    font-weight: bold;
+}
+.levelup-body .skill-text{
+    font-size:1em;
+    white-space: normal;
  }
 
 .hero-active-skill .skill-level {
@@ -871,6 +918,13 @@ body {
     background-image: url("../img/skill-cross-slash.png");
 }
 
+/*priest skill*/
+.skill-image-heal {
+    background-image: url("../img/skill-heal.png");
+}
+.skill-image-blind-undead {
+    background-image: url("../img/skill-blind-undead.png");
+}
 
 /*achievement*/
 /*.achievement-icon-goblin-level , .achievement-icon-goblin-count, .achievement-icon-goblin-count2, .achievement-icon-goblin-count3 {
