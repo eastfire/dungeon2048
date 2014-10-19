@@ -266,6 +266,7 @@ define(function(require,exports,module) {
                 this.ref.push({
                     name: gameStatus.playerName,
                     ".priority": Firebase.ServerValue.TIMESTAMP,
+                    timestamp:Firebase.ServerValue.TIMESTAMP,
                     msg: msg
                 },function(){
                     self.$(".input-message").val("");
@@ -277,7 +278,9 @@ define(function(require,exports,module) {
             list.empty();
             _.each( this.messages, function(message){
                 if ( message.name ) {
-                    list.prepend("<li class='message'><label class='message-user-name'>" + message.name + "</label>说:<div class='message-msg'>" + message.msg + "</div></li>");
+                    list.prepend("<li class='message'><label class='message-user-name'>" + message.name + "</label>" +
+                        (message.timestamp ? ("<label class='message-time'>"+ relative_time_text(message.timestamp) +"</label>") : "") +
+                        "说:<div class='message-msg'>" + message.msg + "</div></li>");
                 }
             },this);
         },

@@ -570,6 +570,10 @@ body {
     margin-left: 10px;
     word-wrap: break-word;
 }
+.message-time {
+    font-size: 0.8em;
+    font-weight: normal;
+}
 .message-list {
     overflow: auto;
     padding: 0 5%;

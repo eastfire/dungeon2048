@@ -118,6 +118,7 @@ CACHE MANIFEST
 /dungeon2048/js/vendor/bootstrap.min.js
 /dungeon2048/js/vendor/firebase.js
 #program
+/dungeon2048/js/utils.js
 /dungeon2048/js/datamodel.js
 /dungeon2048/js/main.js
 /dungeon2048/js/plugins.js

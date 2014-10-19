@@ -1,51 +1,4 @@
 define(function(require,exports,module){
-    if ( !Math.log10 ){
-        Math.log10 = function(num){
-            return Math.log(num)/Math.log(10)
-        }
-    }
-    if ( !String.prototype.contains ) {
-        String.prototype.contains = function(str){
-            return this.indexOf(str) > -1;
-        }
-    }
-    window.clone = function(obj){
-        return JSON.parse( JSON.stringify(obj) );
-    }
-
-    window.getRandomItem = function(array){
-        if ( array.length == 0 )
-            return null;
-        return array[Math.floor(array.length*Math.random())];
-    }
-
-    window.getRandomItems = function(array, count){
-        if ( array.length == 0 )
-            return null;
-        var newArray = [];
-        for ( var item in array ){
-            newArray.push(array[item]);
-        }
-        if ( count >= array.length ) {
-            return newArray;
-        }
-
-        var outputArray = [];
-        for ( var i = 0; i < count ; i++) {
-            var index = Math.floor(newArray.length * Math.random());
-            outputArray.push(newArray.splice(index,1)[0]);
-        }
-        return outputArray;
-    }
-
-    window.isInArray = function(array, item){
-        for ( var i = 0 ; i < array.length; i++ ){
-            if ( array[i] == item )
-                return true;
-        }
-        return false;
-    }
-
     try {
         var appCache = window.applicationCache;
 
@@ -853,7 +806,7 @@ define(function(require,exports,module){
                 score : window.hero.get("score"),
                 level : window.hero.get("level"),
                 killBy :gameStatus.killBy,
-                timestamp : (new Date()).getTime(),
+                timestamp : Firebase.ServerValue.TIMESTAMP,//(new Date()).getTime(),
                 ".priority":window.hero.get("score")
             }
         else
