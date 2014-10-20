@@ -28,6 +28,15 @@ define(function(require,exports,module) {
         }
     });
 
+    exports.heroTypeDisplayName = {
+        priest:"牧师",
+        warrior:"战士"
+    }
+
+    exports.heroRaceDisplayName = {
+        human:"人类"
+    }
+
     exports.monsterDisplayName = {
         "archer":"骷髅弓箭手",
         "ghost":"幽灵",

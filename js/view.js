@@ -1,5 +1,6 @@
 define(function(require,exports,module){
     var Skill = require("./skill");
+    var Help = require("./help")
 
     var clearMapBlock = function (x,y) {
         if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
@@ -776,14 +777,16 @@ define(function(require,exports,module){
             this.hp = this.$(".hero-hp");
             this.level = this.$(".hero-level");
             this.exp = this.$(".hero-exp");
+            this.score = this.$(".hero-score");
             this.model.on("change",this.render, this);
         },
         render:function(){
-            this.type.html(this.model.get("typeDisplayName"))
+            this.type.html(Help.heroTypeDisplayName[this.model.get("type")])
             var hp = this.model.get("hp");
             this.hp.html("<span class='hp-symbol'>♥</span>"+(hp>0?hp:0)+"/"+this.model.get("maxHp"));
             this.level.html("LV:"+this.model.get("level"));
             this.exp.html("EXP:"+this.model.get("exp")+"/"+this.model.get("maxExp"));
+            this.score.html(this.model.get("score")+"分")
             if ( window.windowOriention == "landscape") {
                 this.$el.css({
                     width:blockSize.width*1.5

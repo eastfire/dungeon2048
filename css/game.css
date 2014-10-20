@@ -549,8 +549,12 @@ body {
 }
 
 .hero-label {
-    font-size: 1.2em;
+    font-size: 1.1em;
     margin: 1px 9px;
+}
+
+.hero-label.hero-score {
+    font-size: 0.9em;
 }
 
 .hp-symbol {
@@ -790,7 +794,35 @@ body {
     background-image: url("../img/boss-beholder2-0.png");
 }
 
-.levelup-body {
+.select-hero-type-item {
+    width:25%;
+    height:25%;
+    display: inline-block;
+}
+
+.hero-type-image {
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+}
+.hero-type-image.priest {
+    background-image: url("../img/priest2-0.png");
+}
+.hero-type-image.warrior {
+    background-image: url("../img/warrior2-0.png");
+}
+.hero-type-image.locked {
+    background-image: url("../img/status-locked.png");
+}
+
+.hero-type-name {
+    text-align: center;
+    font-weight: bold;
+}
+
+
+.levelup-body , .select-hero-body {
     position:absolute;
     width: 100%;
     height: 100%;
@@ -798,13 +830,19 @@ body {
     background-color: rgba(255, 255, 255, 0.85);
     top:0;
     left:0;
-    font-size: 2em;
+}
+
+.levelup-body .levelup-title , .select-hero-body .select-hero-title{
+    width: 100%;
+    font-size: 1.1em;
+    font-weight: bold;
     text-align: center;
 }
 
 .levelup-body .skill {
     height: auto;
     width:90%;
+    margin-left: 5%;
 }
 
 .levelup-body .skill-image-icon {
@@ -921,6 +959,12 @@ body {
 /*priest skill*/
 .skill-image-heal {
     background-image: url("../img/skill-heal.png");
+}
+.skill-image-turn-undead {
+    background-image: url("../img/skill-turn-undead.png");
+}
+.skill-image-dispel {
+    background-image: url("../img/skill-dispel.png");
 }
 .skill-image-blind-undead {
     background-image: url("../img/skill-blind-undead.png");

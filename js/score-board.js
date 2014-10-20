@@ -193,20 +193,24 @@ define(function(require,exports,module) {
                 } else {
                     current = "";
                 }
+                var type = Help.heroTypeDisplayName[score.type];
+                type = type || Help.heroTypeDisplayName["warrior"];//默认值
                 list.prepend("<tr class='score-row "+current+"'>" +
                         "<td class='score-cell player-name'>"+score.name+"</td>"+
                         "<td class='score-cell player-level'>"+"lv"+score.level+"</td>"+
-                        "<td class='score-cell player-type'>"+score.type+"</td>"+
+                        "<td class='score-cell player-type'>"+type+"</td>"+
                         "<td class='score-cell player-score'>"+score.score+"分</td>"+
                         "<td class='score-cell player-kill-by'>"+self.getReason(score)+"</td>"+
                     "</tr>")
             }, this )
             if ( !found && this.score ) {
+                var type = Help.heroTypeDisplayName[this.score.type];
+                type = type || Help.heroTypeDisplayName["warrior"];//默认值
                 list.append("<tr class='score-row placeholder'><td><b>……</b></td><td></td></td><td></td><td></td><td></td></tr>");
                 list.append("<tr class='score-row current'>" +
                     "<td class='score-cell player-name'>"+this.score.name+"</td>"+
                     "<td class='score-cell player-level'>"+"lv"+this.score.level+"</td>"+
-                    "<td class='score-cell player-type'>"+this.score.type+"</td>"+
+                    "<td class='score-cell player-type'>"+type+"</td>"+
                     "<td class='score-cell player-score'>"+this.score.score+"分</td>"+
                     "<td class='score-cell player-kill-by'>"+self.getReason(this.score)+"</td>"+
                     "</tr>")

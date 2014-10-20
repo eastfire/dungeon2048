@@ -15,7 +15,7 @@ define(function(require,exports,module) {
         "warrior3-3.png",
         "warrior3-4.png",
 
-/*        "priest0-0.png",
+        "priest0-0.png",
         "priest0-3.png",
         "priest0-4.png",
         "priest1-0.png",
@@ -28,7 +28,7 @@ define(function(require,exports,module) {
         "priest3-3.png",
         "priest3-4.png",
         "priest2-5.png",
-        "priest2-6.png",*/
+        "priest2-6.png",
 
         "archer3-0.png",
         "archer3-3.png",
@@ -110,6 +110,8 @@ define(function(require,exports,module) {
 
         "skill-heal.png",
         "skill-blind-undead.png",
+        "skill-turn-undead.png",
+        "skill-dispel.png",
 
         "loading.gif"
     ];

@@ -63,7 +63,8 @@ define(function(require,exports,module){
                 freeze:8,
                 dodge:6
             },
-            gainStar:0
+            gainStar:0,
+            selectableType:["warrior"]
         }
 
         var store = localStorage.getItem("tutorial");
@@ -72,14 +73,8 @@ define(function(require,exports,module){
         }
     }
 
-    var initSkillPool = function(){
-        window.gameStatus.skillPool = Skill.getSkillPool("warrior");
-    }
-
-    var initUnlock = function(){
-        _.each(Unlock.AllUnlocks,function(unlock){
-            unlock.onStartGame.call(unlock);
-        })
+    var generateSkillPool = function(){
+        window.gameStatus.skillPool = Skill.getSkillPool(hero.get("type"));
     }
 
     var calculateBlockSize = function(){
@@ -373,7 +368,7 @@ define(function(require,exports,module){
             callback.call();
             return;
         }
-        var el = $("<div class='levelup-body'>你升级了！<br/>请选择技能</div>");
+        var el = $("<div class='levelup-body'><div class='levelup-title'>请选择技能</div></div>");
         gameStatus.showingDialog = true;
         $(".main-window").append(el);
         _.each(skillArray, function(model){
@@ -807,7 +802,8 @@ define(function(require,exports,module){
         if ( gameStatus.killBy )
             gameStatus.death = {
                 name : window.hero.get("name"),
-                type : window.hero.get("typeDisplayName"),
+                type : window.hero.get("type"),
+                race : window.hero.get("race"),
                 score : window.hero.get("score"),
                 level : window.hero.get("level"),
                 killBy :gameStatus.killBy,
@@ -848,39 +844,7 @@ define(function(require,exports,module){
         e.preventDefault();
     }
 
-    window.startGame = function(){
-        $("body .main-window-wrapper").empty();
-        initGameStatus();
-
-        window.map = initMap();
-        window.getMapBlock = function(x,y){
-            if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
-                return map[x][y];
-            }
-            return null;
-        }
-
-        hero = new Model.Hero();
-        heroView = new View.HeroView({model:hero});
-        renderMap();
-        mapEl.append(heroView.render().$el);
-
-        heroStatusView = new View.HeroStatusView({el:$(".hero-status"), model:hero})
-        heroStatusView.render();
-
-        initSkillPool();
-
-        initUnlock();
-
-        heroView.renderSkillList();
-
-        initEvent();
-
-        var block = map[hero.get("position").x][hero.get("position").y];
-        block.type = "hero";
-        block.model = hero;
-        block.view = heroView;
-
+    var initStatistic = function(){
         var json = localStorage.getItem("statistic")
         if ( json )
             window.statistic = JSON.parse(json);
@@ -906,8 +870,93 @@ define(function(require,exports,module){
                     total:0
                 }
             }
+    }
 
-        setTimeout(generateMonster, TIME_SLICE);
+    window.startGame = function(){
+        $("body .main-window-wrapper").empty();
+        initGameStatus();
+
+        window.map = initMap();
+        window.getMapBlock = function(x,y){
+            if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
+                return map[x][y];
+            }
+            return null;
+        }
+
+        Skill.initSkillPool();
+
+        _.each(Unlock.AllUnlocks,function(unlock){
+            if ( unlock.isUnlocked() && unlock.adjustSkillPool )
+                unlock.adjustSkillPool.call(unlock);
+        })
+
+        renderMap();
+
+        var callback = function() {
+            hero = new Model.Hero({type:gameStatus.selectedType});
+            heroView = new View.HeroView({model: hero});
+
+            mapEl.append(heroView.render().$el);
+
+            heroStatusView = new View.HeroStatusView({el: $(".hero-status"), model: hero})
+            heroStatusView.render();
+
+            generateSkillPool();
+
+            _.each(Unlock.AllUnlocks, function (unlock) {
+                if (unlock.isUnlocked() && unlock.adjustHero)
+                    unlock.adjustHero.call(unlock);
+            })
+
+            heroView.renderSkillList();
+
+            initEvent();
+
+            var block = map[hero.get("position").x][hero.get("position").y];
+            block.type = "hero";
+            block.model = hero;
+            block.view = heroView;
+
+            initStatistic();
+
+            setTimeout(generateMonster, TIME_SLICE);
+        }
+
+        if ( gameStatus.selectableType.length > 1 ) {
+            //show select hero dialog
+            var el = $("<div class='select-hero-body'><div class='select-hero-title'>请选择</div></div>");
+            gameStatus.showingDialog = true;
+            $(".main-window").append(el);
+            var self = this;
+            _.each(gameStatus.selectableType, function(type){
+                var typeEl = $("<div class='select-hero-type-item' name='"+type+"'>" +
+                    "<div class='hero-type-image "+type+"'></div>" +
+                    "<div class='hero-type-name'>"+ Help.heroTypeDisplayName[type] +"</div>" +
+                    "</div>")
+                el.append(typeEl)
+                typeEl.on("click",function(event){
+                    var target = $(event.currentTarget);
+                    $(".select-hero-body").remove();
+                    gameStatus.selectedType = target.attr("name");
+                    gameStatus.showingDialog = false;
+                    callback.call(self);
+                })
+            },this)
+            var typeEl = $("<div class='select-hero-type-item'>" +
+                "<div class='hero-type-image locked'></div>" +
+                "<div class='hero-type-name'>法师</div>" +
+                "</div>")
+            el.append(typeEl)
+            var typeEl = $("<div class='select-hero-type-item'>" +
+                "<div class='hero-type-image locked'></div>" +
+                "<div class='hero-type-name'>盗贼</div>" +
+                "</div>")
+            el.append(typeEl)
+        } else {
+            gameStatus.selectedType = gameStatus.selectableType[0]
+            callback.call(this);
+        }
     }
 
     require("./preload").preload(function(){

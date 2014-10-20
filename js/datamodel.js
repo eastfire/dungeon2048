@@ -9,7 +9,7 @@ define(function (require, exports, module) {
             return {
                 name:"player",
                 race: "human",
-                type: "warrior",
+                type: "priest",
                 typeDisplayName: "战士",
                 score: 0,
                 level: 1,
@@ -178,6 +178,7 @@ define(function (require, exports, module) {
         defaults:function(){
             var data = exports.Monster.prototype.defaults.call(this);
             data.attackType = "range normal";
+            data.isUndead = true;
             return data;
         },
         calAttack: function (level) {
@@ -189,6 +190,11 @@ define(function (require, exports, module) {
     })
 
     exports.Ghost = exports.Monster.extend({
+        defaults:function(){
+            var data = exports.Monster.prototype.defaults.call(this);
+            data.isUndead = true;
+            return data;
+        },
         calAttack: function (level) {
             return Math.round(level / 2);
         },
@@ -255,6 +261,11 @@ define(function (require, exports, module) {
     })
 
     exports.Skeleton = exports.Monster.extend({
+        defaults:function(){
+            var data = exports.Monster.prototype.defaults.call(this);
+            data.isUndead = true;
+            return data;
+        },
         calExp: function (level) {
             return Math.floor(level * 3 / 2);
         }
@@ -280,6 +291,11 @@ define(function (require, exports, module) {
     })
 
     exports.Vampire = exports.Monster.extend({
+        defaults:function(){
+            var data = exports.Monster.prototype.defaults.call(this);
+            data.isUndead = true;
+            return data;
+        },
         calAttack: function (level) {
             return level * level;
         },

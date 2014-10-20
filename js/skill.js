@@ -556,12 +556,12 @@ define(function(require,exports,module) {
                 displayName:"治疗术",
                 level:1,
                 maxLevel:1,
-                currentCount:10,
-                coolDown:10
+                currentCount:21,
+                coolDown:21
             }
         },
         generateDescription:function(){
-            return "＋１０♥（可被恢复技能影响）"
+            return "+10♥且解毒（可被恢复技能影响）"
         },
         onActive:function(){
             window.heroView.getHp(10);
@@ -569,21 +569,107 @@ define(function(require,exports,module) {
         }
     })
 
-    exports.commonSkillPoolEntry = [
-        exports.ConstitutionSkill,
-        exports.CunningSkill,
-        exports.DexteritySkill,
-        exports.CoolingSkill,
-        exports.WisdomSkill,
-        exports.TreasureHuntingSkill,
-        exports.RecoverSkill
-    ]
+    exports.DispelSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.DispelSkill
+        },
+        defaults:function(){
+            return {
+                name:"dispel",
+                type:"active",
+                displayName:"驱魔",
+                level:1,
+                maxLevel:1,
+                currentCount:8,
+                coolDown:8
+            }
+        },
+        generateDescription:function(){
+            return "去除所有对英雄不利和对怪物有利的状态"
+        },
+        onActive:function(){
+            window.hero.set({
+                poison:0,
+                freeze:0
+            })
+            for ( var y = 0; y < mapHeight; y++  ){
+                for ( var x = 0; x < mapWidth; x++) {
+                    var block = getMapBlock(x,y);
+                    if ( block && block.type == "monster" ) {
+                        var model = block.model;
+                        if ( model )
+                            model.set({
+                                angry: 0
+                            })
+                    }
+                }
+            }
+            this.used();
+        }
+    })
 
-    exports.warriorBasicSkillPoolEntry = [
-        exports.SlashSkill,
-        exports.WhirlSkill
-    ]
-    //exports.BigWhirlSkill
+    exports.TurnUndeadSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.TurnUndeadSkill
+        },
+        defaults:function(){
+            return {
+                name:"turn-undead",
+                type:"active",
+                displayName:"超度亡灵",
+                level:1,
+                maxLevel:1,
+                currentCount:60,
+                coolDown:60
+            }
+        },
+        generateDescription:function(){
+            return "消灭所有不死生物（不包括boss）"
+        },
+        onActive:function(){
+            var totalHit = 0;
+            for ( var y = 0; y < mapHeight; y++  ){
+                for ( var x = 0; x < mapWidth; x++) {
+                    var block = getMapBlock(x,y);
+                    if ( block && block.type == "monster" && block.model.get("isUndead") ) {
+                        var monsterView = block.view;
+                        var result = monsterView.beAttacked(2,window.hero.get("attack"), "magic skill");
+                        if ( result )
+                            totalHit++;
+                    }
+                }
+            }
+            if ( totalHit >= 16 ){
+                statistic.skills[this.get("name")]=true;
+            }
+            this.used();
+        }
+    })
+
+    //驱魔，　圣光甲　，　复活，　
+
+
+    exports.initSkillPool = function(){
+        exports.commonSkillPoolEntry = [
+            exports.ConstitutionSkill,
+            exports.CunningSkill,
+            exports.DexteritySkill,
+            exports.CoolingSkill,
+            exports.WisdomSkill,
+            exports.TreasureHuntingSkill,
+            exports.RecoverSkill
+        ]
+
+        exports.warriorBasicSkillPoolEntry = [
+            exports.SlashSkill,
+            exports.WhirlSkill
+        ]
+
+        exports.priestBasicSkillPoolEntry = [
+            exports.HealSkill,
+            exports.DispelSkill
+        ]
+    }
 
     exports.getSkillPool = function(type){
         var array = [];

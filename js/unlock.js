@@ -20,11 +20,6 @@ define(function(require,exports,module){
         },
         unlock:function(){
             localStorage.setItem("unlock-"+this.get("name"), true);
-        },
-        onStartGame:function(){
-            if ( this.isUnlocked() ) {
-                this.effect();
-            }
         }
     })
 
@@ -36,10 +31,8 @@ define(function(require,exports,module){
                 cost:20
             }
         },
-        effect:function(){
-            if ( hero.get("type") == "warrior" ){
-                gameStatus.skillPool.push(new Skill.RevertSlashSkill())
-            }
+        adjustSkillPool:function(){
+            Skill.warriorBasicSkillPoolEntry.push( Skill.RevertSlashSkill )
         }
     })
     exports.BigWhirlUnlock = exports.Unlockable.extend({
@@ -50,10 +43,8 @@ define(function(require,exports,module){
                 cost:20
             }
         },
-        effect:function(){
-            if ( hero.get("type") == "warrior" ){
-                gameStatus.skillPool.push(new Skill.BigWhirlSkill())
-            }
+        adjustSkillPool:function(){
+            Skill.warriorBasicSkillPoolEntry.push( Skill.BigWhirlSkill )
         }
     })
     exports.HorizontalSlashUnlock = exports.Unlockable.extend({
@@ -64,10 +55,8 @@ define(function(require,exports,module){
                 cost:15
             }
         },
-        effect:function(){
-            if ( hero.get("type") == "warrior" ){
-                gameStatus.skillPool.push(new Skill.HorizontalSlashSkill())
-            }
+        adjustSkillPool:function(){
+            Skill.warriorBasicSkillPoolEntry.push( Skill.HorizontalSlashSkill )
         }
     })
     exports.VerticalSlashUnlock = exports.Unlockable.extend({
@@ -78,10 +67,8 @@ define(function(require,exports,module){
                 cost:15
             }
         },
-        effect:function(){
-            if ( hero.get("type") == "warrior" ){
-                gameStatus.skillPool.push(new Skill.VerticalSlashSkill())
-            }
+        adjustSkillPool:function(){
+            Skill.warriorBasicSkillPoolEntry.push( Skill.VerticalSlashSkill )
         }
     })
     exports.CrossSlashUnlock = exports.Unlockable.extend({
@@ -92,10 +79,8 @@ define(function(require,exports,module){
                 cost:30
             }
         },
-        effect:function(){
-            if ( hero.get("type") == "warrior" ){
-                gameStatus.skillPool.push(new Skill.CrossSlashSkill())
-            }
+        adjustSkillPool:function(){
+            Skill.warriorBasicSkillPoolEntry.push( Skill.CrossSlashSkill )
         }
     })
     exports.WarriorThirdSkillUnlock = exports.Unlockable.extend({
@@ -106,7 +91,7 @@ define(function(require,exports,module){
                 cost:50
             }
         },
-        effect:function(){
+        adjustHero:function(){
             if ( hero.get("type") == "warrior" ){
                 if ( hero.get("skillSlot") == 2 )
                     hero.set("skillSlot",3)
@@ -124,8 +109,71 @@ define(function(require,exports,module){
         isValid:function(){
             return (new exports.WarriorThirdSkillUnlock()).isUnlocked();
         },
-        effect:function(){
+        adjustHero:function(){
             if ( hero.get("type") == "warrior" ){
+                hero.set("skillSlot",4)
+            }
+        }
+    })
+
+    exports.PriestUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"priest",
+                description:"解锁牧师",
+                cost:120
+            }
+        },
+        adjustSkillPool:function(){
+            gameStatus.selectableType.push("priest")
+        }
+    })
+    exports.TurnUndeadUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"turn-undead",
+                description:"牧师 的 超度亡灵技能",
+                cost:200
+            }
+        },
+        isValid:function(){
+            return (new exports.PriestUnlock()).isUnlocked();
+        },
+        adjustSkillPool:function(){
+            Skill.priestBasicSkillPoolEntry.push( Skill.TurnUndeadSkill )
+        }
+    })
+    exports.PriestThirdSkillUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"priest-third-skill",
+                description:"牧师 的 第3个技能槽",
+                cost:100
+            }
+        },
+        isValid:function(){
+            return (new exports.PriestUnlock()).isUnlocked();
+        },
+        adjustHero:function(){
+            if ( hero.get("type") == "priest" ){
+                if ( hero.get("skillSlot") == 2 )
+                    hero.set("skillSlot",3)
+            }
+        }
+    })
+    exports.PriestFourthSkillUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"priest-fourth-skill",
+                description:"牧师 的 第4个技能槽",
+                cost:300
+            }
+        },
+        isValid:function(){
+            return (new exports.PriestThirdSkillUnlock()).isUnlocked();
+        },
+        adjustHero:function(){
+            if ( hero.get("type") == "priest" ){
                 hero.set("skillSlot",4)
             }
         }
@@ -138,7 +186,12 @@ define(function(require,exports,module){
         new exports.VerticalSlashUnlock(),
         new exports.CrossSlashUnlock(),
         new exports.WarriorThirdSkillUnlock(),
-        new exports.WarriorFourthSkillUnlock()
+        new exports.WarriorFourthSkillUnlock(),
+
+        new exports.PriestUnlock(),
+        new exports.TurnUndeadUnlock(),
+        new exports.PriestThirdSkillUnlock(),
+        new exports.PriestFourthSkillUnlock(),
     ]
 
     exports.Achievement = Backbone.Model.extend({
@@ -649,6 +702,23 @@ define(function(require,exports,module){
         }
     })
 
+    exports.SkillTurnUndeadAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"skill-turn-undead",
+                displayName:"极乐往生",
+                description:"超度亡灵同时消灭至少16个怪物",
+                reward:64
+            }
+        },
+        isValid:function(){
+            return (new exports.TurnUndeadUnlock()).isUnlocked();
+        },
+        isPassed:function(){
+            return statistic.skills["turn-undead"];
+        }
+    })
+
     exports.AllAchievements = [
 
 //        new exports.SlimeCountAchievement(),
@@ -688,6 +758,8 @@ define(function(require,exports,module){
         new exports.PotionLevelAchievement(),
 
         new exports.SkillWhirlAchievement(),
-        new exports.SkillBigWhirlAchievement
+        new exports.SkillBigWhirlAchievement(),
+
+        new exports.SkillTurnUndeadAchievement()
     ]
 });
