@@ -450,6 +450,8 @@ define(function(require,exports,module){
                         var att = self.model.calAttack.call(self, self.model.get("level"));
                         if (self.model.get("angry"))
                             att = att * 3;
+                        if ( gameStatus.globalEffect.doubleAttack > 0 )
+                            att = att * 2;
                         gameStatus.killBy = {
                             type :"monster",
                             monsterLevel:self.model.get("level"),
@@ -549,7 +551,12 @@ define(function(require,exports,module){
                 this.$el.addClass("attacking0");
                 (function t(self) {
                     setTimeout(function () {
-                        var hit = heroView.takeDamage(self.model.get("attack"));
+                        var att = self.model.calAttack.call(self, self.model.get("level"));
+                        if (self.model.get("angry"))
+                            att = att * 3;
+                        if ( gameStatus.globalEffect.doubleAttack > 0 )
+                            att = att * 2;
+                        var hit = heroView.takeDamage(att);
                         if (!hit) {
                             self.effecQueue.add.call(self.effecQueue, "Miss!");
                         }
@@ -695,6 +702,18 @@ define(function(require,exports,module){
 
     })
 
+    exports.BossHydraView = exports.BossView.extend({
+        onGenerate:function(){
+            if ( gameStatus.globalEffect.doubleAttack )
+                gameStatus.globalEffect.doubleAttack++;
+            else
+                gameStatus.globalEffect.doubleAttack = 1;
+        },
+        onDie:function(){
+            gameStatus.globalEffect.doubleAttack--;
+        }
+    })
+
     exports.ViewMap = {
         archer:exports.ArcherView,
         ghost:exports.GhostView,
@@ -712,7 +731,8 @@ define(function(require,exports,module){
         vampire:exports.VampireView,
 
         "boss-beholder":exports.BossBeholderView,
-        "boss-death": exports.BossDeathView
+        "boss-death": exports.BossDeathView,
+        "boss-hydra": exports.BossHydraView
     };
 
     exports.ItemView = MovableView.extend({

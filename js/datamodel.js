@@ -326,16 +326,6 @@ define(function (require, exports, module) {
         }
     })
 
-
-    exports.BossDeath = exports.Boss.extend({
-        calAttack: function (level) {
-            return Math.floor(window.hero.get("maxHp")/2);
-        },
-        calExp: function (level) {
-            return Math.floor(window.hero.get("maxExp") / 2);
-        }
-    })
-
     exports.BossBeholder = exports.Boss.extend({
         calAttack: function (level) {
             return Math.floor(window.hero.get("maxHp")/3);
@@ -348,6 +338,24 @@ define(function (require, exports, module) {
         },
         getDizzyPower:function(){
             return 100;
+        }
+    })
+
+    exports.BossDeath = exports.Boss.extend({
+        calAttack: function (level) {
+            return Math.floor(window.hero.get("maxHp")/2);
+        },
+        calExp: function (level) {
+            return Math.floor(window.hero.get("maxExp") / 2);
+        }
+    })
+
+    exports.BossHydra = exports.Boss.extend({
+        calAttack: function (level) {
+            return Math.floor(window.hero.get("maxHp")/4);//it will be double
+        },
+        calExp: function (level) {
+            return window.hero.get("maxExp");
         }
     })
 
@@ -368,7 +376,8 @@ define(function (require, exports, module) {
         minotaur: exports.Minotaur,
 
         "boss-beholder":exports.BossBeholder,
-        "boss-death":exports.BossDeath
+        "boss-death":exports.BossDeath,
+        "boss-hydra":exports.BossHydra
     }
 
     exports.Item = Backbone.Model.extend({
