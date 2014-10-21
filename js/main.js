@@ -806,7 +806,7 @@ define(function(require,exports,module){
 
         generateMonster();
 
-        if ( gameStatus.turn % 211 == 0 || gameStatus.tryingToGenerateBoss ) {
+        if ( gameStatus.turn % 167 == 0 || gameStatus.tryingToGenerateBoss ) {
             gameStatus.tryingToGenerateBoss = true;
             var success = generateBoss();
             if ( success ) {
