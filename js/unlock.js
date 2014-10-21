@@ -143,6 +143,21 @@ define(function(require,exports,module){
             Skill.priestBasicSkillPoolEntry.push( Skill.TurnUndeadSkill )
         }
     })
+    exports.ResurrectionUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"resurrection",
+                description:"牧师 的 复活术技能",
+                cost:200
+            }
+        },
+        isValid:function(){
+            return (new exports.PriestUnlock()).isUnlocked();
+        },
+        adjustSkillPool:function(){
+            Skill.priestBasicSkillPoolEntry.push( Skill.ResurrectionSkill )
+        }
+    })
     exports.PriestThirdSkillUnlock = exports.Unlockable.extend({
         defaults:function(){
             return {
@@ -189,6 +204,7 @@ define(function(require,exports,module){
         new exports.WarriorFourthSkillUnlock(),
 
         new exports.PriestUnlock(),
+        new exports.ResurrectionUnlock(),
         new exports.TurnUndeadUnlock(),
         new exports.PriestThirdSkillUnlock(),
         new exports.PriestFourthSkillUnlock(),

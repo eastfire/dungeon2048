@@ -768,7 +768,7 @@ define(function(require,exports,module){
         setTimeout(function(){
             if ( gameStatus.phase != PHASE_GAME_OVER )
                 nextTurn();
-        },TIME_SLICE+1);
+        },TIME_SLICE*2);
     }
 
     var nextTurn = function(){

@@ -966,6 +966,9 @@ body {
 .skill-image-dispel {
     background-image: url("../img/skill-dispel.png");
 }
+.skill-image-resurrection {
+    background-image: url("../img/skill-resurrection.png");
+}
 .skill-image-blind-undead {
     background-image: url("../img/skill-blind-undead.png");
 }

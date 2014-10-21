@@ -110,6 +110,9 @@ CACHE MANIFEST
 #priest-skill
 /dungeon2048/img/skill-heal.png
 /dungeon2048/img/skill-blind-undead.png
+/dungeon2048/img/skill-turn-undead.png
+/dungeon2048/img/skill-dispel.png
+/dungeon2048/img/skill-resurrection.png
 #misc
 /dungeon2048/img/loading.gif
 #libs js

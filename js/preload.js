@@ -112,6 +112,7 @@ define(function(require,exports,module) {
         "skill-blind-undead.png",
         "skill-turn-undead.png",
         "skill-dispel.png",
+        "skill-resurrection.png",
 
         "loading.gif"
     ];

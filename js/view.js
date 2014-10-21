@@ -84,6 +84,7 @@ define(function(require,exports,module){
             MovableView.prototype.initialize.call(this);
             this.model.on("change:level",this.levelUp,this);
             this.model.on("change:poison",this.renderPoison,this);
+            this.model.on("change:hp",this.checkAlive,this);
             this.skillList = [];
         },
         render:function(){
@@ -204,7 +205,7 @@ define(function(require,exports,module){
             var realDamage = attack - this.model.get("defend");
             if ( realDamage > 0 ){
                 this.effecQueue.add.call(this.effecQueue,"♥-"+realDamage);
-                this.model.set("hp",this.model.get("hp")-realDamage);
+                this.model.set("hp",Math.max(this.model.get("hp")-realDamage,0));
             }
             return true;
         },
@@ -246,6 +247,26 @@ define(function(require,exports,module){
                 this.effecQueue.add.call(this.effecQueue, "中毒");
             } else if ( !this.model.get("poison") && this.model.previous("poison")) {
                 this.$(".status-poison").remove();
+            }
+        },
+        onDying:function(){
+            _.each(this.skillList, function(skill){
+                if ( skill.onDying ){
+                    skill.onDying.call(skill);
+                }
+            },this);
+        },
+        checkAlive:function(){
+            if ( this.model.previous("hp")>0 && this.model.get("hp") <= 0 ) { //prevent multiple enter
+                var self = this;
+                setTimeout(function(){
+                    self.onDying.call(self);
+                    if ( self.model.get("hp") <= 0 ){
+                        gameOver();
+                    } else {
+                        //复活了
+                    }
+                },100) //wait all monster attacked
             }
         }
     })
@@ -791,9 +812,6 @@ define(function(require,exports,module){
                 this.$el.css({
                     width:blockSize.width*1.5
                 })
-            }
-            if ( this.model.get("hp") <= 0 ) {
-                gameOver();
             }
             return this;
         }

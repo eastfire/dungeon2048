@@ -56,10 +56,10 @@ define(function(require,exports,module) {
                 this.$el.on("click",function(){
                     if ( window.gameStatus.phase != PHASE_USER )
                         return;
-                    hero.getScore(1);
                     var count = self.model.get("currentCount");
                     var coolDown = self.model.calCoolDown();
                     if ( count >= coolDown ) {
+                        hero.getScore(1);
                         self.model.onActive.call(self.model);
                     }
                 })
@@ -618,6 +618,39 @@ define(function(require,exports,module) {
             }
             hero.getScore(score);
             this.used();
+        }
+    })
+
+    exports.ResurrectionSkill = exports.Skill.extend({
+        initialize: function () {
+            this.modelClass = exports.ResurrectionSkill
+        },
+        defaults: function () {
+            return {
+                name: "resurrection",
+                type: "active",
+                displayName: "复活术",
+                level: 1,
+                maxLevel: 1,
+                currentCount: 60,
+                coolDown: 60
+            }
+        },
+        generateDescription: function () {
+            return "如果本轮死亡，将以1/4生命复活"
+        },
+        onDying : function() {
+            if ( this.get("skill-resurrection-active") ) {
+                hero.set("hp",Math.floor(hero.get("maxHp")/4));
+            }
+        },
+        onActive:function(){
+            this.set("skill-resurrection-active",1);
+            this.used();
+        },
+        onNewRound:function(){
+            exports.Skill.prototype.onNewRound.call(this);
+            this.set("skill-resurrection-active",0);
         }
     })
 
