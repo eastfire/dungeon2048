@@ -9,8 +9,7 @@ define(function (require, exports, module) {
             return {
                 name:"player",
                 race: "human",
-                type: "priest",
-                typeDisplayName: "战士",
+                type: "warrior",
                 score: 0,
                 level: 1,
                 exp: 0,
@@ -44,7 +43,7 @@ define(function (require, exports, module) {
                 exp += Math.round(exp * this.get("wisdom") * WISDOM_EFFECT / 100);
             }
             if (level) {
-                this.set("score", this.get("score") + exp);
+                this.getScore(exp);
             }
             if ( this.expUnused == 0 ) {
                 this.expUnused += exp;
@@ -52,6 +51,9 @@ define(function (require, exports, module) {
             } else {
                 this.expUnused += exp;
             }
+        },
+        getScore:function(score){
+            this.set("score",this.get("score")+score);
         },
         checkLevelUp:function(){
             var currentExp = this.get("exp");
@@ -358,14 +360,17 @@ define(function (require, exports, module) {
                 direction: 2
             }
         },
-        initialize: function () {
-
+        initialize: function (options) {
+            this.setToLevel(options.level)
         },
         setToLevel: function (level) {
             this.set({
                 level: level,
-                effect: level * (level - 1)
+                effect: this.calEffect(level)
             })
+        },
+        calEffect:function(level){
+            return level * (level + 1)/2;
         },
         effectHappen: function () {
             if (this.get("type") == "potion") {

@@ -210,7 +210,7 @@ define(function(require,exports,module){
         },
         getHp:function(hp){
             hp += this.model.get("recover");
-            this.model.set("score",this.model.get("score")+hp);
+            this.model.getScore(hp);
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
             if ( realHeal > 0 ){
                 this.effecQueue.add.call(this.effecQueue,"♥+"+realHeal, "effect-get-hp");
@@ -494,13 +494,13 @@ define(function(require,exports,module){
         },
         onMerged:function(){
             if ( this.model.get("level") == 2 ){ //no star + no star = 1 star
-                this.model.set("level", 6);
-            } else if ( this.model.get("level") == 7 ) { //no star + 1 star = 2 star
-                this.model.set("level",12)
-            } else if ( this.model.get("level") == 13 ) { //no star + 2 star = 3 star
-                this.model.set("level",18)
-            } else if ( this.model.get("level") == 12 ) { //1 star + 1 star = 3 star
-                this.model.set("level",18)
+                this.model.set("level", WISDOM_THRESHOLD);
+            } else if ( this.model.get("level") == WISDOM_THRESHOLD+1 ) { //no star + 1 star = 2 star
+                this.model.set("level",2*WISDOM_THRESHOLD)
+            } else if ( this.model.get("level") == 2*WISDOM_THRESHOLD+1 ) { //no star + 2 star = 3 star
+                this.model.set("level",3*WISDOM_THRESHOLD)
+            } else if ( this.model.get("level") == 2*WISDOM_THRESHOLD ) { //1 star + 1 star = 3 star
+                this.model.set("level",3*WISDOM_THRESHOLD)
             }
         }
     })

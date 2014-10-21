@@ -368,7 +368,7 @@ define(function(require,exports,module){
             callback.call();
             return;
         }
-        var el = $("<div class='levelup-body'><div class='levelup-title'>请选择技能</div></div>");
+        var el = $("<div class='levelup-body'><div class='levelup-title'>请选择升级技能</div></div>");
         gameStatus.showingDialog = true;
         $(".main-window").append(el);
         _.each(skillArray, function(model){
@@ -567,12 +567,27 @@ define(function(require,exports,module){
         });
 
         $(document).on("keydown",function(event) {
+            var levelUpShowing = $(".levelup-body").length > 0;
+
             if (gameStatus.showingDialog) {
                 if ( $(".help").length ) {
                     $(".help").remove();
                     window.gameStatus.showingDialog = false;
                     return;
                 }
+            }
+            if ( levelUpShowing ) {
+                var skillEl = $(".levelup-body .skill");
+                switch(event.keyCode){
+                    case 38:
+                        $(skillEl[0]).trigger("click");
+                        break;
+                    case 40:
+                        if ( skillEl.length > 1 )
+                            $(skillEl[1]).trigger("click");
+                        break;
+                }
+                return;
             }
             if ( !window.isDirectionInputValid() )
                 return;

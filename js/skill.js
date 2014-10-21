@@ -56,6 +56,7 @@ define(function(require,exports,module) {
                 this.$el.on("click",function(){
                     if ( window.gameStatus.phase != PHASE_USER )
                         return;
+                    hero.getScore(1);
                     var count = self.model.get("currentCount");
                     var coolDown = self.model.calCoolDown();
                     if ( count >= coolDown ) {
@@ -580,30 +581,42 @@ define(function(require,exports,module) {
                 displayName:"驱魔",
                 level:1,
                 maxLevel:1,
-                currentCount:8,
-                coolDown:8
+                currentCount:6,
+                coolDown:6
             }
         },
         generateDescription:function(){
             return "去除所有对英雄不利和对怪物有利的状态"
         },
         onActive:function(){
+            var score = 0;
+            if ( hero.get("poison") )
+                score++;
+            if ( hero.get("freeze") )
+                score++;
+            if ( hero.get("dizzy") )
+                score++;
             window.hero.set({
                 poison:0,
-                freeze:0
+                freeze:0,
+                dizzy:0
             })
             for ( var y = 0; y < mapHeight; y++  ){
                 for ( var x = 0; x < mapWidth; x++) {
                     var block = getMapBlock(x,y);
                     if ( block && block.type == "monster" ) {
                         var model = block.model;
-                        if ( model )
+                        if ( model ) {
+                            if ( model.get("angry") )
+                                score++;
                             model.set({
                                 angry: 0
                             })
+                        }
                     }
                 }
             }
+            hero.getScore(score);
             this.used();
         }
     })
