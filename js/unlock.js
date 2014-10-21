@@ -501,20 +501,6 @@ define(function(require,exports,module){
         }
     })
 
-    exports.VampireLevelAchievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"vampire-level",
-                displayName:"吸血鬼的华丽谢幕",
-                description:"杀死一个3<span class='star'></span>级吸血鬼",
-                reward:50
-            }
-        },
-        isPassed:function(){
-            return statistic.kill.monsterLevel["vampire"] >= 3*WISDOM_THRESHOLD;
-        }
-    })
-
     exports.MedusaLevelAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
@@ -610,6 +596,34 @@ define(function(require,exports,module){
         },
         isPassed:function(){
             return statistic.kill.monsterLevel["snake"] >= 3*WISDOM_THRESHOLD;
+        }
+    })
+
+    exports.TrollLevelAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"troll-level",
+                displayName:"巨魔的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级巨魔",
+                reward:30
+            }
+        },
+        isPassed:function(){
+            return statistic.kill.monsterLevel["troll"] >= 3*WISDOM_THRESHOLD;
+        }
+    })
+
+    exports.VampireLevelAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"vampire-level",
+                displayName:"吸血鬼的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级吸血鬼",
+                reward:50
+            }
+        },
+        isPassed:function(){
+            return statistic.kill.monsterLevel["vampire"] >= 3*WISDOM_THRESHOLD;
         }
     })
 
@@ -764,6 +778,7 @@ define(function(require,exports,module){
         new exports.SkeletonLevelAchievement(),
         new exports.SlimeLevelAchievement(),
         new exports.SnakeLevelAchievement(),
+        new exports.TrollLevelAchievement(),
         new exports.VampireLevelAchievement(),
         new exports.KillBossAchievement(),
 
