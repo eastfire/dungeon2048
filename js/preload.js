@@ -75,6 +75,10 @@ define(function(require,exports,module) {
         "snake1-0.png",
         "snake1-3.png",
         "snake1-4.png",
+        "troll1-0.png",
+        "troll1-3.png",
+        "troll1-4.png",
+        "troll1-5.png",
         "vampire2-0.png",
         "vampire2-3.png",
         "vampire2-4.png",
@@ -85,6 +89,9 @@ define(function(require,exports,module) {
         "boss-death2-0.png",
         "boss-death2-3.png",
         "boss-death2-4.png",
+        "boss-hydra1-0.png",
+        "boss-hydra1-3.png",
+        "boss-hydra1-4.png",
 
         "potion.png",
 

@@ -199,10 +199,16 @@ body {
 .monster.ghost.d0.attacking1, .monster.ghost.d1.attacking1, .monster.ghost.d2.attacking1, .monster.ghost.d3.attacking1 {
     background-image: url("../img/ghost1-4.png");
 }
+.monster.ghost.d0.attacking2, .monster.ghost.d1.attacking2, .monster.ghost.d2.attacking2, .monster.ghost.d3.attacking2 {
+    background-image: url("../img/ghost1-3.png");
+}
 .monster.ghost.d0.attacking0, .monster.ghost.d3.attacking0 {
     transform:scaleX(-1);
 }
 .monster.ghost.d0.attacking1, .monster.ghost.d3.attacking1 {
+    transform:scaleX(-1);
+}
+.monster.ghost.d0.attacking2, .monster.ghost.d3.attacking2 {
     transform:scaleX(-1);
 }
 
@@ -215,10 +221,16 @@ body {
 .monster.goblin.d0.attacking1, .monster.goblin.d1.attacking1, .monster.goblin.d2.attacking1, .monster.goblin.d3.attacking1 {
     background-image: url("../img/goblin1-4.png");
 }
+.monster.goblin.d0.attacking2, .monster.goblin.d1.attacking2, .monster.goblin.d2.attacking2, .monster.goblin.d3.attacking2 {
+    background-image: url("../img/goblin1-3.png");
+}
 .monster.goblin.d0.attacking0, .monster.goblin.d3.attacking0 {
     transform:scaleX(-1);
 }
 .monster.goblin.d0.attacking1, .monster.goblin.d3.attacking1 {
+    transform:scaleX(-1);
+}
+.monster.goblin.d0.attacking2, .monster.goblin.d3.attacking2 {
     transform:scaleX(-1);
 }
 
@@ -231,10 +243,16 @@ body {
 .monster.medusa.d0.attacking1, .monster.medusa.d1.attacking1, .monster.medusa.d2.attacking1, .monster.medusa.d3.attacking1 {
     background-image: url("../img/medusa1-4.png");
 }
+.monster.medusa.d0.attacking2, .monster.medusa.d1.attacking2, .monster.medusa.d2.attacking2, .monster.medusa.d3.attacking2 {
+    background-image: url("../img/medusa1-3.png");
+}
 .monster.medusa.d0.attacking0, .monster.medusa.d3.attacking0 {
     transform:scaleX(-1);
 }
 .monster.medusa.d0.attacking1, .monster.medusa.d3.attacking1 {
+    transform:scaleX(-1);
+}
+.monster.medusa.d0.attacking2, .monster.medusa.d3.attacking2 {
     transform:scaleX(-1);
 }
 
@@ -247,17 +265,29 @@ body {
 .monster.mimic.d0.attacking1, .monster.mimic.d1.attacking1, .monster.mimic.d2.attacking1, .monster.mimic.d3.attacking1 {
     background-image: url("../img/mimic2-4.png");
 }
+.monster.mimic.d0.attacking2, .monster.mimic.d1.attacking2, .monster.mimic.d2.attacking2, .monster.mimic.d3.attacking2 {
+    background-image: url("../img/mimic2-4.png");
+}
+.monster.mimic.d0.attacking0, .monster.mimic.d3.attacking0 {
+    transform:scaleX(-1);
+}
+.monster.mimic.d0.attacking1, .monster.mimic.d3.attacking1 {
+    transform:scaleX(-1);
+}
+.monster.mimic.d0.attacking2, .monster.mimic.d3.attacking2 {
+    transform:scaleX(-1);
+}
 
 .monster.minotaur.d0,.monster.minotaur.d1,.monster.minotaur.d2,.monster.minotaur.d3 {
     background-image: url("../img/minotaur2-0.png");
 }
-.monster.minotaur.d0.attacking0 {
+.monster.minotaur.d0.attacking0, .monster.minotaur.d0.attacking2 {
     background-image: url("../img/minotaur0-3.png");
 }
 .monster.minotaur.d0.attacking1 {
     background-image: url("../img/minotaur0-4.png");
 }
-.monster.minotaur.d1.attacking0 {
+.monster.minotaur.d1.attacking0, .monster.minotaur.d1.attacking2 {
     background-image: url("../img/minotaur3-3.png");
     transform:scaleX(-1);
 }
@@ -265,13 +295,13 @@ body {
     background-image: url("../img/minotaur3-4.png");
     transform:scaleX(-1);
 }
-.monster.minotaur.d2.attacking0 {
+.monster.minotaur.d2.attacking0, .monster.minotaur.d2.attacking2 {
     background-image: url("../img/minotaur2-3.png");
 }
 .monster.minotaur.d2.attacking1 {
     background-image: url("../img/minotaur2-4.png");
 }
-.monster.minotaur.d3.attacking0 {
+.monster.minotaur.d3.attacking0, .monster.minotaur.d3.attacking2 {
     background-image: url("../img/minotaur3-3.png");
 }
 .monster.minotaur.d3.attacking1 {
@@ -281,13 +311,13 @@ body {
 .monster.orc.d0,.monster.orc.d1,.monster.orc.d2,.monster.orc.d3 {
     background-image: url("../img/orc1-0.png");
 }
-.monster.orc.attacking0.d1, .monster.orc.attacking0.d2 {
+.monster.orc.attacking0.d1, .monster.orc.attacking0.d2, .monster.orc.attacking2.d1, .monster.orc.attacking2.d2{
     background-image: url("../img/orc1-3.png");
 }
 .monster.orc.attacking1.d1, .monster.orc.attacking1.d2 {
     background-image: url("../img/orc1-4.png");
 }
-.monster.orc.attacking0.d0, .monster.orc.attacking0.d3 {
+.monster.orc.attacking0.d0, .monster.orc.attacking0.d3,.monster.orc.attacking2.d0, .monster.orc.attacking2.d3 {
     background-image: url("../img/orc1-3.png");
     transform:scaleX(-1);
 }
@@ -296,16 +326,7 @@ body {
     transform:scaleX(-1);
 }
 
-.monster.slime.d0 {
-    background-image: url("../img/slime2-0.png");
-}
-.monster.slime.d1 {
-    background-image: url("../img/slime2-0.png");
-}
-.monster.slime.d2 {
-    background-image: url("../img/slime2-0.png");
-}
-.monster.slime.d3 {
+.monster.slime.d0, .monster.slime.d1, .monster.slime.d2, .monster.slime.d3 {
     background-image: url("../img/slime2-0.png");
 }
 .monster.slime.d0.attacking0, .monster.slime.d1.attacking0, .monster.slime.d2.attacking0, .monster.slime.d3.attacking0 {
@@ -313,6 +334,9 @@ body {
  }
 .monster.slime.d0.attacking1, .monster.slime.d1.attacking1, .monster.slime.d2.attacking1, .monster.slime.d3.attacking1 {
     background-image: url("../img/slime2-2.png");
+}
+.monster.slime.d0.attacking2, .monster.slime.d1.attacking2, .monster.slime.d2.attacking2, .monster.slime.d3.attacking2 {
+    background-image: url("../img/slime2-1.png");
 }
 
 .monster.shaman.d0,.monster.shaman.d1,.monster.shaman.d2,.monster.shaman.d3 {
@@ -324,10 +348,16 @@ body {
 .monster.shaman.d0.attacking1, .monster.shaman.d1.attacking1, .monster.shaman.d2.attacking1, .monster.shaman.d3.attacking1 {
     background-image: url("../img/shaman2-4.png");
 }
+.monster.shaman.d0.attacking2, .monster.shaman.d1.attacking2, .monster.shaman.d2.attacking2, .monster.shaman.d3.attacking2 {
+    background-image: url("../img/shaman2-3.png");
+}
 .monster.shaman.d0.attacking0, .monster.shaman.d3.attacking0 {
     transform:scaleX(-1);
 }
 .monster.shaman.d0.attacking1, .monster.shaman.d3.attacking1 {
+    transform:scaleX(-1);
+}
+.monster.shaman.d0.attacking2, .monster.shaman.d3.attacking2 {
     transform:scaleX(-1);
 }
 
@@ -340,44 +370,27 @@ body {
 .monster.vampire.d0.attacking1, .monster.vampire.d1.attacking1, .monster.vampire.d2.attacking1, .monster.vampire.d3.attacking1 {
     background-image: url("../img/vampire2-4.png");
 }
-
-.monster.skeleton.d0 {
-    background-image: url("../img/skeleton2-0.png");
-}
-.monster.skeleton.d1 {
-    background-image: url("../img/skeleton2-0.png");
-}
-.monster.skeleton.d2 {
-    background-image: url("../img/skeleton2-0.png");
-}
-.monster.skeleton.d3 {
-    background-image: url("../img/skeleton2-0.png");
+.monster.vampire.d0.attacking2, .monster.vampire.d1.attacking2, .monster.vampire.d2.attacking2, .monster.vampire.d3.attacking2 {
+    background-image: url("../img/vampire2-3.png");
 }
 
-.monster.skeleton.d0.attacking0, .monster.skeleton.d1.attacking0 {
+.monster.skeleton.d0, .monster.skeleton.d1, .monster.skeleton.d2, .monster.skeleton.d3 {
+    background-image: url("../img/skeleton2-0.png");
+}
+.monster.skeleton.d0.attacking0, .monster.skeleton.d1.attacking0, .monster.skeleton.d0.attacking2, .monster.skeleton.d1.attacking2 {
     background-image: url("../img/skeleton2-3.png");
 }
 .monster.skeleton.d0.attacking1, .monster.skeleton.d1.attacking1 {
     background-image: url("../img/skeleton2-4.png");
 }
-
-.monster.skeleton.d2.attacking0, .monster.skeleton.d3.attacking0 {
+.monster.skeleton.d2.attacking0, .monster.skeleton.d3.attacking0, .monster.skeleton.d2.attacking2, .monster.skeleton.d3.attacking2 {
     background-image: url("../img/skeleton3-3.png");
 }
 .monster.skeleton.d2.attacking1, .monster.skeleton.d3.attacking1 {
     background-image: url("../img/skeleton3-4.png");
 }
 
-.monster.snake.d0 {
-    background-image: url("../img/snake1-0.png");
-}
-.monster.snake.d1 {
-    background-image: url("../img/snake1-0.png");
-}
-.monster.snake.d2 {
-    background-image: url("../img/snake1-0.png");
-}
-.monster.snake.d3 {
+.monster.snake.d0 , .monster.snake.d1, .monster.snake.d2, .monster.snake.d3{
     background-image: url("../img/snake1-0.png");
 }
 .monster.snake.d3.attacking0 {
@@ -388,37 +401,53 @@ body {
     background-image: url("../img/snake1-4.png");
     transform: scaleX(-1);
 }
-.monster.snake.d0.attacking0,.monster.snake.d2.attacking0, .monster.snake.d1.attacking0 {
+.monster.snake.d3.attacking2 {
+    background-image: url("../img/snake1-3.png");
+    transform: scaleX(-1);
+}
+.monster.snake.d0.attacking0,.monster.snake.d2.attacking0, .monster.snake.d1.attacking0, .monster.snake.d0.attacking2,.monster.snake.d2.attacking2, .monster.snake.d1.attacking2 {
     background-image: url("../img/snake1-3.png");
 }
 .monster.snake.d0.attacking1,.monster.snake.d2.attacking1, .monster.snake.d1.attacking1 {
     background-image: url("../img/snake1-4.png");
 }
 
-.monster.ogre.d0 {
+.monster.ogre.d0, .monster.ogre.d1, .monster.ogre.d2, .monster.ogre.d3 {
     background-image: url("../img/ogre2-0.png");
 }
-.monster.ogre.d1 {
-    background-image: url("../img/ogre2-0.png");
-}
-.monster.ogre.d2 {
-    background-image: url("../img/ogre2-0.png");
-}
-.monster.ogre.d3 {
-    background-image: url("../img/ogre2-0.png");
-}
-
-.monster.ogre.d0.attacking0, .monster.ogre.d3.attacking0 {
+.monster.ogre.d0.attacking0, .monster.ogre.d3.attacking0, .monster.ogre.d0.attacking2, .monster.ogre.d3.attacking2 {
     background-image: url("../img/ogre3-3.png");
 }
 .monster.ogre.d0.attacking1, .monster.ogre.d3.attacking1 {
     background-image: url("../img/ogre3-4.png");
 }
-.monster.ogre.d2.attacking0, .monster.ogre.d1.attacking0 {
+.monster.ogre.d2.attacking0, .monster.ogre.d1.attacking0, .monster.ogre.d2.attacking2, .monster.ogre.d1.attacking2 {
     background-image: url("../img/ogre2-3.png");
 }
 .monster.ogre.d2.attacking1, .monster.ogre.d1.attacking1 {
     background-image: url("../img/ogre2-4.png");
+}
+
+.monster.troll.d0,.monster.troll.d1, .monster.troll.d2, .monster.troll.d3  {
+    background-image: url("../img/troll1-0.png");
+}
+.monster.troll.d0.attacking0, .monster.troll.d1.attacking0, .monster.troll.d2.attacking0, .monster.troll.d3.attacking0 {
+    background-image: url("../img/troll1-3.png");
+}
+.monster.troll.d0.attacking1, .monster.troll.d1.attacking1, .monster.troll.d2.attacking1, .monster.troll.d3.attacking1 {
+    background-image: url("../img/troll1-4.png");
+}
+.monster.troll.d0.attacking2, .monster.troll.d1.attacking2, .monster.troll.d2.attacking2, .monster.troll.d3.attacking2 {
+    background-image: url("../img/troll1-5.png");
+}
+.monster.troll.d0.attacking0, .monster.troll.d3.attacking0 {
+    transform:scaleX(-1);
+}
+.monster.troll.d0.attacking1, .monster.troll.d3.attacking1 {
+    transform:scaleX(-1);
+}
+.monster.troll.d0.attacking2, .monster.troll.d3.attacking2 {
+    transform:scaleX(-1);
 }
 
 /*boss image*/
@@ -440,6 +469,16 @@ body {
 }
 .monster.boss-death.attacking2 {
     background-image: url("../img/boss-death2-4.png");
+}
+
+.monster.boss-hydra {
+    background-image: url("../img/boss-hydra1-0.png");
+}
+.monster.boss-hydra.attacking1 {
+    background-image: url("../img/boss-hydra1-4.png");
+}
+.monster.boss-hydra.attacking2 {
+    background-image: url("../img/boss-hydra1-4.png");
 }
 
 .item.potion {
@@ -465,6 +504,17 @@ body {
     position: absolute;
     right: 15%;
     top: 15%;
+    width: 20%;
+}
+
+.status-dizzy {
+    background-image: url("../img/status-dizzy.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 20%;
+    position: absolute;
+    left: 40%;
+    top: 5%;
     width: 20%;
 }
 
@@ -783,15 +833,21 @@ body {
 .snake-help {
     background-image: url("../img/snake1-0.png");
 }
+.troll-help {
+    background-image: url("../img/troll1-0.png");
+}
 .vampire-help {
     background-image: url("../img/vampire2-0.png");
 }
 /*boss-help*/
+.boss-beholder-help {
+    background-image: url("../img/boss-beholder2-0.png");
+}
 .boss-death-help {
     background-image: url("../img/boss-death2-0.png");
 }
-.boss-beholder-help {
-    background-image: url("../img/boss-beholder2-0.png");
+.boss-hydra-help {
+    background-image: url("../img/boss-hydra1-0.png");
 }
 
 .select-hero-type-item {

@@ -50,10 +50,12 @@ define(function(require,exports,module) {
         "skeleton":"骷髅",
         "slime":"史莱姆",
         "snake":"毒蛇",
+        "troll":"巨魔",
         "vampire":"吸血鬼",
 
         "boss-beholder":"Boss眼魔",
-        "boss-death":"Boss死神"
+        "boss-death":"Boss死神",
+        "boss-hydra":"Boss九头蛇"
     }
     exports.monsterDescription = {
         "archer":{
@@ -104,6 +106,10 @@ define(function(require,exports,module) {
             text:"击中英雄后使英雄<i><u>中毒</u></i>(每回合开始-1HP，升级或获得回复药时解毒)<br/>攻击力：弱（为等级的1/2）<br/>经验值：中",
             imageClass:"snake-help"
         },
+        "troll":{
+            text:"击中英雄后一定概率使英雄<u><i>晕眩</i></u>(上下左右操作相反)1回合<br/>攻击力：强（为等级的2倍）<br/>经验值：高",
+            imageClass:"troll-help"
+        },
         "vampire":{
             text:"击中英雄后升级<br/>攻击力：非常强（为等级的平方）<br/>经验值：非常高",
             imageClass:"vampire-help"
@@ -111,12 +117,16 @@ define(function(require,exports,module) {
 
         //boss help
         "boss-beholder":{
-            text:"所有怪物击中英雄后一定概率使英雄<u><i>麻痹</i></u>（无法移动）直到下回合。<br/>攻击力：英雄最大生命值的1/3<br/>经验值：超高",
+            text:"所有怪物击中英雄后一定概率使英雄<u><i>麻痹</i></u>和<u><i>晕眩</i></u><br/>攻击力：英雄最大生命值的1/3<br/>经验值：超高",
             imageClass:"boss-beholder-help"
         },
         "boss-death":{
             text:"<br/>攻击力：英雄最大生命值的1/2<br/>经验值：超高",
             imageClass:"boss-death-help"
+        },
+        "boss-hydra":{
+            text:"所有其他怪物攻击力加倍<br/>攻击力：英雄最大生命值的1/2<br/>经验值：超高",
+            imageClass:"boss-hydra-help"
         }
     }
 });

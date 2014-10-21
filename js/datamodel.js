@@ -161,6 +161,11 @@ define(function (require, exports, module) {
                 return Math.min( this.get("level") * gameStatus.monsterPower.freeze, 96 ) / 100;
             return 0;
         },
+        getDizzyPower:function(){
+            if ( gameStatus.globalEffect.madness )
+                return Math.min( this.get("level") * gameStatus.monsterPower.dizzy, 100 ) / 100;
+            return 0;
+        },
         mergeStatus: function (mergeToModel) {
             if (mergeToModel.get("angry")) {
                 this.set("angry", mergeToModel.get("angry"))
@@ -292,6 +297,18 @@ define(function (require, exports, module) {
         }
     })
 
+    exports.Troll = exports.Monster.extend({
+        calAttack: function (level) {
+            return level * 2;
+        },
+        calExp: function (level) {
+            return level * 4;
+        },
+        getDizzyPower:function(){
+            return Math.min( this.get("level") * gameStatus.monsterPower.dizzy, 100 ) / 100;
+        }
+    })
+
     exports.Vampire = exports.Monster.extend({
         defaults:function(){
             var data = exports.Monster.prototype.defaults.call(this);
@@ -325,6 +342,12 @@ define(function (require, exports, module) {
         },
         calExp: function (level) {
             return Math.floor(window.hero.get("maxExp") * 2 / 3);
+        },
+        getFreezePower:function(){
+            return 100;
+        },
+        getDizzyPower:function(){
+            return 100;
         }
     })
 
@@ -340,6 +363,7 @@ define(function (require, exports, module) {
         skeleton: exports.Skeleton,
         slime: exports.Slime,
         snake: exports.Snake,
+        troll: exports.Troll,
         vampire: exports.Vampire,
         minotaur: exports.Minotaur,
 
@@ -370,7 +394,7 @@ define(function (require, exports, module) {
             })
         },
         calEffect:function(level){
-            return level * (level + 1)/2;
+            return level * (level + 1) / 2;
         },
         effectHappen: function () {
             if (this.get("type") == "potion") {

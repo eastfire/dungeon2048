@@ -54,6 +54,10 @@ CACHE MANIFEST
 /dungeon2048/img/snake1-0.png
 /dungeon2048/img/snake1-3.png
 /dungeon2048/img/snake1-4.png
+/dungeon2048/img/troll1-0.png
+/dungeon2048/img/troll1-3.png
+/dungeon2048/img/troll1-4.png
+/dungeon2048/img/troll1-5.png
 /dungeon2048/img/vampire2-0.png
 /dungeon2048/img/vampire2-3.png
 /dungeon2048/img/vampire2-4.png
@@ -64,6 +68,9 @@ CACHE MANIFEST
 /dungeon2048/img/boss-death2-0.png
 /dungeon2048/img/boss-death2-3.png
 /dungeon2048/img/boss-death2-4.png
+/dungeon2048/img/boss-hydra1-0.png
+/dungeon2048/img/boss-hydra1-3.png
+/dungeon2048/img/boss-hydra1-4.png
 #item
 /dungeon2048/img/potion.png
 #status

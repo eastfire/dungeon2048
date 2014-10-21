@@ -48,7 +48,7 @@ define(function(require,exports,module){
             globalEffect:{},
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
-            monsterPool:["archer","ghost","goblin","medusa","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","vampire"],
+            monsterPool:["archer","ghost","goblin","medusa","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","troll","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             currentMonsterMaxLevel : 1,
@@ -61,7 +61,8 @@ define(function(require,exports,module){
             },
             monsterPower:{
                 freeze:8,
-                dodge:6
+                dodge:6,
+                dizzy:10
             },
             gainStar:0,
             selectableType:["warrior"]
@@ -544,8 +545,11 @@ define(function(require,exports,module){
     var directionInput = function(direction){
         if ( gameStatus.phase == PHASE_ASK_DIRECTION ) {
             returnUserInput(direction);
-        } else
+        } else {
+            if ( hero.get("dizzy") )
+                direction = (direction+2)%4;
             calMove(direction);
+        }
     }
 
     var initEvent = function(){

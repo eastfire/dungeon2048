@@ -84,6 +84,7 @@ define(function(require,exports,module){
             MovableView.prototype.initialize.call(this);
             this.model.on("change:level",this.levelUp,this);
             this.model.on("change:poison",this.renderPoison,this);
+            this.model.on("change:dizzy",this.renderDizzy,this);
             this.model.on("change:hp",this.checkAlive,this);
             this.skillList = [];
         },
@@ -235,6 +236,9 @@ define(function(require,exports,module){
             if ( this.model.get("freeze") ){
                 this.model.set("freeze",this.model.get("freeze")-1);
             }
+            if ( this.model.get("dizzy") ){
+                this.model.set("dizzy",this.model.get("dizzy")-1);
+            }
             _.each(this.skillList, function(skill){
                 if ( skill.onNewRound ){
                     skill.onNewRound.call(skill);
@@ -247,6 +251,14 @@ define(function(require,exports,module){
                 this.effecQueue.add.call(this.effecQueue, "中毒");
             } else if ( !this.model.get("poison") && this.model.previous("poison")) {
                 this.$(".status-poison").remove();
+            }
+        },
+        renderDizzy:function(){
+            if ( this.model.get("dizzy") && !this.model.previous("dizzy")) {
+                this.$el.append("<div class='status-dizzy'></div>")
+                this.effecQueue.add.call(this.effecQueue, "眩晕");
+            } else if ( !this.model.get("dizzy") && this.model.previous("dizzy")) {
+                this.$(".status-dizzy").remove();
             }
         },
         onDying:function(){
@@ -457,10 +469,10 @@ define(function(require,exports,module){
                         self.$el.removeClass("attacking0").addClass("attacking1");
                     },TIME_SLICE/2);
                     setTimeout(function(){
-                        self.$el.removeClass("attacking1").addClass("attacking0");
+                        self.$el.removeClass("attacking1").addClass("attacking2");
                     },TIME_SLICE*3/2);
                     setTimeout(function(){
-                        self.$el.removeClass("attacking0");
+                        self.$el.removeClass("attacking2");
                         self.$el.removeClass("d0 d1 d2 d3").addClass("d"+self.model.get("direction"));
                     },TIME_SLICE*2);
                 })(this);
@@ -481,6 +493,10 @@ define(function(require,exports,module){
             var freezeRate = this.model.getFreezePower();
             if ( Math.random() < freezeRate ) {
                 hero.set("freeze",2);
+            }
+            var dizzyRate = this.model.getDizzyPower();
+            if ( Math.random() < dizzyRate ) {
+                hero.set("dizzy",2);
             }
         },
 
@@ -653,6 +669,9 @@ define(function(require,exports,module){
 
     })
 
+    exports.TrollView = exports.MonsterView.extend({
+    })
+
     exports.VampireView = exports.MonsterView.extend({
         onHitHero:function(){
             exports.MonsterView.prototype.onHitHero.call(this);
@@ -689,6 +708,7 @@ define(function(require,exports,module){
         slime:exports.SlimeView,
         skeleton:exports.SkeletonView,
         snake:exports.SnakeView,
+        troll:exports.TrollView,
         vampire:exports.VampireView,
 
         "boss-beholder":exports.BossBeholderView,
