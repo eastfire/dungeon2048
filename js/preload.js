@@ -56,8 +56,6 @@ define(function(require,exports,module) {
         "ogre2-0.png",
         "ogre2-3.png",
         "ogre2-4.png",
-        "ogre3-3.png",
-        "ogre3-4.png",
         "orc1-0.png",
         "orc1-3.png",
         "orc1-4.png",
@@ -70,8 +68,6 @@ define(function(require,exports,module) {
         "skeleton2-0.png",
         "skeleton2-3.png",
         "skeleton2-4.png",
-        "skeleton3-3.png",
-        "skeleton3-4.png",
         "snake1-0.png",
         "snake1-3.png",
         "snake1-4.png",
@@ -99,6 +95,8 @@ define(function(require,exports,module) {
         "status-elite.png",
         "status-poison.png",
         "status-freeze.png",
+        "status-locked.png",
+        "icon-hourglass.png",
 
         "skill-constitution.png",
         "skill-cunning.png",
@@ -116,8 +114,9 @@ define(function(require,exports,module) {
         "skill-cross-slash.png",
 
         "skill-heal.png",
-        "skill-blind-undead.png",
+        "skill-confuse-undead.png",
         "skill-turn-undead.png",
+        "skill-holy-shield.png",
         "skill-dispel.png",
         "skill-resurrection.png",
 

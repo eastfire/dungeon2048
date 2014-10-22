@@ -128,12 +128,42 @@ define(function(require,exports,module){
             gameStatus.selectableType.push("priest")
         }
     })
+    exports.HolyShieldUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"holy-shield",
+                description:"牧师 的 圣盔甲技能",
+                cost:40
+            }
+        },
+        isValid:function(){
+            return (new exports.PriestUnlock()).isUnlocked();
+        },
+        adjustSkillPool:function(){
+            Skill.priestBasicSkillPoolEntry.push( Skill.HolyShieldSkill )
+        }
+    })
+    exports.ConfuseUndeadUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"confuse-undead",
+                description:"牧师 的 操控亡灵技能",
+                cost:40
+            }
+        },
+        isValid:function(){
+            return (new exports.PriestUnlock()).isUnlocked();
+        },
+        adjustSkillPool:function(){
+            Skill.priestBasicSkillPoolEntry.push( Skill.ConfuseUndeadSkill )
+        }
+    })
     exports.TurnUndeadUnlock = exports.Unlockable.extend({
         defaults:function(){
             return {
                 name:"turn-undead",
                 description:"牧师 的 超度亡灵技能",
-                cost:200
+                cost:100
             }
         },
         isValid:function(){
@@ -148,7 +178,7 @@ define(function(require,exports,module){
             return {
                 name:"resurrection",
                 description:"牧师 的 复活术技能",
-                cost:200
+                cost:100
             }
         },
         isValid:function(){
@@ -204,6 +234,8 @@ define(function(require,exports,module){
         new exports.WarriorFourthSkillUnlock(),
 
         new exports.PriestUnlock(),
+        new exports.HolyShieldUnlock(),
+        new exports.ConfuseUndeadUnlock(),
         new exports.ResurrectionUnlock(),
         new exports.TurnUndeadUnlock(),
         new exports.PriestThirdSkillUnlock(),
@@ -737,8 +769,8 @@ define(function(require,exports,module){
             return {
                 name:"skill-turn-undead",
                 displayName:"极乐往生",
-                description:"超度亡灵同时消灭至少16个怪物",
-                reward:64
+                description:"超度亡灵同时消灭至少15个怪物",
+                reward:80
             }
         },
         isValid:function(){

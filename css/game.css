@@ -384,10 +384,12 @@ body {
     background-image: url("../img/skeleton2-4.png");
 }
 .monster.skeleton.d2.attacking0, .monster.skeleton.d3.attacking0, .monster.skeleton.d2.attacking2, .monster.skeleton.d3.attacking2 {
-    background-image: url("../img/skeleton3-3.png");
+    background-image: url("../img/skeleton2-3.png");
+    transform: scaleX(-1);
 }
 .monster.skeleton.d2.attacking1, .monster.skeleton.d3.attacking1 {
-    background-image: url("../img/skeleton3-4.png");
+    background-image: url("../img/skeleton2-4.png");
+    transform: scaleX(-1);
 }
 
 .monster.snake.d0 , .monster.snake.d1, .monster.snake.d2, .monster.snake.d3{
@@ -416,10 +418,12 @@ body {
     background-image: url("../img/ogre2-0.png");
 }
 .monster.ogre.d0.attacking0, .monster.ogre.d3.attacking0, .monster.ogre.d0.attacking2, .monster.ogre.d3.attacking2 {
-    background-image: url("../img/ogre3-3.png");
+    background-image: url("../img/ogre2-3.png");
+    transform: scaleX(-1);
 }
 .monster.ogre.d0.attacking1, .monster.ogre.d3.attacking1 {
-    background-image: url("../img/ogre3-4.png");
+    background-image: url("../img/ogre2-4.png");
+    transform: scaleX(-1);
 }
 .monster.ogre.d2.attacking0, .monster.ogre.d1.attacking0, .monster.ogre.d2.attacking2, .monster.ogre.d1.attacking2 {
     background-image: url("../img/ogre2-3.png");
@@ -928,6 +932,19 @@ body {
     font-size: 1em;
 }
 
+.skill-duration {
+    background-image: url("../img/icon-hourglass.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 20%;
+    left: 30%;
+    padding-left: 23%;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 22%;
+}
+
 .empty-skill-slot {
     border: 1px dashed black;
     border-radius: 10px;
@@ -1022,11 +1039,14 @@ body {
 .skill-image-dispel {
     background-image: url("../img/skill-dispel.png");
 }
+.skill-image-holy-shield {
+    background-image: url("../img/skill-holy-shield.png");
+}
 .skill-image-resurrection {
     background-image: url("../img/skill-resurrection.png");
 }
-.skill-image-blind-undead {
-    background-image: url("../img/skill-blind-undead.png");
+.skill-image-confuse-undead {
+    background-image: url("../img/skill-confuse-undead.png");
 }
 
 /*achievement*/

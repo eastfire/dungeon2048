@@ -386,7 +386,7 @@ define(function(require,exports,module){
                     }
                 }
                 model.levelup();
-                if ( model.get("level") >= model.get("maxLevel") ) {
+                if ( model.get("level") > model.get("maxLevel") ) {
                     removeSkillFromPool(model);
                 }
                 gameStatus.showingDialog = false;

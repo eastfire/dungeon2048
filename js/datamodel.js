@@ -184,7 +184,7 @@ define(function (require, exports, module) {
     exports.Archer = exports.Monster.extend({
         defaults:function(){
             var data = exports.Monster.prototype.defaults.call(this);
-            data.attackType = "range normal";
+            data.attackType = "range normal undead";
             data.isUndead = true;
             return data;
         },
@@ -199,6 +199,7 @@ define(function (require, exports, module) {
     exports.Ghost = exports.Monster.extend({
         defaults:function(){
             var data = exports.Monster.prototype.defaults.call(this);
+            data.attackType = "melee normal undead";
             data.isUndead = true;
             return data;
         },
@@ -270,6 +271,7 @@ define(function (require, exports, module) {
     exports.Skeleton = exports.Monster.extend({
         defaults:function(){
             var data = exports.Monster.prototype.defaults.call(this);
+            data.attackType = "melee normal undead";
             data.isUndead = true;
             return data;
         },
@@ -312,6 +314,7 @@ define(function (require, exports, module) {
     exports.Vampire = exports.Monster.extend({
         defaults:function(){
             var data = exports.Monster.prototype.defaults.call(this);
+            data.attackType = "melee normal undead";
             data.isUndead = true;
             return data;
         },

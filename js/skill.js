@@ -5,7 +5,7 @@ define(function(require,exports,module) {
     window.WISDOM_EFFECT = 10;
     window.WISDOM_THRESHOLD = 6;
     window.TREASURE_HUNTING_EFFECT = 5;
-    window.COOLING_EFFECT = 5;
+    window.COOLING_EFFECT = 10;
 
     exports.SkillView = Backbone.View.extend({
         initialize:function(options){
@@ -31,11 +31,12 @@ define(function(require,exports,module) {
                 },100)
             } else if ( options.mode == "list") {
                 this.$el.addClass("skill");
-//                var lvStr = this.model.get("maxLevel") > 1 ? ( "lv" + this.model.get("level") ) : "";
+                var durationStr = "";
                 this.$el.html("<div class='skill-image-icon'>" +
                     "<div class='skill-image skill-image-"+this.model.get("name")+"'></div>" +
                     "<div class='skill-cool-down'></div>"+
                     "<div class='skill-level'>" + this.model.get("displayName")+ "</div>"+
+                    "<div class='skill-duration' style='display:none'></div>" +
                     "</div>")
                 this.$el.css({
                     "font-size":blockSize.height/6+"px"
@@ -76,6 +77,11 @@ define(function(require,exports,module) {
                 this.coolDown.hide();
                 this.$(".skill-image").removeClass("used");
             }
+            if ( !this.model.get("hideDuration") && this.model.get("duration")) {
+                this.$(".skill-duration").html(this.model.get("duration")).show();
+            } else {
+                this.$(".skill-duration").hide();
+            }
         }
     })
 
@@ -89,7 +95,9 @@ define(function(require,exports,module) {
                 level:1,
                 maxLevel:5,
                 currentCount:1,
-                coolDown:1
+                coolDown:1,
+                duration:0,
+                hideDuration:false
             }
         },
         levelup:function(){
@@ -110,6 +118,8 @@ define(function(require,exports,module) {
             this.set("currentCount",0);
         },
         onNewRound:function(){
+            if ( this.get("duration") )
+                this.set("duration", this.get("duration") - 1);
             var count = this.get("currentCount");
             if ( count < this.calCoolDown() ){
                 this.set("currentCount", count+1);
@@ -171,7 +181,7 @@ define(function(require,exports,module) {
                 type:"passive",
                 displayName:"沉着",
                 level:1,
-                maxLevel:5
+                maxLevel:4
             }
         },
         onGet:function(){
@@ -266,20 +276,21 @@ define(function(require,exports,module) {
                 level:1,
                 maxLevel:1,
                 currentCount:5,
-                coolDown:5
+                coolDown:5,
+                hideDuration:true
             }
         },
         generateDescription:function(){
             return "英雄下次攻击同时攻击被击中的怪物后面的一个怪物";
         },
         onActive:function(){
-            this.set("skill-slash-active",1);
+            this.set("duration",1);
             this.used();
         },
         onAttack:function(x,y, direction){
             var mx = x;
             var my = y;
-            if ( this.get("skill-slash-active") ){
+            if ( this.get("duration") ){
                 mx += increment[direction].x;
                 my += increment[direction].y;
                 var self = this;
@@ -287,10 +298,6 @@ define(function(require,exports,module) {
                     self.attackBlock(mx,my,direction,"melee skill");
                 },TIME_SLICE);
             }
-        },
-        onNewRound:function(){
-            exports.Skill.prototype.onNewRound.call(this);
-            this.set("skill-slash-active",0);
         }
     })
 
@@ -306,20 +313,21 @@ define(function(require,exports,module) {
                 level:1,
                 maxLevel:1,
                 currentCount:10,
-                coolDown:10
+                coolDown:10,
+                hideDuration:true
             }
         },
         generateDescription:function(){
             return "英雄下次攻击同时攻击自己身后的一个怪物";
         },
         onActive:function(){
-            this.set("skill-revert-slash-active",1);
+            this.set("duration",1);
             this.used();
         },
         onCheckAttack:function(x,y, direction){
             var mx = x;
             var my = y;
-            if ( this.get("skill-revert-slash-active") ){
+            if ( this.get("duration") ){
                 var d = (direction+2)%4;
                 mx += increment[d].x;
                 my += increment[d].y;
@@ -332,10 +340,6 @@ define(function(require,exports,module) {
                 return true;
             }
             return false;
-        },
-        onNewRound:function(){
-            exports.Skill.prototype.onNewRound.call(this);
-            this.set("skill-revert-slash-active",0);
         }
     })
 
@@ -556,17 +560,20 @@ define(function(require,exports,module) {
                 type:"active",
                 displayName:"治疗术",
                 level:1,
-                maxLevel:1,
-                currentCount:21,
-                coolDown:21
+                maxLevel:5,
+                currentCount:20,
+                coolDown:20
             }
         },
         generateDescription:function(){
-            return "+10♥且解毒（可被恢复技能影响）"
+            return "+"+this.getEffect(this.get("level"))+"♥且解毒（可被恢复技能影响）"
         },
         onActive:function(){
-            window.heroView.getHp(10);
+            window.heroView.getHp(this.getEffect(this.get("level")));
             this.used();
+        },
+        getEffect:function(level){
+            return 5+level*5;
         }
     })
 
@@ -581,8 +588,8 @@ define(function(require,exports,module) {
                 displayName:"驱魔",
                 level:1,
                 maxLevel:1,
-                currentCount:6,
-                coolDown:6
+                currentCount:5,
+                coolDown:5
             }
         },
         generateDescription:function(){
@@ -621,6 +628,71 @@ define(function(require,exports,module) {
         }
     })
 
+    exports.HolyShieldSkill = exports.Skill.extend({
+        initialize: function () {
+            this.modelClass = exports.HolyShieldSkill
+        },
+        defaults: function () {
+            return {
+                name: "holy-shield",
+                type: "active",
+                displayName: "圣盔甲",
+                level: 1,
+                maxLevel: 1,
+                currentCount: 20,
+                coolDown: 20
+            }
+        },
+        generateDescription: function () {
+            return "只受一半伤害。持续3回合"
+        },
+        onActive:function(){
+            this.set("duration",3);
+            this.used();
+        },
+        adjustDamage:function(damage, type){
+            if ( this.get("duration") ) {
+                return Math.ceil(damage/2);
+            } else
+                return damage;
+        }
+    })
+
+    exports.ConfuseUndeadSkill = exports.Skill.extend({
+        initialize: function () {
+            this.modelClass = exports.ConfuseUndeadSkill
+        },
+        defaults: function () {
+            return {
+                name: "confuse-undead",
+                type: "active",
+                displayName: "操控亡灵",
+                level: 1,
+                maxLevel: 1,
+                currentCount: 18,
+                coolDown: 18
+            }
+        },
+        generateDescription: function () {
+            return "不受不死生物的伤害（boss除外）。持续3回合"
+        },
+        onActive:function(){
+            this.set("duration",3);
+            this.used();
+        },
+        adjustDamage:function(damage, type){
+            if ( this.get("duration") ) {
+                if ( type ) {
+                    if ( type.contains("undead") )
+                        return 0;
+                    return damage;
+                }
+                return damage;
+            } else
+                return damage;
+        }
+    })
+
     exports.ResurrectionSkill = exports.Skill.extend({
         initialize: function () {
             this.modelClass = exports.ResurrectionSkill
@@ -631,26 +703,23 @@ define(function(require,exports,module) {
                 type: "active",
                 displayName: "复活术",
                 level: 1,
-                maxLevel: 1,
+                maxLevel: 3,
                 currentCount: 60,
-                coolDown: 60
+                coolDown: 60,
+                hideDuration:true
             }
         },
         generateDescription: function () {
-            return "如果本轮死亡，将以1/4生命复活"
+            return "如果本轮死亡，将以1/"+(5-this.get("level"))+"生命复活"
         },
         onDying : function() {
-            if ( this.get("skill-resurrection-active") ) {
-                hero.set("hp",Math.floor(hero.get("maxHp")/4));
+            if ( this.get("duration") ) {
+                hero.set("hp",Math.floor(hero.get("maxHp")/(5-this.get("level"))));
             }
         },
         onActive:function(){
-            this.set("skill-resurrection-active",1);
+            this.set("duration",1);
             this.used();
-        },
-        onNewRound:function(){
-            exports.Skill.prototype.onNewRound.call(this);
-            this.set("skill-resurrection-active",0);
         }
     })
 
@@ -685,7 +754,7 @@ define(function(require,exports,module) {
                     }
                 }
             }
-            if ( totalHit >= 16 ){
+            if ( totalHit >= 15 ){
                 statistic.skills[this.get("name")]=true;
             }
             this.used();

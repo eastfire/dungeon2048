@@ -204,6 +204,11 @@ define(function(require,exports,module){
                 return false;
             }
             var realDamage = attack - this.model.get("defend");
+            _.each(this.skillList, function(skill){
+                if ( skill.adjustDamage ){
+                    realDamage = skill.adjustDamage.call(skill, realDamage, type);
+                }
+            },this);
             if ( realDamage > 0 ){
                 this.effecQueue.add.call(this.effecQueue,"♥-"+realDamage);
                 this.model.set("hp",Math.max(this.model.get("hp")-realDamage,0));
