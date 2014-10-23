@@ -567,7 +567,7 @@ define(function(require,exports,module) {
             }
         },
         generateDescription:function(){
-            return "+"+this.getEffect(this.get("level"))+"♥且解毒（可被恢复技能影响）"
+            return "+"+this.getEffect(this.get("level"))+"<span class='hp-symbol'>♥</span>且解毒（可被恢复技能影响）"
         },
         onActive:function(){
             window.heroView.getHp(this.getEffect(this.get("level")));

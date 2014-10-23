@@ -858,6 +858,16 @@ define(function(require,exports,module){
             this.type.html(Help.heroTypeDisplayName[this.model.get("type")])
             var hp = this.model.get("hp");
             this.hp.html("<span class='hp-symbol'>♥</span>"+(hp>0?hp:0)+"/"+this.model.get("maxHp"));
+            if ( hp <= this.model.get("maxHp")/5) {
+                this.hp.addClass("little-danger")
+            } else {
+                this.hp.removeClass("little-danger");
+            }
+            if ( hp <= this.model.get("maxHp")/10) {
+                this.hp.addClass("danger")
+            } else {
+                this.hp.removeClass("danger");
+            }
             this.level.html("LV:"+this.model.get("level"));
             this.exp.html("EXP:"+this.model.get("exp")+"/"+this.model.get("maxExp"));
             this.score.html(this.model.get("score")+"分")
