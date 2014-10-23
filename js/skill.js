@@ -62,6 +62,7 @@ define(function(require,exports,module) {
                     var coolDown = self.model.calCoolDown();
                     if ( count >= coolDown ) {
                         hero.getScore(1);
+                        heroView.useSkill();
                         self.model.onActive.call(self.model);
                     }
                 })
@@ -551,6 +552,7 @@ define(function(require,exports,module) {
         }
     })
 
+    //priest skill
     exports.HealSkill = exports.Skill.extend({
         initialize:function() {
             this.modelClass = exports.HealSkill
@@ -567,13 +569,14 @@ define(function(require,exports,module) {
             }
         },
         generateDescription:function(){
-            return "+"+this.getEffect(this.get("level"))+"<span class='hp-symbol'>♥</span>且解毒（可被恢复技能影响）"
+            return "+"+this.getEffect()+"<span class='hp-symbol'>♥</span>且解毒（可被恢复技能影响）"
         },
         onActive:function(){
-            window.heroView.getHp(this.getEffect(this.get("level")));
+            window.heroView.getHp(this.getEffect());
             this.used();
         },
         getEffect:function(level){
+            level = level || this.get("level")
             return 5+level*5;
         }
     })
@@ -753,7 +756,7 @@ define(function(require,exports,module) {
                     var block = getMapBlock(x,y);
                     if ( block && block.type == "monster" && block.model.get("isUndead") ) {
                         var monsterView = block.view;
-                        var result = monsterView.beAttacked(2,window.hero.get("attack"), "magic skill");
+                        var result = monsterView.beAttacked(0,window.hero.get("attack"), "magic skill");
                         if ( result )
                             totalHit++;
                     }
@@ -766,8 +769,89 @@ define(function(require,exports,module) {
         }
     })
 
-    //驱魔，　圣光甲　，　复活，　
+    //wizard skill
+    exports.MagicMissileSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.MagicMissileSkill
+        },
+        defaults:function(){
+            return {
+                name:"magic-missile",
+                type:"active",
+                displayName:"魔法导弹",
+                level:1,
+                maxLevel:3,
+                currentCount:9,
+                coolDown:9
+            }
+        },
+        generateDescription:function(){
+            return "随机攻击英雄周围的"+this.getEffect()+"个怪物"
+        },
+        onActive:function(){
+            var totalHit = 0;
+            var candidate = [];
+            var x = window.hero.get("position").x;
+            var y = window.hero.get("position").y;
+            for ( var i = x-1 ; i <= x+1 ; i++ ) {
+                for ( var j = y-1 ; j <= y+1 ; j++ ) {
+                    var block = getMapBlock(i,j);
+                    if ( block && block.type === "monster" ) {
+                        var monsterView = block.view;
+                        candidate.push(monsterView)
+                    }
+                }
+            }
 
+            var killList = getRandomItems(candidate, this.getEffect());
+            _.each(killList, function(monsterView){
+                var result = monsterView.beAttacked(0,window.hero.get("attack"), "magic skill");
+                if ( result )
+                    totalHit++;
+            },this)
+            hero.getScore(totalHit)
+            this.used();
+        },
+        getEffect:function(level){
+            var l = level || this.get("level");
+            return l;
+        }
+    })
+    exports.SpiderWebSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.SpiderWebSkill
+        },
+        defaults:function(){
+            return {
+                name:"spider-web",
+                type:"active",
+                displayName:"蛛网术",
+                level:1,
+                maxLevel:1,
+                currentCount:25,
+                coolDown:25
+            }
+        },
+        generateDescription:function(){
+            return "所有怪物不能移动1回合"
+        },
+        onActive:function(){
+            var totalHit = 0;
+            for ( var i = 0 ; i < mapWidth ; i++ ) {
+                for ( var j = 0 ; j < mapWidth ; j++ ) {
+                    var block = getMapBlock(i,j);
+                    if ( block && block.type == "monster" ) {
+                        var monsterView = block.view;
+                        var result = monsterView.getFreeze(1);
+                        if ( result )
+                            totalHit++;
+                    }
+                }
+            }
+            hero.getScore(totalHit)
+            this.used();
+        }
+    })
 
     exports.initSkillPool = function(){
         exports.commonSkillPoolEntry = [
@@ -788,6 +872,11 @@ define(function(require,exports,module) {
         exports.priestBasicSkillPoolEntry = [
             exports.HealSkill,
             exports.DispelSkill
+        ]
+
+        exports.wizardBasicSkillPoolEntry = [
+            exports.SpiderWebSkill,
+            exports.MagicMissileSkill
         ]
     }
 

@@ -72,6 +72,10 @@ define(function(require,exports,module){
                 this.$(".status-freeze").remove();
             }
         },
+        getFreeze:function(f){
+            this.model.set("freeze",f);
+            return true;
+        },
         onMoveComplete:function(){
 
         },
@@ -144,6 +148,19 @@ define(function(require,exports,module){
             newblock.type = "hero";
             newblock.model = this.model;
             this.model.set("position",{x:newblock.x,y:newblock.y});
+        },
+        useSkill:function(){
+            var self = this;
+            this.$el.addClass("skill0");
+            setTimeout(function(){
+                self.$el.removeClass("skill0").addClass("skill1");
+            },TIME_SLICE)
+            setTimeout(function(){
+                self.$el.removeClass("skill1").addClass("skill2");
+            },2*TIME_SLICE)
+            setTimeout(function(){
+                self.$el.removeClass("skill2");
+            },3*TIME_SLICE)
         },
         attack:function(direction){
             var x = this.model.get("position").x;
@@ -285,6 +302,14 @@ define(function(require,exports,module){
                     }
                 },100) //wait all monster attacked
             }
+        },
+        getPoison:function(p){
+            this.model.set("poison",p);
+            return true;
+        },
+        getDizzy:function(d){
+            this.model.set("dizzy",d);
+            return true;
         }
     })
 
@@ -491,6 +516,9 @@ define(function(require,exports,module){
         onDie:function(){
         },
         onNewRound:function(){
+            if ( this.model.get("freeze") ){
+                this.model.set("freeze",this.model.get("freeze")-1);
+            }
             this.model.set({
                 angry:0
             });
@@ -499,11 +527,11 @@ define(function(require,exports,module){
             this.model.onHitHero();
             var freezeRate = this.model.getFreezePower();
             if ( Math.random() < freezeRate ) {
-                hero.set("freeze",2);
+                heroView.getFreeze(2);
             }
             var dizzyRate = this.model.getDizzyPower();
             if ( Math.random() < dizzyRate ) {
-                hero.set("dizzy",2);
+                heroView.getDizzy(2);
             }
         },
 

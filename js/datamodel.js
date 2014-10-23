@@ -295,7 +295,7 @@ define(function (require, exports, module) {
         },
         onHitHero: function () {
             if (!window.hero.get("poison"))
-                window.hero.set("poison", 1);
+                window.heroView.getPoison(1);
         }
     })
 

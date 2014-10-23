@@ -165,6 +165,16 @@ body {
     background-image: url("../img/priest3-4.png");
 }
 
+.hero.priest.skill0 {
+    background-image: url("../img/priest2-5.png");
+}
+.hero.priest.skill1 {
+    background-image: url("../img/priest2-6.png");
+}
+.hero.priest.skill2 {
+    background-image: url("../img/priest2-5.png");
+}
+
 /*wizard*/
 .hero.wizard.d0 {
     background-image: url("../img/wizard0-0.png");
@@ -1102,6 +1112,14 @@ body {
 }
 .skill-image-confuse-undead {
     background-image: url("../img/skill-confuse-undead.png");
+}
+
+/* wizard skill */
+.skill-image-magic-missile {
+    background-image: url("../img/skill-magic-missile.png");
+}
+.skill-image-spider-web {
+    background-image: url("../img/skill-spider-web.png");
 }
 
 /*achievement*/

@@ -133,6 +133,9 @@ define(function(require,exports,module) {
         "skill-dispel.png",
         "skill-resurrection.png",
 
+        "skill-magic-missile.png",
+        "skill-spider-web.png",
+
         "loading.gif"
     ];
 
