@@ -65,6 +65,7 @@ define(function(require,exports,module){
                 dizzy:10
             },
             gainStar:0,
+            allTypes:["warrior","priest","wizard","thief"],
             selectableType:["warrior"]
         }
 
@@ -948,30 +949,28 @@ define(function(require,exports,module){
             gameStatus.showingDialog = true;
             $(".main-window").append(el);
             var self = this;
-            _.each(gameStatus.selectableType, function(type){
-                var typeEl = $("<div class='select-hero-type-item' name='"+type+"'>" +
-                    "<div class='hero-type-image "+type+"'></div>" +
-                    "<div class='hero-type-name'>"+ Help.heroTypeDisplayName[type] +"</div>" +
-                    "</div>")
-                el.append(typeEl)
-                typeEl.on("click",function(event){
-                    var target = $(event.currentTarget);
-                    $(".select-hero-body").remove();
-                    gameStatus.selectedType = target.attr("name");
-                    gameStatus.showingDialog = false;
-                    callback.call(self);
-                })
+            _.each(gameStatus.allTypes, function(type){
+                if ( isInArray(gameStatus.selectableType,type) ) {
+                    var typeEl = $("<div class='select-hero-type-item' name='" + type + "'>" +
+                        "<div class='hero-type-image " + type + "'></div>" +
+                        "<div class='hero-type-name'>" + Help.heroTypeDisplayName[type] + "</div>" +
+                        "</div>")
+                    el.append(typeEl)
+                    typeEl.on("click", function (event) {
+                        var target = $(event.currentTarget);
+                        $(".select-hero-body").remove();
+                        gameStatus.selectedType = target.attr("name");
+                        gameStatus.showingDialog = false;
+                        callback.call(self);
+                    })
+                } else {
+                    var typeEl = $("<div class='select-hero-type-item'>" +
+                        "<div class='hero-type-image locked'></div>" +
+                        "<div class='hero-type-name'>"+Help.heroTypeDisplayName[type]+"</div>" +
+                        "</div>")
+                    el.append(typeEl)
+                }
             },this)
-            var typeEl = $("<div class='select-hero-type-item'>" +
-                "<div class='hero-type-image locked'></div>" +
-                "<div class='hero-type-name'>法师</div>" +
-                "</div>")
-            el.append(typeEl)
-            var typeEl = $("<div class='select-hero-type-item'>" +
-                "<div class='hero-type-image locked'></div>" +
-                "<div class='hero-type-name'>盗贼</div>" +
-                "</div>")
-            el.append(typeEl)
         } else {
             gameStatus.selectedType = gameStatus.selectableType[0]
             callback.call(this);

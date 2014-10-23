@@ -35,8 +35,6 @@ CACHE MANIFEST
 /dungeon2048/img/ogre2-0.png
 /dungeon2048/img/ogre2-3.png
 /dungeon2048/img/ogre2-4.png
-/dungeon2048/img/ogre3-3.png
-/dungeon2048/img/ogre3-4.png
 /dungeon2048/img/orc1-0.png
 /dungeon2048/img/orc1-3.png
 /dungeon2048/img/orc1-4.png
@@ -46,8 +44,6 @@ CACHE MANIFEST
 /dungeon2048/img/skeleton2-0.png
 /dungeon2048/img/skeleton2-3.png
 /dungeon2048/img/skeleton2-4.png
-/dungeon2048/img/skeleton3-3.png
-/dungeon2048/img/skeleton3-4.png
 /dungeon2048/img/slime2-0.png
 /dungeon2048/img/slime2-1.png
 /dungeon2048/img/slime2-2.png
@@ -78,6 +74,8 @@ CACHE MANIFEST
 /dungeon2048/img/status-poison.png
 /dungeon2048/img/status-freeze.png
 /dungeon2048/img/status-elite.png
+/dungeon2048/img/status-locked.png
+/dungeon2048/img/icon-hourglass.png
 #hero
 /dungeon2048/img/warrior0-0.png
 /dungeon2048/img/warrior0-1.png
@@ -116,7 +114,8 @@ CACHE MANIFEST
 /dungeon2048/img/skill-cross-slash.png
 #priest-skill
 /dungeon2048/img/skill-heal.png
-/dungeon2048/img/skill-blind-undead.png
+/dungeon2048/img/skill-holy-shield.png
+/dungeon2048/img/skill-confuse-undead.png
 /dungeon2048/img/skill-turn-undead.png
 /dungeon2048/img/skill-dispel.png
 /dungeon2048/img/skill-resurrection.png

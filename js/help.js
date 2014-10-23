@@ -30,7 +30,9 @@ define(function(require,exports,module) {
 
     exports.heroTypeDisplayName = {
         priest:"牧师",
-        warrior:"战士"
+        warrior:"战士",
+        wizard:"法师",
+        thief:"盗贼"
     }
 
     exports.heroRaceDisplayName = {
