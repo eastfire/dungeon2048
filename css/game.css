@@ -165,6 +165,46 @@ body {
     background-image: url("../img/priest3-4.png");
 }
 
+/*wizard*/
+.hero.wizard.d0 {
+    background-image: url("../img/wizard0-0.png");
+}
+.hero.wizard.d0.attacking0 {
+    background-image: url("../img/wizard0-3.png");
+}
+.hero.wizard.d0.attacking1 {
+    background-image: url("../img/wizard0-4.png");
+}
+
+.hero.wizard.d1 {
+    background-image: url("../img/wizard1-0.png");
+}
+.hero.wizard.d1.attacking0 {
+    background-image: url("../img/wizard1-3.png");
+}
+.hero.wizard.d1.attacking1 {
+    background-image: url("../img/wizard1-4.png");
+}
+
+.hero.wizard.d2 {
+    background-image: url("../img/wizard2-0.png");
+}
+.hero.wizard.d2.attacking0 {
+    background-image: url("../img/wizard2-3.png");
+}
+.hero.wizard.d2.attacking1 {
+    background-image: url("../img/wizard2-4.png");
+}
+
+.hero.wizard.d3 {
+    background-image: url("../img/wizard3-0.png");
+}
+.hero.wizard.d3.attacking0 {
+    background-image: url("../img/wizard3-3.png");
+}
+.hero.wizard.d3.attacking1 {
+    background-image: url("../img/wizard3-4.png");
+}
 
 /*monster image*/
 .monster.archer.d0 {
@@ -871,6 +911,9 @@ body {
 }
 .hero-type-image.warrior {
     background-image: url("../img/warrior2-0.png");
+}
+.hero-type-image.wizard {
+    background-image: url("../img/wizard2-0.png");
 }
 .hero-type-image.locked {
     background-image: url("../img/status-locked.png");

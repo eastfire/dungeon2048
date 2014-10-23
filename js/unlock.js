@@ -224,6 +224,55 @@ define(function(require,exports,module){
         }
     })
 
+    exports.WizardUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"wizard",
+                description:"解锁法师",
+                cost:120
+            }
+        },
+        adjustSkillPool:function(){
+            gameStatus.selectableType.push("wizard")
+        }
+    })
+
+    exports.WizardThirdSkillUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"wizard-third-skill",
+                description:"法师 的 第3个技能槽",
+                cost:100
+            }
+        },
+        isValid:function(){
+            return (new exports.WizardUnlock()).isUnlocked();
+        },
+        adjustHero:function(){
+            if ( hero.get("type") == "wizard" ){
+                if ( hero.get("skillSlot") == 2 )
+                    hero.set("skillSlot",3)
+            }
+        }
+    })
+    exports.WizardFourthSkillUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"wizard-fourth-skill",
+                description:"法师 的 第4个技能槽",
+                cost:300
+            }
+        },
+        isValid:function(){
+            return (new exports.WizardThirdSkillUnlock()).isUnlocked();
+        },
+        adjustHero:function(){
+            if ( hero.get("type") == "wizard" ){
+                hero.set("skillSlot",4)
+            }
+        }
+    })
+
     exports.AllUnlocks = [
         new exports.RevertSlashUnlock(),
         new exports.BigWhirlUnlock(),
@@ -240,6 +289,10 @@ define(function(require,exports,module){
         new exports.TurnUndeadUnlock(),
         new exports.PriestThirdSkillUnlock(),
         new exports.PriestFourthSkillUnlock(),
+
+        new exports.WizardUnlock(),
+        new exports.WizardThirdSkillUnlock(),
+        new exports.WizardFourthSkillUnlock(),
     ]
 
     exports.Achievement = Backbone.Model.extend({

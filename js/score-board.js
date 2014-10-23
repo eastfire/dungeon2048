@@ -44,16 +44,20 @@ define(function(require,exports,module) {
         render:function(){
             this.$el.addClass("game-over");
             this.$el.html("<div><ul class='nav nav-tabs game-over-tabs' role='tablist'>" +
-                "<li class='active'><a href='#score' role='tab' data-toggle='tab'>排行榜</a></li>" +
-                "<li><a href='#message' role='tab' data-toggle='tab'>留言板</a></li>" +
+                "<li class='active'><a href='#score' role='tab' data-toggle='tab'>排名</a></li>" +
+                "<li><a href='#local-score' role='tab' data-toggle='tab'>本地</a></li>" +
+                "<li><a href='#message' role='tab' data-toggle='tab'>留言</a></li>" +
                 "<li><a href='#unlock' role='tab' data-toggle='tab'>解锁</a></li>" +
                 "<li><a href='#achievement' role='tab' data-toggle='tab'>成就</a></li>" +
+                "<li><a href='#shop' role='tab' data-toggle='tab'>商店</a></li>" +
                 "</ul>" +
                 "<div class='tab-content'>" +
                 "<div class='tab-pane fade in active' id='score'></div>" +
+                "<div class='tab-pane fade' id='local-score'>开发中……</div>" +
                 "<div class='tab-pane fade' id='message'></div>" +
                 "<div class='tab-pane fade' id='unlock'></div>" +
                 "<div class='tab-pane fade' id='achievement'></div>" +
+                "<div class='tab-pane fade' id='shop'>开发中……</div>" +
                 "</div></div>" +
                 "<p class='game-over-buttons'><button class='btn btn-primary restart-game'>再来一局</button></p>")
 

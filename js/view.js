@@ -216,7 +216,7 @@ define(function(require,exports,module){
             return true;
         },
         getHp:function(hp){
-            hp += this.model.get("recover");
+            hp += this.model.get("recover")*window.RECOVER_EFFECT;
             this.model.getScore(hp);
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
             if ( realHeal > 0 ){
@@ -520,6 +520,15 @@ define(function(require,exports,module){
 
         },
         checkInRange:function(){
+            var range = this.calRange();
+            _.each(heroView.skillList, function(skill){
+                if ( skill.adjustRange ){
+                    range = skill.adjustRange.call(skill, this.model.get("attackType"), range);
+                }
+            },this);
+            return range;
+        },
+        calRange:function(){
             var x = this.model.get("position").x;
             var y = this.model.get("position").y;
             var ret = window.hero.isPositionNear(x,y);
@@ -527,7 +536,6 @@ define(function(require,exports,module){
                 return ret.direction;
             else
                 return null;
-            return attackDirection;
         }
     })
 
@@ -578,7 +586,7 @@ define(function(require,exports,module){
                 })(this);
             }
         },
-        checkInRange:function(){
+        calRange:function(){
 //            var x = this.model.get("position").x;
 //            var y = this.model.get("position").y;
 //            var heroX = window.hero.get("position").x;

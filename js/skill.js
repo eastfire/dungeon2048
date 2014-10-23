@@ -6,6 +6,7 @@ define(function(require,exports,module) {
     window.WISDOM_THRESHOLD = 6;
     window.TREASURE_HUNTING_EFFECT = 5;
     window.COOLING_EFFECT = 10;
+    window.RECOVER_EFFECT = 2;
 
     exports.SkillView = Backbone.View.extend({
         initialize:function(options){
@@ -224,7 +225,7 @@ define(function(require,exports,module) {
             window.hero.set("recover", this.get("level"))
         },
         generateDescription:function(){
-            return "回复生命时多回复"+(this.get("level"))+"生命";
+            return "回复生命时多回复"+(this.get("level")*RECOVER_EFFECT)+"生命";
         }
     })
 
@@ -638,23 +639,27 @@ define(function(require,exports,module) {
                 type: "active",
                 displayName: "圣盔甲",
                 level: 1,
-                maxLevel: 1,
-                currentCount: 20,
-                coolDown: 20
+                maxLevel: 3,
+                currentCount: 24,
+                coolDown: 24
             }
         },
         generateDescription: function () {
-            return "只受一半伤害。持续3回合"
+            return "只受一半伤害(向下取整)。持续"+this.getEffect()+"回合"
         },
         onActive:function(){
-            this.set("duration",3);
+            this.set("duration",this.getEffect());
             this.used();
         },
         adjustDamage:function(damage, type){
             if ( this.get("duration") ) {
-                return Math.ceil(damage/2);
+                return Math.floor(damage/2);
             } else
                 return damage;
+        },
+        getEffect:function(level){
+            var l = level || this.get("level");
+            return 2+l;
         }
     })
 
@@ -674,22 +679,22 @@ define(function(require,exports,module) {
             }
         },
         generateDescription: function () {
-            return "不受不死生物的伤害（boss除外）。持续3回合"
+            return "不死生物不会攻击英雄（boss除外）。持续3回合"
         },
         onActive:function(){
             this.set("duration",3);
             this.used();
         },
-        adjustDamage:function(damage, type){
+        adjustRange:function( type,range){
             if ( this.get("duration") ) {
                 if ( type ) {
                     if ( type.contains("undead") )
-                        return 0;
-                    return damage;
+                        return null;
+                    return range;
                 }
-                return damage;
+                return range;
             } else
-                return damage;
+                return range;
         }
     })
 
@@ -734,8 +739,8 @@ define(function(require,exports,module) {
                 displayName:"超度亡灵",
                 level:1,
                 maxLevel:1,
-                currentCount:60,
-                coolDown:60
+                currentCount:50,
+                coolDown:50
             }
         },
         generateDescription:function(){
