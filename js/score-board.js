@@ -45,7 +45,6 @@ define(function(require,exports,module) {
             this.$el.addClass("game-over");
             this.$el.html("<div><ul class='nav nav-tabs game-over-tabs' role='tablist'>" +
                 "<li class='active'><a href='#score' role='tab' data-toggle='tab'>排名</a></li>" +
-                "<li><a href='#local-score' role='tab' data-toggle='tab'>本地</a></li>" +
                 "<li><a href='#message' role='tab' data-toggle='tab'>留言</a></li>" +
                 "<li><a href='#unlock' role='tab' data-toggle='tab'>解锁</a></li>" +
                 "<li><a href='#achievement' role='tab' data-toggle='tab'>成就</a></li>" +
@@ -53,7 +52,6 @@ define(function(require,exports,module) {
                 "</ul>" +
                 "<div class='tab-content'>" +
                 "<div class='tab-pane fade in active' id='score'></div>" +
-                "<div class='tab-pane fade' id='local-score'>开发中……</div>" +
                 "<div class='tab-pane fade' id='message'></div>" +
                 "<div class='tab-pane fade' id='unlock'></div>" +
                 "<div class='tab-pane fade' id='achievement'></div>" +

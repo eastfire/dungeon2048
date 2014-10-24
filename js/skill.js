@@ -109,7 +109,10 @@ define(function(require,exports,module) {
             return "";
         },
         calCoolDown:function(){
-            return Math.max(1, Math.round( this.get("coolDown") * (1-window.COOLING_EFFECT/100*window.hero.get("cooling"))));
+            return Math.max(1, Math.round( this.getBasicCoolDown() * (1-window.COOLING_EFFECT/100*window.hero.get("cooling"))));
+        },
+        getBasicCoolDown:function(){
+            return this.get("coolDown");
         },
         clone:function(){
             if ( this.modelClass != null )
@@ -219,7 +222,7 @@ define(function(require,exports,module) {
                 type:"passive",
                 displayName:"恢复",
                 level:1,
-                maxLevel:6
+                maxLevel:5
             }
         },
         onGet:function(){
@@ -781,12 +784,19 @@ define(function(require,exports,module) {
                 displayName:"魔法导弹",
                 level:1,
                 maxLevel:3,
-                currentCount:9,
-                coolDown:9
+                currentCount:8,
+                coolDown:8
             }
         },
         generateDescription:function(){
-            return "随机攻击英雄周围的"+this.getEffect()+"个怪物"
+            var str = "随机攻击英雄周围的"+this.getEffect()+"个怪物";
+            if ( this.get("level") > 1 ){
+                str += "，但是冷却时间＋２"
+            }
+            return str;
+        },
+        getBasicCoolDown:function(){
+            return this.get("coolDown") + ( this.get("level") - 1 )* 2;
         },
         onActive:function(){
             var totalHit = 0;
@@ -828,8 +838,8 @@ define(function(require,exports,module) {
                 displayName:"蛛网术",
                 level:1,
                 maxLevel:1,
-                currentCount:25,
-                coolDown:25
+                currentCount:20,
+                coolDown:20
             }
         },
         generateDescription:function(){
