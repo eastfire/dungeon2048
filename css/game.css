@@ -928,13 +928,13 @@ body {
     height: 100%;
     width: 100%;
 }
-.hero-type-image.priest {
+.hero-type-image.priest , .unlock-icon-priest {
     background-image: url("../img/priest2-0.png");
 }
 .hero-type-image.warrior {
     background-image: url("../img/warrior2-0.png");
 }
-.hero-type-image.wizard {
+.hero-type-image.wizard, .unlock-icon-wizard {
     background-image: url("../img/wizard2-0.png");
 }
 .hero-type-image.locked {
@@ -1098,19 +1098,19 @@ body {
 .skill-image-heal {
     background-image: url("../img/skill-heal.png");
 }
-.skill-image-turn-undead {
+.skill-image-turn-undead , .unlock-icon-turn-undead{
     background-image: url("../img/skill-turn-undead.png");
 }
 .skill-image-dispel {
     background-image: url("../img/skill-dispel.png");
 }
-.skill-image-holy-shield {
+.skill-image-holy-shield , .unlock-icon-holy-shield{
     background-image: url("../img/skill-holy-shield.png");
 }
-.skill-image-resurrection {
+.skill-image-resurrection , .unlock-icon-resurrection{
     background-image: url("../img/skill-resurrection.png");
 }
-.skill-image-confuse-undead {
+.skill-image-confuse-undead , .unlock-icon-confuse-undead{
     background-image: url("../img/skill-confuse-undead.png");
 }
 
@@ -1121,10 +1121,12 @@ body {
 .skill-image-spider-web {
     background-image: url("../img/skill-spider-web.png");
 }
-.skill-image-teleport {
+.skill-image-teleport, .unlock-icon-teleport {
     background-image: url("../img/skill-teleport.png");
 }
-
+.skill-image-lightening-chain, .unlock-icon-lightening-chain {
+    background-image: url("../img/skill-lightening-chain.png");
+}
 
 /*achievement*/
 /*.achievement-icon-goblin-level , .achievement-icon-goblin-count, .achievement-icon-goblin-count2, .achievement-icon-goblin-count3 {
