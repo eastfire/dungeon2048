@@ -43,6 +43,26 @@ define(function(require,exports,module){
                 self.onMoveComplete.call(self, oldblock, newblock);
             },1+TIME_SLICE*movement)
         },
+        setToPosition:function(x,y){
+            var oldx = this.model.get("position").x;
+            var oldy = this.model.get("position").y;
+
+            if ( oldx == x && oldy == y )
+                return;
+
+            map[x][y].view = map[oldx][oldy].view
+            map[x][y].model = map[oldx][oldy].model
+            map[x][y].type = map[oldx][oldy].type
+
+            this.model.set("position",{x:x,y:y});
+            var x2 = x*blockSize.width;
+            var y2 = y*blockSize.height;
+            this.$el.css({transition: "", left:x2, top:y2});
+
+            map[oldx][oldy].view = "blank"
+            map[oldx][oldy].model = null;
+            map[oldx][oldy].type = "blank"
+        },
         render:function() {
             this.$el.css({
                 position: "absolute",

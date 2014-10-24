@@ -1121,6 +1121,10 @@ body {
 .skill-image-spider-web {
     background-image: url("../img/skill-spider-web.png");
 }
+.skill-image-teleport {
+    background-image: url("../img/skill-teleport.png");
+}
+
 
 /*achievement*/
 /*.achievement-icon-goblin-level , .achievement-icon-goblin-count, .achievement-icon-goblin-count2, .achievement-icon-goblin-count3 {

@@ -781,7 +781,7 @@ define(function(require,exports,module) {
             return {
                 name:"magic-missile",
                 type:"active",
-                displayName:"魔法导弹",
+                displayName:"魔导弹",
                 level:1,
                 maxLevel:3,
                 currentCount:8,
@@ -862,6 +862,43 @@ define(function(require,exports,module) {
             this.used();
         }
     })
+    exports.TeleportSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.TeleportSkill
+        },
+        defaults:function(){
+            return {
+                name:"teleport",
+                type:"active",
+                displayName:"传送术",
+                level:1,
+                maxLevel:1,
+                currentCount:20,
+                coolDown:20
+            }
+        },
+        generateDescription:function(){
+            return "英雄随机传送到另一个空白的格子";
+        },
+        onActive:function(){
+            var totalHit = 0;
+            var candidate = [];
+            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                    var block = getMapBlock(i,j);
+                    if ( block && block.type === "blank" ) {
+                        candidate.push(block)
+                    }
+                }
+            }
+
+            if ( candidate.length > 0 ) {
+                var block = getRandomItem(candidate);
+                heroView.setToPosition(block.x,block.y)
+            }
+            this.used();
+        }
+    })
 
     exports.initSkillPool = function(){
         exports.commonSkillPoolEntry = [
@@ -886,7 +923,8 @@ define(function(require,exports,module) {
 
         exports.wizardBasicSkillPoolEntry = [
             exports.SpiderWebSkill,
-            exports.MagicMissileSkill
+            exports.MagicMissileSkill,
+            exports.TeleportSkill
         ]
     }
 

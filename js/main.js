@@ -177,7 +177,7 @@ define(function(require,exports,module){
         } while ( map[x][y].type != "blank" || hero.isPositionNear(x,y) );
 
         var monsterType = getRandomItem(gameStatus.currentBossTypes);
-        createOneMonster(monsterType, x,y);
+        createOneMonster(monsterType, x,y, 1);
 
         if ( !gameStatus.tutorial.on && !gameStatus.tutorial[monsterType] ) {
             gameStatus.tutorial[monsterType] = true;
@@ -219,14 +219,14 @@ define(function(require,exports,module){
         }
     }
 
-    var createOneMonster = function(monsterType, x, y){
+    var createOneMonster = function(monsterType, x, y, level){
         var block = map[x][y];
         block.type = "monster";
         var TempView = View.ViewMap[monsterType]
         var TempModel = Model.ModelMap[monsterType]
         var m = new TempModel({
             type:monsterType,
-            level:getRandomItem(gameStatus.currentMonsterLevels),
+            level:level || getRandomItem(gameStatus.currentMonsterLevels),
             position:{
                 x: x,
                 y: y

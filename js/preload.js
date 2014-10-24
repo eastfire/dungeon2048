@@ -135,6 +135,7 @@ define(function(require,exports,module) {
 
         "skill-magic-missile.png",
         "skill-spider-web.png",
+        "skill-teleport.png",
 
         "loading.gif"
     ];
