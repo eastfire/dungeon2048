@@ -237,6 +237,38 @@ define(function(require,exports,module){
         }
     })
 
+    exports.TeleportUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"teleport",
+                description:"法师 的 传送术技能",
+                cost:15
+            }
+        },
+        isValid:function(){
+            return (new exports.WizardUnlock()).isUnlocked();
+        },
+        adjustSkillPool:function(){
+            Skill.wizardBasicSkillPoolEntry.push( Skill.TeleportSkill )
+        }
+    })
+
+    exports.LighteningChainUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"lightening-chain",
+                description:"法师 的 闪电链技能",
+                cost:100
+            }
+        },
+        isValid:function(){
+            return (new exports.WizardUnlock()).isUnlocked();
+        },
+        adjustSkillPool:function(){
+            Skill.wizardBasicSkillPoolEntry.push( Skill.LighteningChainSkill )
+        }
+    })
+
     exports.WizardThirdSkillUnlock = exports.Unlockable.extend({
         defaults:function(){
             return {
@@ -291,8 +323,10 @@ define(function(require,exports,module){
         new exports.PriestFourthSkillUnlock(),
 
         new exports.WizardUnlock(),
+        new exports.TeleportUnlock(),
+        new exports.LighteningChainUnlock(),
         new exports.WizardThirdSkillUnlock(),
-        new exports.WizardFourthSkillUnlock(),
+        new exports.WizardFourthSkillUnlock()
     ]
 
     exports.Achievement = Backbone.Model.extend({
@@ -834,6 +868,40 @@ define(function(require,exports,module){
         }
     })
 
+    exports.SkillTeleportAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"skill-teleport",
+                displayName:"又入虎穴",
+                description:"传送术移动到的新地点周围8格全是怪物",
+                reward:20
+            }
+        },
+        isValid:function(){
+            return (new exports.TeleportUnlock()).isUnlocked();
+        },
+        isPassed:function(){
+            return statistic.skills["teleport"];
+        }
+    })
+
+    exports.SkillLighteningChainAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"skill-lightening-chain",
+                displayName:"宙斯之怒",
+                description:"闪电链消灭所有且至少15个怪物",
+                reward:60
+            }
+        },
+        isValid:function(){
+            return (new exports.LighteningChainUnlock()).isUnlocked();
+        },
+        isPassed:function(){
+            return statistic.skills["lightening-chain"];
+        }
+    })
+
     exports.AllAchievements = [
 
 //        new exports.SlimeCountAchievement(),
@@ -876,6 +944,9 @@ define(function(require,exports,module){
         new exports.SkillWhirlAchievement(),
         new exports.SkillBigWhirlAchievement(),
 
-        new exports.SkillTurnUndeadAchievement()
+        new exports.SkillTurnUndeadAchievement(),
+
+        new exports.SkillTeleportAchievement(),
+        new exports.SkillLighteningChainAchievement()
     ]
 });

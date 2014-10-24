@@ -894,9 +894,126 @@ define(function(require,exports,module) {
 
             if ( candidate.length > 0 ) {
                 var block = getRandomItem(candidate);
-                heroView.setToPosition(block.x,block.y)
+                window.heroView.setToPosition(block.x,block.y)
+
+                var monsterCount = 0;
+                for ( var i = block.x-1 ; i <= block.x+1 ; i++ ) {
+                    for ( var j = block.y-1 ; j <= block.y+1 ; j++ ) {
+                        var block = getMapBlock(i,j);
+                        if ( block && block.type === "monster" ) {
+                            monsterCount++;
+                        }
+                    }
+                }
+                if ( monsterCount == 8 ){
+                    statistic.skills[this.get("name")]=true;
+                }
             }
             this.used();
+        }
+    })
+
+    exports.LighteningChainSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.LighteningChainSkill
+        },
+        defaults:function(){
+            return {
+                name:"lightening-chain",
+                type:"active",
+                displayName:"闪电链",
+                level:1,
+                maxLevel:4,
+                currentCount:40,
+                coolDown:40
+            }
+        },
+        generateDescription:function(){
+            var str = "随机杀死英雄上下左右的"+this.getEffect()+"个怪物和与之同名的所有怪物";
+            if ( this.get("level") > 1 ) {
+                str += "，但冷却时间＋５"
+            }
+            return str;
+        },
+        getBasicCoolDown:function(){
+            return this.get("coolDown") + ( this.get("level") - 1 )* 5;
+        },
+        onActive:function(){
+            var totalHit = 0;
+            var candidate = [];
+            var x = window.hero.get("position").x;
+            var y = window.hero.get("position").y;
+            var block = getMapBlock(x-1,y);
+            if ( block && block.type === "monster" ) {
+                candidate.push({
+                    type: block.view.model.get("type"),
+                    d: 3
+                })
+            }
+            block = getMapBlock(x+1,y);
+            if ( block && block.type === "monster" ) {
+                candidate.push({
+                    type: block.view.model.get("type"),
+                    d: 1
+                })
+            }
+            var block = getMapBlock(x,y-1);
+            if ( block && block.type === "monster" ) {
+                candidate.push({
+                    type: block.view.model.get("type"),
+                    d: 0
+                })
+            }
+            var block = getMapBlock(x,y+1);
+            if ( block && block.type === "monster" ) {
+                candidate.push({
+                    type: block.view.model.get("type"),
+                    d: 2
+                })
+            }
+
+            if ( candidate.length > 0 ) {
+                var attList = getRandomItems(candidate, this.getEffect() );
+                _.each(attList,function(att){
+                    totalHit += this.killAllInType(att.type,att.d,"magic skill");
+                },this)
+            }
+            hero.getScore(totalHit);
+            if ( totalHit >= 15 && this.checkAllDead())
+                statistic.skills[this.get("name")]=true;
+            this.used();
+        },
+        killAllInType:function(monsterType, direction, type){
+            var total = 0;
+            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                    var block = getMapBlock(i,j);
+                    if ( block && block.type === "monster" ) {
+                        var monsterView = block.view;
+                        if ( monsterView.model.get("type") == monsterType ) {
+                            var result = monsterView.beAttacked(direction,window.hero.get("attack"), "magic skill");
+                            if ( result )
+                                total++
+                        }
+                    }
+                }
+            }
+            return total;
+        },
+        checkAllDead:function(){
+            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                    var block = getMapBlock(i,j);
+                    if ( block && block.type === "monster" ) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        },
+        getEffect:function(level){
+            var l = level || this.get("level");
+            return l;
         }
     })
 
@@ -923,8 +1040,7 @@ define(function(require,exports,module) {
 
         exports.wizardBasicSkillPoolEntry = [
             exports.SpiderWebSkill,
-            exports.MagicMissileSkill,
-            exports.TeleportSkill
+            exports.MagicMissileSkill
         ]
     }
 
