@@ -109,6 +109,7 @@ define(function(require,exports,module){
             this.model.on("change:level",this.levelUp,this);
             this.model.on("change:poison",this.renderPoison,this);
             this.model.on("change:dizzy",this.renderDizzy,this);
+            this.model.on("change:locked",this.renderLocked,this);
             this.model.on("change:hp",this.checkAlive,this);
             this.skillList = [];
         },
@@ -284,6 +285,9 @@ define(function(require,exports,module){
             if ( this.model.get("dizzy") ){
                 this.model.set("dizzy",this.model.get("dizzy")-1);
             }
+            if ( this.model.get("locked") ){
+                this.model.set("locked",this.model.get("locked")-1);
+            }
             _.each(this.skillList, function(skill){
                 if ( skill.onNewRound ){
                     skill.onNewRound.call(skill);
@@ -304,6 +308,20 @@ define(function(require,exports,module){
                 this.effecQueue.add.call(this.effecQueue, "眩晕");
             } else if ( !this.model.get("dizzy") && this.model.previous("dizzy")) {
                 this.$(".status-dizzy").remove();
+            }
+        },
+        renderLocked:function(){
+            if ( this.model.get("locked") && !this.model.previous("locked")) {
+                this.$el.append("<div class='status-locked'></div>")
+                this.effecQueue.add.call(this.effecQueue, "封魔");
+                _.each(this.skillList, function(skill){
+                    skill.set("locked",true)
+                },this);
+            } else if ( !this.model.get("locked") && this.model.previous("locked")) {
+                this.$(".status-locked").remove();
+                _.each(this.skillList, function(skill){
+                    skill.set("locked",false)
+                },this);
             }
         },
         onDying:function(){
@@ -332,6 +350,10 @@ define(function(require,exports,module){
         },
         getDizzy:function(d){
             this.model.set("dizzy",d);
+            return true;
+        },
+        getLocked:function(d){
+            this.model.set("locked",d);
             return true;
         }
     })
@@ -556,6 +578,10 @@ define(function(require,exports,module){
             if ( Math.random() < dizzyRate ) {
                 heroView.getDizzy(2);
             }
+            var lockRate = this.model.getLockPower();
+            if ( Math.random() < lockRate ) {
+                heroView.getLocked(2);
+            }
         },
 
         onDropItem:function(x,y){
@@ -653,6 +679,9 @@ define(function(require,exports,module){
 //            }
             return 3;
         }
+    })
+
+    exports.GargoyleView = exports.MonsterView.extend({
     })
 
     exports.GhostView = exports.MonsterView.extend({
@@ -794,6 +823,7 @@ define(function(require,exports,module){
 
     exports.ViewMap = {
         archer:exports.ArcherView,
+        gargoyle:exports.GargoyleView,
         ghost:exports.GhostView,
         goblin:exports.GoblinView,
         golem:exports.GolemView,

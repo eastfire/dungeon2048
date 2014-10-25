@@ -58,6 +58,8 @@ define(function(require,exports,module) {
                 this.$el.on("click",function(){
                     if ( window.gameStatus.phase != PHASE_USER )
                         return;
+                    if ( self.model.get("locked") )
+                        return;
                     var count = self.model.get("currentCount");
                     var coolDown = self.model.calCoolDown();
                     if ( count >= coolDown ) {
@@ -66,6 +68,14 @@ define(function(require,exports,module) {
                         self.model.onActive.call(self.model);
                     }
                 })
+                this.model.on("change:locked",this.renderLocked,this);
+            }
+        },
+        renderLocked:function(){
+            if ( this.model.get("locked") ) {
+                this.$(".skill-image-icon .skill-image").addClass("skill-locked")
+            } else {
+                this.$(".skill-image-icon .skill-image").removeClass("skill-locked")
             }
         },
         renderCoolDown:function(){

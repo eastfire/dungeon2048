@@ -240,6 +240,28 @@ body {
     background-image: url("../img/archer3-5.png");
 }
 
+.monster.gargoyle.d0,.monster.gargoyle.d1,.monster.gargoyle.d2,.monster.gargoyle.d3 {
+    background-image: url("../img/gargoyle1-0.png");
+}
+.monster.gargoyle.d0.attacking0, .monster.gargoyle.d1.attacking0, .monster.gargoyle.d2.attacking0, .monster.gargoyle.d3.attacking0 {
+    background-image: url("../img/gargoyle1-3.png");
+}
+.monster.gargoyle.d0.attacking1, .monster.gargoyle.d1.attacking1, .monster.gargoyle.d2.attacking1, .monster.gargoyle.d3.attacking1 {
+    background-image: url("../img/gargoyle1-4.png");
+}
+.monster.gargoyle.d0.attacking2, .monster.gargoyle.d1.attacking2, .monster.gargoyle.d2.attacking2, .monster.gargoyle.d3.attacking2 {
+    background-image: url("../img/gargoyle1-3.png");
+}
+.monster.gargoyle.d0.attacking0, .monster.gargoyle.d3.attacking0 {
+    transform:scaleX(-1);
+}
+.monster.gargoyle.d0.attacking1, .monster.gargoyle.d3.attacking1 {
+    transform:scaleX(-1);
+}
+.monster.gargoyle.d0.attacking2, .monster.gargoyle.d3.attacking2 {
+    transform:scaleX(-1);
+}
+
 .monster.ghost.d0,.monster.ghost.d1,.monster.ghost.d2,.monster.ghost.d3 {
     background-image: url("../img/ghost1-0.png");
 }
@@ -605,6 +627,17 @@ body {
     width: 20%;
 }
 
+.status-locked {
+    background-image: url("../img/status-locked.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 30%;
+    position: absolute;
+    left: 5%;
+    top: 5%;
+    width: 30%;
+}
+
 .status-elite {
     background-image: url("../img/status-elite.png");
     background-repeat: no-repeat;
@@ -896,6 +929,9 @@ body {
 .archer-help {
     background-image: url("../img/archer3-0.png");
 }
+.gargoyle-help {
+    background-image: url("../img/gargoyle1-0.png");
+}
 .ghost-help {
     background-image: url("../img/ghost1-0.png");
 }
@@ -1160,6 +1196,11 @@ body {
 .skill-image-lightening-chain, .unlock-icon-lightening-chain {
     background-image: url("../img/skill-lightening-chain.png");
 }
+
+.skill-image.skill-locked {
+    background-image: url("../img/status-locked.png");
+}
+
 
 /*achievement*/
 /*.achievement-icon-goblin-level , .achievement-icon-goblin-count, .achievement-icon-goblin-count2, .achievement-icon-goblin-count3 {

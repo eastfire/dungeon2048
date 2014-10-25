@@ -166,6 +166,9 @@ define(function (require, exports, module) {
                 return Math.min( this.get("level") * gameStatus.monsterPower.dizzy, 100 ) / 100;
             return 0;
         },
+        getLockPower:function(){
+            return 0;
+        },
         mergeStatus: function (mergeToModel) {
             if (mergeToModel.get("angry")) {
                 this.set("angry", mergeToModel.get("angry"))
@@ -193,6 +196,15 @@ define(function (require, exports, module) {
         },
         calExp: function (level) {
             return Math.floor(level * 3 / 2);
+        }
+    })
+
+    exports.Gargoyle = exports.Monster.extend({
+        calExp: function (level) {
+            return level * 2 + 1;
+        },
+        getLockPower:function(){
+            return Math.min( this.get("level")*gameStatus.monsterPower.lock , 100)/100;
         }
     })
 
@@ -374,6 +386,7 @@ define(function (require, exports, module) {
 
     exports.ModelMap = {
         archer: exports.Archer,
+        gargoyle: exports.Gargoyle,
         ghost: exports.Ghost,
         goblin: exports.Goblin,
         golem: exports.Golem,
