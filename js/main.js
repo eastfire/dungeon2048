@@ -48,7 +48,7 @@ define(function(require,exports,module){
             globalEffect:{},
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
-            monsterPool:["archer","gargoyle","ghost","goblin","golem","medusa","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","troll","vampire"],
+            monsterPool:["archer","gargoyle","ghost","goblin","golem","kobold","medusa","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","troll","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             currentMonsterMaxLevel : 1,
@@ -63,7 +63,8 @@ define(function(require,exports,module){
                 freeze:8,
                 dodge:6,
                 dizzy:10,
-                lock:10
+                lock:10,
+                disturb:8
             },
             gainStar:0,
             allTypes:["warrior","priest","wizard","thief"],

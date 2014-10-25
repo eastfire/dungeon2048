@@ -355,6 +355,14 @@ define(function(require,exports,module){
         getLocked:function(d){
             this.model.set("locked",d);
             return true;
+        },
+        getDisturb:function(d){
+            this.effecQueue.add.call(this.effecQueue, "干扰");
+            _.each(this.skillList, function(skill){
+                if ( skill.get("currentCount") < skill.get("coolDown") ){
+                    skill.set("currentCount", skill.get("currentCount")-d);
+                }
+            },this);
         }
     })
 
@@ -582,6 +590,10 @@ define(function(require,exports,module){
             if ( Math.random() < lockRate ) {
                 heroView.getLocked(2);
             }
+            var disturbRate = this.model.getDisturbPower();
+            if ( Math.random() < disturbRate ) {
+                heroView.getDisturb(1);
+            }
         },
 
         onDropItem:function(x,y){
@@ -713,6 +725,9 @@ define(function(require,exports,module){
         }
     })
 
+    exports.KoboldView = exports.MonsterView.extend({
+    })
+
     exports.MedusaView = exports.MonsterView.extend({
     })
 
@@ -827,6 +842,7 @@ define(function(require,exports,module){
         ghost:exports.GhostView,
         goblin:exports.GoblinView,
         golem:exports.GolemView,
+        kobold:exports.KoboldView,
         medusa:exports.MedusaView,
         mimic:exports.MimicView,
         minotaur:exports.MinotaurView,

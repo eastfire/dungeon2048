@@ -169,6 +169,9 @@ define(function (require, exports, module) {
         getLockPower:function(){
             return 0;
         },
+        getDisturbPower:function(){
+            return 0;
+        },
         mergeStatus: function (mergeToModel) {
             if (mergeToModel.get("angry")) {
                 this.set("angry", mergeToModel.get("angry"))
@@ -241,6 +244,17 @@ define(function (require, exports, module) {
         }
     })
 
+    exports.Kobold = exports.Monster.extend({
+        calAttack: function (level) {
+            return Math.round(level / 2);
+        },
+        calExp: function (level) {
+            return Math.floor(level * 5 / 2);
+        },
+        getDisturbPower:function(){
+            return Math.min( this.get("level")*gameStatus.monsterPower.disturb , 80)/100;
+        }
+    })
 
     exports.Medusa = exports.Monster.extend({
         calExp: function (level) {
@@ -390,6 +404,7 @@ define(function (require, exports, module) {
         ghost: exports.Ghost,
         goblin: exports.Goblin,
         golem: exports.Golem,
+        kobold: exports.Kobold,
         medusa: exports.Medusa,
         mimic: exports.Mimic,
         ogre: exports.Ogre,
