@@ -916,8 +916,18 @@ define(function(require,exports,module){
             } else {
                 this.hp.removeClass("danger");
             }
-            this.level.html("LV:"+this.model.get("level"));
-            this.exp.html("EXP:"+this.model.get("exp")+"/"+this.model.get("maxExp"));
+            this.level.html("lv:"+this.model.get("level"));
+            this.exp.html("exp:"+this.model.get("exp")+"/"+this.model.get("maxExp"));
+            if ( this.model.get("exp") >= this.model.get("maxExp")*4/5) {
+                this.exp.addClass("nearly-level-up")
+            } else {
+                this.exp.removeClass("nearly-level-up");
+            }
+            if ( this.model.get("exp") >= this.model.get("maxExp")*9/10) {
+                this.exp.addClass("almost-level-up")
+            } else {
+                this.exp.removeClass("almost-level-up");
+            }
             this.score.html(this.model.get("score")+"分")
             if ( window.windowOriention == "landscape") {
                 this.$el.css({

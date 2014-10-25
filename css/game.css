@@ -661,7 +661,7 @@ body {
     font-size: 0.9em;
 }
 
-.hero-hp {
+.hero-hp, .hero-exp {
     transition: all 0.5s ease-in-out 0s;
 }
 
@@ -671,6 +671,14 @@ body {
 
 .hero-hp.little-danger.danger{
     background-color: red;
+}
+
+.hero-exp.nearly-level-up{
+    background-color: lightgreen;
+}
+
+.hero-exp.almost-level-up{
+    background-color: green;
 }
 
 .hp-symbol {
