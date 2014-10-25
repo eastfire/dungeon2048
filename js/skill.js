@@ -896,11 +896,12 @@ define(function(require,exports,module) {
                 var block = getRandomItem(candidate);
                 window.heroView.setToPosition(block.x,block.y)
 
+                //又入虎穴
                 var monsterCount = 0;
                 for ( var i = block.x-1 ; i <= block.x+1 ; i++ ) {
                     for ( var j = block.y-1 ; j <= block.y+1 ; j++ ) {
-                        var block = getMapBlock(i,j);
-                        if ( block && block.type === "monster" ) {
+                        var b = getMapBlock(i,j);
+                        if ( b && b.type === "monster" ) {
                             monsterCount++;
                         }
                     }
