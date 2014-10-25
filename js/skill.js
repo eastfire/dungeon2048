@@ -73,7 +73,7 @@ define(function(require,exports,module) {
             var coolDown = this.model.calCoolDown();
             if ( count < coolDown ) {
                 this.coolDown.show();
-                this.coolDown.html((coolDown - count))
+                this.coolDown.html(Math.max(coolDown - count,0))
                 this.$(".skill-image").addClass("used");
             } else {
                 this.coolDown.hide();
@@ -128,6 +128,8 @@ define(function(require,exports,module) {
             var count = this.get("currentCount");
             if ( count < this.calCoolDown() ){
                 this.set("currentCount", count+1);
+            } else {
+                this.set("currentCount", 1000); //set to very big
             }
         },
         attackBlock:function(x,y,direction, type){

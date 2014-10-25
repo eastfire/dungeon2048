@@ -224,6 +224,9 @@ define(function(require,exports,module){
             return willAttack;
         },
         takeItem:function(direction){
+            if ( this.model.get("freeze") ){
+                return true;
+            }
             var x = this.model.get("position").x;
             var y = this.model.get("position").y;
             x += increment[direction].x;
@@ -617,6 +620,11 @@ define(function(require,exports,module){
                             att = att * 3;
                         if ( gameStatus.globalEffect.doubleAttack > 0 )
                             att = att * 2;
+                        gameStatus.killBy = {
+                            type :"monster",
+                            monsterLevel:self.model.get("level"),
+                            monsterType:self.model.get("type")
+                        }
                         var hit = heroView.takeDamage(att);
                         if (!hit) {
                             self.effecQueue.add.call(self.effecQueue, "Miss!");
