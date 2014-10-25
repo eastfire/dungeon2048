@@ -675,6 +675,15 @@ define(function(require,exports,module){
         }
     })
 
+    exports.GolemView = exports.MonsterView.extend({
+        beAttacked:function(direction, attack, type){
+            if ( type.contains("skill") ) {
+                return false;
+            }
+            return exports.MonsterView.prototype.beAttacked.call(this,direction, attack, type);
+        }
+    })
+
     exports.MedusaView = exports.MonsterView.extend({
     })
 
@@ -787,6 +796,7 @@ define(function(require,exports,module){
         archer:exports.ArcherView,
         ghost:exports.GhostView,
         goblin:exports.GoblinView,
+        golem:exports.GolemView,
         medusa:exports.MedusaView,
         mimic:exports.MimicView,
         minotaur:exports.MinotaurView,

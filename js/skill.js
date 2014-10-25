@@ -96,7 +96,7 @@ define(function(require,exports,module) {
                 displayName:"",
                 level:1,
                 maxLevel:5,
-                currentCount:1,
+                currentCount:1000,
                 coolDown:1,
                 duration:0,
                 hideDuration:false
@@ -282,7 +282,7 @@ define(function(require,exports,module) {
                 displayName:"顺劈",
                 level:1,
                 maxLevel:1,
-                currentCount:5,
+                currentCount:1000,
                 coolDown:5,
                 hideDuration:true
             }
@@ -319,7 +319,7 @@ define(function(require,exports,module) {
                 displayName:"拖刀计",
                 level:1,
                 maxLevel:1,
-                currentCount:10,
+                currentCount:1000,
                 coolDown:10,
                 hideDuration:true
             }
@@ -361,7 +361,7 @@ define(function(require,exports,module) {
                 displayName:"回旋斩",
                 level:1,
                 maxLevel:1,
-                currentCount:20,
+                currentCount:1000,
                 coolDown:20
             }
         },
@@ -397,7 +397,7 @@ define(function(require,exports,module) {
                 displayName:"大回旋斩",
                 level:1,
                 maxLevel:1,
-                currentCount:35,
+                currentCount:1000,
                 coolDown:35
             }
         },
@@ -450,7 +450,7 @@ define(function(require,exports,module) {
                 displayName:"横斩",
                 level:1,
                 maxLevel:1,
-                currentCount:20,
+                currentCount:1000,
                 coolDown:20
             }
         },
@@ -486,7 +486,7 @@ define(function(require,exports,module) {
                 displayName:"纵斩",
                 level:1,
                 maxLevel:1,
-                currentCount:20,
+                currentCount:1000,
                 coolDown:20
             }
         },
@@ -522,7 +522,7 @@ define(function(require,exports,module) {
                 displayName:"十字斩",
                 level:1,
                 maxLevel:1,
-                currentCount:38,
+                currentCount:1000,
                 coolDown:38
             }
         },
@@ -569,7 +569,7 @@ define(function(require,exports,module) {
                 displayName:"治疗术",
                 level:1,
                 maxLevel:5,
-                currentCount:20,
+                currentCount:1000,
                 coolDown:20
             }
         },
@@ -597,7 +597,7 @@ define(function(require,exports,module) {
                 displayName:"驱魔",
                 level:1,
                 maxLevel:1,
-                currentCount:5,
+                currentCount:1000,
                 coolDown:5
             }
         },
@@ -648,7 +648,7 @@ define(function(require,exports,module) {
                 displayName: "圣盔甲",
                 level: 1,
                 maxLevel: 3,
-                currentCount: 24,
+                currentCount: 1000,
                 coolDown: 24
             }
         },
@@ -682,7 +682,7 @@ define(function(require,exports,module) {
                 displayName: "操控亡灵",
                 level: 1,
                 maxLevel: 1,
-                currentCount: 18,
+                currentCount: 1000,
                 coolDown: 18
             }
         },
@@ -717,7 +717,7 @@ define(function(require,exports,module) {
                 displayName: "复活术",
                 level: 1,
                 maxLevel: 3,
-                currentCount: 60,
+                currentCount: 1000,
                 coolDown: 60,
                 hideDuration:true
             }
@@ -747,7 +747,7 @@ define(function(require,exports,module) {
                 displayName:"超度亡灵",
                 level:1,
                 maxLevel:1,
-                currentCount:50,
+                currentCount:1000,
                 coolDown:50
             }
         },
@@ -786,7 +786,7 @@ define(function(require,exports,module) {
                 displayName:"魔导弹",
                 level:1,
                 maxLevel:3,
-                currentCount:8,
+                currentCount:1000,
                 coolDown:8
             }
         },
@@ -840,7 +840,7 @@ define(function(require,exports,module) {
                 displayName:"蛛网术",
                 level:1,
                 maxLevel:1,
-                currentCount:20,
+                currentCount:1000,
                 coolDown:20
             }
         },
@@ -875,7 +875,7 @@ define(function(require,exports,module) {
                 displayName:"传送术",
                 level:1,
                 maxLevel:1,
-                currentCount:20,
+                currentCount:1000,
                 coolDown:20
             }
         },
@@ -927,7 +927,7 @@ define(function(require,exports,module) {
                 displayName:"闪电链",
                 level:1,
                 maxLevel:4,
-                currentCount:40,
+                currentCount:1000,
                 coolDown:40
             }
         },

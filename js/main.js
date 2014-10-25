@@ -48,7 +48,7 @@ define(function(require,exports,module){
             globalEffect:{},
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
-            monsterPool:["archer","ghost","goblin","medusa","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","troll","vampire"],
+            monsterPool:["archer","ghost","goblin","golem","medusa","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","troll","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             currentMonsterMaxLevel : 1,

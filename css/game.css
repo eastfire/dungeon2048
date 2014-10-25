@@ -284,6 +284,28 @@ body {
     transform:scaleX(-1);
 }
 
+.monster.golem.d0,.monster.golem.d1,.monster.golem.d2,.monster.golem.d3 {
+    background-image: url("../img/golem1-0.png");
+}
+.monster.golem.d0.attacking0, .monster.golem.d1.attacking0, .monster.golem.d2.attacking0, .monster.golem.d3.attacking0 {
+    background-image: url("../img/golem1-3.png");
+}
+.monster.golem.d0.attacking1, .monster.golem.d1.attacking1, .monster.golem.d2.attacking1, .monster.golem.d3.attacking1 {
+    background-image: url("../img/golem1-4.png");
+}
+.monster.golem.d0.attacking2, .monster.golem.d1.attacking2, .monster.golem.d2.attacking2, .monster.golem.d3.attacking2 {
+    background-image: url("../img/golem1-3.png");
+}
+.monster.golem.d0.attacking0, .monster.golem.d3.attacking0 {
+    transform:scaleX(-1);
+}
+.monster.golem.d0.attacking1, .monster.golem.d3.attacking1 {
+    transform:scaleX(-1);
+}
+.monster.golem.d0.attacking2, .monster.golem.d3.attacking2 {
+    transform:scaleX(-1);
+}
+
 .monster.medusa.d0,.monster.medusa.d1,.monster.medusa.d2,.monster.medusa.d3 {
     background-image: url("../img/medusa1-0.png");
 }
@@ -879,6 +901,9 @@ body {
 }
 .goblin-help {
     background-image: url("../img/goblin1-0.png");
+}
+.golem-help {
+    background-image: url("../img/golem1-0.png");
 }
 .medusa-help {
     background-image: url("../img/medusa1-0.png");

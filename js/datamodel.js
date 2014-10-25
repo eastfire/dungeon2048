@@ -220,6 +220,16 @@ define(function (require, exports, module) {
         }
     })
 
+    exports.Golem = exports.Monster.extend({
+        calAttack: function (level) {
+            return level*level;
+        },
+        calExp: function (level) {
+            return level*level+2;
+        }
+    })
+
+
     exports.Medusa = exports.Monster.extend({
         calExp: function (level) {
             return level*3-1;
@@ -366,6 +376,7 @@ define(function (require, exports, module) {
         archer: exports.Archer,
         ghost: exports.Ghost,
         goblin: exports.Goblin,
+        golem: exports.Golem,
         medusa: exports.Medusa,
         mimic: exports.Mimic,
         ogre: exports.Ogre,

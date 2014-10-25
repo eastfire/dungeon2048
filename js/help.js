@@ -43,6 +43,7 @@ define(function(require,exports,module) {
         "archer":"骷髅弓箭手",
         "ghost":"幽灵",
         "goblin":"哥布林",
+        "golem":"魔像",
         "medusa":"美杜莎",
         "mimic":"宝箱怪",
         "minotaur":"牛头怪",
@@ -71,6 +72,10 @@ define(function(require,exports,module) {
         "goblin":{
             text:"每次合并后升级<br/>攻击力：低（为等级的1/2）<br/>经验值：低",
             imageClass:"goblin-help"
+        },
+        "golem":{
+            text:"对英雄的技能攻击免疫<br/>攻击力：非常强（为等级的平方）<br/>经验值：非常高",
+            imageClass:"golem-help"
         },
         "medusa":{
             text:"击中英雄后一定概率使英雄<u><i>麻痹</i></u>（无法移动）直到下回合。<br/>等级越高概率越高<br/>攻击力：中（与等级相同）<br/>经验值：高",
