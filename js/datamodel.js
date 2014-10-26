@@ -379,7 +379,7 @@ define(function (require, exports, module) {
             return Math.floor(window.hero.get("maxHp")/3);
         },
         calExp: function (level) {
-            return Math.floor(window.hero.get("maxExp") * 2 / 3);
+            return Math.floor(window.hero.get("maxHp") / 3);
         },
         getFreezePower:function(){
             return 100;
@@ -394,7 +394,7 @@ define(function (require, exports, module) {
             return Math.floor(window.hero.get("maxHp")/2);
         },
         calExp: function (level) {
-            return Math.floor(window.hero.get("maxExp") / 2);
+            return Math.floor(window.hero.get("maxHp") / 2);
         }
     })
 
@@ -403,7 +403,7 @@ define(function (require, exports, module) {
             return Math.floor(window.hero.get("maxHp")/4);//it will be double
         },
         calExp: function (level) {
-            return window.hero.get("maxExp");
+            return Math.floor(window.hero.get("maxHp")/2);
         }
     })
 
