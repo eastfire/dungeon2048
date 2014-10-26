@@ -93,7 +93,7 @@ define(function(require,exports,module) {
             imageClass:"medusa-help"
         },
         "mimic":{
-            text:"必然掉落宝物，且其等级与怪物等级相同<br/>攻击力：中（与等级相同）<br/>经验值：始终为1",
+            text:"必然掉落宝物，宝物等级为怪物等级1/5<br/>攻击力：中（与等级相同）<br/>经验值：始终为1",
             imageClass:"mimic-help"
         },
         "minotaur":{

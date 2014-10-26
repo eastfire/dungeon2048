@@ -46,6 +46,7 @@ define(function(require,exports,module){
         window.gameStatus = {
             phase: PHASE_GENERATE,
             turn: 0,
+            heroSkipAttackCount:0,
             globalEffect:{},
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
@@ -310,12 +311,8 @@ define(function(require,exports,module){
                 generateOneMonster();
             }
         } else {
-            var spaceCount = getFreeSpaceCount();
-            if ( spaceCount >= 5)
-                generateNumber = 2;
-            else
-                generateNumber = 1;
-            for (var i = 0; i < generateNumber; i++) {
+            var generateNumber = 2;
+            for (var i = 0; i < generateNumber + gameStatus.heroSkipAttackCount; i++) {
                 generateOneMonster();
             }
         }
@@ -776,6 +773,11 @@ define(function(require,exports,module){
         var direction = window.moveDirection;
         window.prevLevel = hero.get("level");
         var willAttack = heroView.attack(direction);
+        if ( willAttack ) {
+            gameStatus.heroSkipAttackCount = 0;
+        } else {
+            gameStatus.heroSkipAttackCount++;
+        }
         setTimeout(function(){
             gameStatus.phase = PHASE_MONSTER_ATTACK;
             waitForMonsterAttack();

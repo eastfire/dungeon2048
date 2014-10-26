@@ -733,7 +733,7 @@ define(function(require,exports,module){
 
     exports.MimicView = exports.MonsterView.extend({
         onDropItem:function(x,y){
-            generateItemForSure(x,y, this.model.get("level"));
+            generateItemForSure(x,y, Math.ceil(this.model.get("level")/5));
         }
     })
 
