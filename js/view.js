@@ -209,10 +209,10 @@ define(function(require,exports,module){
                     }
                 },TIME_SLICE)
                 setTimeout(function(){
-                    self.$el.removeClass("attacking1").addClass("attacking0");
+                    self.$el.removeClass("attacking1").addClass("attacking2");
                 },2*TIME_SLICE)
                 setTimeout(function(){
-                    self.$el.removeClass("attacking0");
+                    self.$el.removeClass("attacking2");
                 },3*TIME_SLICE)
 
                 _.each(this.skillList, function(skill){

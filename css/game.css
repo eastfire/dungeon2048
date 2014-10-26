@@ -63,13 +63,7 @@ body {
 .hero.warrior.d0 {
     background-image: url("../img/warrior0-0.png");
 }
-/*.hero.warrior.d0.moving0 {
-    background-image: url("../img/warrior0-1.png");
-}
-.hero.warrior.d0.moving1 {
-    background-image: url("../img/warrior0-2.png");
-}*/
-.hero.warrior.d0.attacking0 {
+.hero.warrior.d0.attacking0, .hero.warrior.d0.attacking2 {
     background-image: url("../img/warrior0-3.png");
 }
 .hero.warrior.d0.attacking1 {
@@ -79,13 +73,7 @@ body {
 .hero.warrior.d1 {
     background-image: url("../img/warrior1-0.png");
 }
-/*.hero.warrior.d1.moving0 {
-    background-image: url("../img/warrior1-1.png");
-}
-.hero.warrior.d1.moving1 {
-    background-image: url("../img/warrior1-2.png");
-}*/
-.hero.warrior.d1.attacking0 {
+.hero.warrior.d1.attacking0, .hero.warrior.d1.attacking2 {
     background-image: url("../img/warrior1-3.png");
 }
 .hero.warrior.d1.attacking1 {
@@ -95,13 +83,7 @@ body {
 .hero.warrior.d2 {
     background-image: url("../img/warrior2-0.png");
 }
-/*.hero.warrior.d2.moving0 {
-    background-image: url("../img/warrior2-1.png");
-}
-.hero.warrior.d2.moving1 {
-    background-image: url("../img/warrior2-2.png");
-}*/
-.hero.warrior.d2.attacking0 {
+.hero.warrior.d2.attacking0 , .hero.warrior.d2.attacking2{
     background-image: url("../img/warrior2-3.png");
 }
 .hero.warrior.d2.attacking1 {
@@ -111,13 +93,7 @@ body {
 .hero.warrior.d3 {
     background-image: url("../img/warrior3-0.png");
 }
-/*.hero.warrior.d3.moving0 {
-    background-image: url("../img/warrior3-1.png");
-}
-.hero.warrior.d3.moving1 {
-    background-image: url("../img/warrior3-2.png");
-}*/
-.hero.warrior.d3.attacking0 {
+.hero.warrior.d3.attacking0 , .hero.warrior.d3.attacking2{
     background-image: url("../img/warrior3-3.png");
 }
 .hero.warrior.d3.attacking1 {
@@ -128,7 +104,7 @@ body {
 .hero.priest.d0 {
     background-image: url("../img/priest0-0.png");
 }
-.hero.priest.d0.attacking0 {
+.hero.priest.d0.attacking0 , .hero.priest.d0.attacking2{
     background-image: url("../img/priest0-3.png");
 }
 .hero.priest.d0.attacking1 {
@@ -138,7 +114,7 @@ body {
 .hero.priest.d1 {
     background-image: url("../img/priest1-0.png");
 }
-.hero.priest.d1.attacking0 {
+.hero.priest.d1.attacking0 , .hero.priest.d1.attacking2{
     background-image: url("../img/priest1-3.png");
 }
 .hero.priest.d1.attacking1 {
@@ -148,7 +124,7 @@ body {
 .hero.priest.d2 {
     background-image: url("../img/priest2-0.png");
 }
-.hero.priest.d2.attacking0 {
+.hero.priest.d2.attacking0 , .hero.priest.d2.attacking2{
     background-image: url("../img/priest2-3.png");
 }
 .hero.priest.d2.attacking1 {
@@ -158,7 +134,7 @@ body {
 .hero.priest.d3 {
     background-image: url("../img/priest3-0.png");
 }
-.hero.priest.d3.attacking0 {
+.hero.priest.d3.attacking0, .hero.priest.d3.attacking2 {
     background-image: url("../img/priest3-3.png");
 }
 .hero.priest.d3.attacking1 {
@@ -179,7 +155,7 @@ body {
 .hero.wizard.d0 {
     background-image: url("../img/wizard0-0.png");
 }
-.hero.wizard.d0.attacking0 {
+.hero.wizard.d0.attacking0, .hero.wizard.d0.attacking2 {
     background-image: url("../img/wizard0-3.png");
 }
 .hero.wizard.d0.attacking1 {
@@ -189,7 +165,7 @@ body {
 .hero.wizard.d1 {
     background-image: url("../img/wizard1-0.png");
 }
-.hero.wizard.d1.attacking0 {
+.hero.wizard.d1.attacking0, .hero.wizard.d1.attacking2 {
     background-image: url("../img/wizard1-3.png");
 }
 .hero.wizard.d1.attacking1 {
@@ -199,7 +175,7 @@ body {
 .hero.wizard.d2 {
     background-image: url("../img/wizard2-0.png");
 }
-.hero.wizard.d2.attacking0 {
+.hero.wizard.d2.attacking0, .hero.wizard.d2.attacking2 {
     background-image: url("../img/wizard2-3.png");
 }
 .hero.wizard.d2.attacking1 {
@@ -209,11 +185,68 @@ body {
 .hero.wizard.d3 {
     background-image: url("../img/wizard3-0.png");
 }
-.hero.wizard.d3.attacking0 {
+.hero.wizard.d3.attacking0 , .hero.wizard.d3.attacking2{
     background-image: url("../img/wizard3-3.png");
 }
 .hero.wizard.d3.attacking1 {
     background-image: url("../img/wizard3-4.png");
+}
+
+/*thief*/
+.hero.thief.d0 {
+    background-image: url("../img/thief0-0.png");
+}
+.hero.thief.d0.attacking0 {
+    background-image: url("../img/thief0-3.png");
+}
+.hero.thief.d0.attacking1 {
+    background-image: url("../img/thief0-4.png");
+}
+.hero.thief.d0.attacking2 {
+    background-image: url("../img/thief0-5.png");
+}
+
+.hero.thief.d1{
+    background-image: url("../img/thief1-0.png");
+}
+.hero.thief.d1.attacking0{
+    background-image: url("../img/thief1-3.png");
+}
+.hero.thief.d1.attacking1{
+    background-image: url("../img/thief1-4.png");
+}
+.hero.thief.d1.attacking2{
+    background-image: url("../img/thief1-5.png");
+}
+
+.hero.thief.d3 {
+    background-image: url("../img/thief1-0.png");
+    transform: scaleX(-1);
+}
+.hero.thief.d3.attacking0 {
+    background-image: url("../img/thief1-3.png");
+    transform: scaleX(-1);
+}
+.hero.thief.d3.attacking1{
+    background-image: url("../img/thief1-4.png");
+    transform: scaleX(-1);
+}
+.hero.thief.d3.attacking2 {
+    background-image: url("../img/thief1-5.png");
+    transform: scaleX(-1);
+}
+
+.hero.thief.d2 {
+    background-image: url("../img/thief2-0.png");
+}
+.hero.thief.d2.attacking0{
+    background-image: url("../img/thief2-3.png");
+}
+.hero.thief.d2.attacking1 {
+    background-image: url("../img/thief2-4.png");
+}
+.hero.thief.d2.attacking3 {
+    background-image: url("../img/thief2-5.png");
 }
 
 /*monster image*/
