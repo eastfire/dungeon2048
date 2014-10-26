@@ -65,7 +65,7 @@ define(function(require,exports,module) {
     }
     exports.monsterDescription = {
         "archer":{
-            text:"远程攻击<br/>攻击力：始终为1<br/>经验值：中",
+            text:"远程攻击（射程3）<br/>攻击力：很低（等级的1/4）<br/>经验值：中",
             imageClass:"archer-help"
         },
         "gargoyle":{
@@ -85,7 +85,7 @@ define(function(require,exports,module) {
             imageClass:"golem-help"
         },
         "kobold":{
-            text:"击中英雄后一定概率使英雄技能冷却时间加1<br/>等级越高概率越高<br/>攻击力：低（为等级的1/2）<br/>经验值：中偏高",
+            text:"击中英雄后一定概率<u><i>干扰</i></u>英雄（技能冷却时间加1）<br/>等级越高概率越高<br/>攻击力：低（为等级的1/2）<br/>经验值：中",
             imageClass:"kobold-help"
         },
         "medusa":{
@@ -129,7 +129,7 @@ define(function(require,exports,module) {
             imageClass:"snake-help"
         },
         "troll":{
-            text:"击中英雄后一定概率使英雄<u><i>晕眩</i></u>(上下左右操作相反)1回合<br/>攻击力：强（为等级的2倍）<br/>经验值：高",
+            text:"远程攻击（射程3）<br/>击中英雄后一定概率使英雄<u><i>晕眩</i></u>(上下左右操作相反)1回合<br/>攻击力：中（与等级相同）<br/>经验值：高",
             imageClass:"troll-help"
         },
         "vampire":{
@@ -139,11 +139,11 @@ define(function(require,exports,module) {
 
         //boss help
         "boss-beholder":{
-            text:"所有怪物击中英雄后一定概率使英雄<u><i>麻痹</i></u>和<u><i>晕眩</i></u><br/>攻击力：英雄最大生命值的1/3<br/>经验值：超高",
+            text:"所有怪物击中英雄后一定概率使英雄<u><i>麻痹</i></u>、<u><i>晕眩</i></u><br/>、<u><i>封魔</i></u>、<u><i>干扰</i></u>攻击力：英雄最大生命值的1/3<br/>经验值：超高",
             imageClass:"boss-beholder-help"
         },
         "boss-death":{
-            text:"<br/>攻击力：英雄最大生命值的1/2<br/>经验值：超高",
+            text:"<br/>攻击力：英雄最大生命值的2/3<br/>经验值：超高",
             imageClass:"boss-death-help"
         },
         "boss-hydra":{

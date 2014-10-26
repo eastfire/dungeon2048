@@ -167,9 +167,13 @@ define(function (require, exports, module) {
             return 0;
         },
         getLockPower:function(){
+            if ( gameStatus.globalEffect.madness )
+                return Math.min( this.get("level") * gameStatus.monsterPower.lock, 100 ) / 100;
             return 0;
         },
         getDisturbPower:function(){
+            if ( gameStatus.globalEffect.madness )
+                return Math.min( this.get("level") * gameStatus.monsterPower.disturb, 80 ) / 100;
             return 0;
         },
         mergeStatus: function (mergeToModel) {
@@ -192,10 +196,11 @@ define(function (require, exports, module) {
             var data = exports.Monster.prototype.defaults.call(this);
             data.attackType = "range normal undead";
             data.isUndead = true;
+            data.range = 3;
             return data;
         },
         calAttack: function (level) {
-            return 1;
+            return Math.ceil(level/4);
         },
         calExp: function (level) {
             return Math.floor(level * 3 / 2);
@@ -249,7 +254,7 @@ define(function (require, exports, module) {
             return Math.round(level / 2);
         },
         calExp: function (level) {
-            return Math.floor(level * 5 / 2);
+            return level * 2;
         },
         getDisturbPower:function(){
             return Math.min( this.get("level")*gameStatus.monsterPower.disturb , 80)/100;
@@ -345,8 +350,14 @@ define(function (require, exports, module) {
     })
 
     exports.Troll = exports.Monster.extend({
+        defaults:function(){
+            var data = exports.Monster.prototype.defaults.call(this);
+            data.attackType = "range normal";
+            data.range = 3;
+            return data;
+        },
         calAttack: function (level) {
-            return level * 2;
+            return level;
         },
         calExp: function (level) {
             return level * 4;
@@ -379,22 +390,28 @@ define(function (require, exports, module) {
             return Math.floor(window.hero.get("maxHp")/3);
         },
         calExp: function (level) {
-            return Math.floor(window.hero.get("maxHp") / 3);
+            return Math.floor(window.hero.get("maxHp")*2/ 3);
         },
         getFreezePower:function(){
             return 100;
         },
         getDizzyPower:function(){
             return 100;
+        },
+        getDisturbPower:function(){
+            return 100;
+        },
+        getLockPower:function(){
+            return 100;
         }
     })
 
     exports.BossDeath = exports.Boss.extend({
         calAttack: function (level) {
-            return Math.floor(window.hero.get("maxHp")/2);
+            return Math.floor(window.hero.get("maxHp")*2/3);
         },
         calExp: function (level) {
-            return Math.floor(window.hero.get("maxHp") / 2);
+            return Math.floor(window.hero.get("maxHp")*2/3);
         }
     })
 

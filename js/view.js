@@ -617,6 +617,9 @@ define(function(require,exports,module){
             },this);
             return range;
         },
+        getAttackRange:function(){
+            return this.model.get("range")
+        },
         calRange:function(){
             var x = this.model.get("position").x;
             var y = this.model.get("position").y;
@@ -681,15 +684,14 @@ define(function(require,exports,module){
             }
         },
         calRange:function(){
-//            var x = this.model.get("position").x;
-//            var y = this.model.get("position").y;
-//            var heroX = window.hero.get("position").x;
-//            var heroY = window.hero.get("position").y;
-//            if (( x == heroX && y == heroY-1 ) || ( x == heroX && y == heroY+1 ) ||
-//                ( y == heroY && x == heroX+1 ) || ( y == heroY && x == heroX-1 ) ){
-//                return null;
-//            }
-            return 3;
+            var x = this.model.get("position").x;
+            var y = this.model.get("position").y;
+            var heroX = window.hero.get("position").x;
+            var heroY = window.hero.get("position").y;
+            if ( Math.abs(x-heroX) + Math.abs(y-heroY) <= this.getAttackRange() ) {
+                return 3;
+            }
+            return null;
         }
     })
 
@@ -855,6 +857,16 @@ define(function(require,exports,module){
     })
 
     exports.TrollView = exports.MonsterView.extend({
+        calRange:function(){
+            var x = this.model.get("position").x;
+            var y = this.model.get("position").y;
+            var heroX = window.hero.get("position").x;
+            var heroY = window.hero.get("position").y;
+            if ( Math.abs(x-heroX) + Math.abs(y-heroY) <= this.getAttackRange() ) {
+                return 1;
+            }
+            return null;
+        }
     })
 
     exports.VampireView = exports.MonsterView.extend({
