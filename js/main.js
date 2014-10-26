@@ -813,10 +813,10 @@ define(function(require,exports,module){
             gameStatus.generateItemRate = TREASURE_HUNTING_EFFECT/100;
             gameStatus.currentMonsterTypeNumber = 2;
             calMonsterWave();
-        } else if ( gameStatus.turn == 30 ) {
+        } else if ( gameStatus.turn == 16 ) {
             gameStatus.currentMonsterTypeNumber = 3;
             calMonsterWave();
-        } else if ( gameStatus.turn == 60 ) {
+        } else if ( gameStatus.turn == 32 ) {
             gameStatus.currentMonsterTypeNumber = 4;
             calMonsterWave();
         } else {
