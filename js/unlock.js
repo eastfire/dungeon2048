@@ -358,189 +358,95 @@ define(function(require,exports,module){
         }
     })
 
-    exports.SlimeLevelAchievement = exports.Achievement.extend({
+
+//
+//    exports.SlimeCountAchievement = exports.Achievement.extend({
+//        defaults:function(){
+//            return {
+//                name:"slime-count",
+//                displayName:"史莱姆猎手",
+//                description:"杀死100个史莱姆",
+//                reward:10
+//            }
+//        },
+//        isPassed:function(){
+//            return statistic.kill.monsterCount["slime"] >= 100;
+//        }
+//    })
+//
+//    exports.SlimeCount2Achievement = exports.Achievement.extend({
+//        defaults:function(){
+//            return {
+//                name:"slime-count2",
+//                displayName:"史莱姆屠夫",
+//                description:"杀死1000个史莱姆",
+//                reward:50
+//            }
+//        },
+//        isValid:function(){
+//            return localStorage.getItem("get-reward-slime-count");
+//        },
+//        isPassed:function(){
+//            return statistic.kill.monsterCount["slime"] >= 1000;
+//        }
+//    })
+//
+//    exports.SlimeCount3Achievement = exports.Achievement.extend({
+//        defaults:function(){
+//            return {
+//                name:"slime-count3",
+//                displayName:"史莱姆灭绝者",
+//                description:"杀死10000个史莱姆",
+//                reward:200
+//            }
+//        },
+//        isValid:function(){
+//            return localStorage.getItem("get-reward-slime-count2");
+//        },
+//        isPassed:function(){
+//            return statistic.kill.monsterCount["slime"] >= 10000;
+//        }
+//    })
+
+    exports.ArcherLevelAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
-                name:"slime-level",
-                displayName:"史莱姆的华丽谢幕",
-                description:"杀死一个3<span class='star'></span>级史莱姆",
+                name:"archer-level",
+                displayName:"骷髅弓箭手的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级骷髅弓箭手",
                 reward:20
             }
         },
         isPassed:function(){
-            return statistic.kill.monsterLevel["slime"] >= 3*WISDOM_THRESHOLD;
+            return statistic.kill.monsterLevel["archer"] >= 3*WISDOM_THRESHOLD;
         }
     })
 
-    exports.SlimeCountAchievement = exports.Achievement.extend({
+    exports.GargoyleLevelAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
-                name:"slime-count",
-                displayName:"史莱姆猎手",
-                description:"杀死100个史莱姆",
-                reward:10
+                name:"gargoyle-level",
+                displayName:"石像鬼的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级石像鬼",
+                reward:30
             }
         },
         isPassed:function(){
-            return statistic.kill.monsterCount["slime"] >= 100;
+            return statistic.kill.monsterLevel["gargoyle"] >= 3*WISDOM_THRESHOLD;
         }
     })
 
-    exports.SlimeCount2Achievement = exports.Achievement.extend({
+    exports.GhostLevelAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
-                name:"slime-count2",
-                displayName:"史莱姆屠夫",
-                description:"杀死1000个史莱姆",
-                reward:50
-            }
-        },
-        isValid:function(){
-            return localStorage.getItem("get-reward-slime-count");
-        },
-        isPassed:function(){
-            return statistic.kill.monsterCount["slime"] >= 1000;
-        }
-    })
-
-    exports.SlimeCount3Achievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"slime-count3",
-                displayName:"史莱姆灭绝者",
-                description:"杀死10000个史莱姆",
-                reward:200
-            }
-        },
-        isValid:function(){
-            return localStorage.getItem("get-reward-slime-count2");
-        },
-        isPassed:function(){
-            return statistic.kill.monsterCount["slime"] >= 10000;
-        }
-    })
-
-    exports.SkeletonLevelAchievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"skeleton-level",
-                displayName:"骷髅的华丽谢幕",
-                description:"杀死一个3<span class='star'></span>级骷髅",
+                name:"ghost-level",
+                displayName:"幽灵的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级幽灵",
                 reward:20
             }
         },
         isPassed:function(){
-            return statistic.kill.monsterLevel["skeleton"] >= 3*WISDOM_THRESHOLD;
-        }
-    })
-
-    exports.SkeletonCountAchievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"skeleton-count",
-                displayName:"骷髅猎手",
-                description:"杀死100个骷髅",
-                reward:10
-            }
-        },
-        isPassed:function(){
-            return statistic.kill.monsterCount["skeleton"] >= 100;
-        }
-    })
-
-    exports.SkeletonCount2Achievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"skeleton-count2",
-                displayName:"骷髅屠夫",
-                description:"杀死1000个骷髅",
-                reward:50
-            }
-        },
-        isValid:function(){
-            return localStorage.getItem("get-reward-skeleton-count");
-        },
-        isPassed:function(){
-            return statistic.kill.monsterCount["skeleton"] >= 1000;
-        }
-    })
-
-    exports.SkeletonCount3Achievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"skeleton-count3",
-                displayName:"骷髅灭绝者",
-                description:"杀死10000个骷髅",
-                reward:200
-            }
-        },
-        isValid:function(){
-            return localStorage.getItem("get-reward-skeleton-count2");
-        },
-        isPassed:function(){
-            return statistic.kill.monsterCount["skeleton"] >= 10000;
-        }
-    })
-
-    exports.OrcLevelAchievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"orc-level",
-                displayName:"兽人的华丽谢幕",
-                description:"杀死一个3<span class='star'></span>级兽人",
-                reward:20
-            }
-        },
-        isPassed:function(){
-            return statistic.kill.monsterLevel["orc"] >= 3*WISDOM_THRESHOLD;
-        }
-    })
-
-    exports.OrcCountAchievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"orc-count",
-                displayName:"兽人猎手",
-                description:"杀死100个兽人",
-                reward:10
-            }
-        },
-        isPassed:function(){
-            return statistic.kill.monsterCount["orc"] >= 100;
-        }
-    })
-
-    exports.OrcCount2Achievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"orc-count2",
-                displayName:"兽人屠夫",
-                description:"杀死1000个兽人",
-                reward:50
-            }
-        },
-        isValid:function(){
-            return localStorage.getItem("get-reward-orc-count");
-        },
-        isPassed:function(){
-            return statistic.kill.monsterCount["orc"] >= 1000;
-        }
-    })
-
-    exports.OrcCount3Achievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"orc-count3",
-                displayName:"兽人灭绝者",
-                description:"杀死10000个兽人",
-                reward:200
-            }
-        },
-        isValid:function(){
-            return localStorage.getItem("get-reward-orc-count2");
-        },
-        isPassed:function(){
-            return statistic.kill.monsterCount["orc"] >= 10000;
+            return statistic.kill.monsterLevel["ghost"] >= 3*WISDOM_THRESHOLD;
         }
     })
 
@@ -558,51 +464,31 @@ define(function(require,exports,module){
         }
     })
 
-    exports.GoblinCountAchievement = exports.Achievement.extend({
+    exports.GolemLevelAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
-                name:"goblin-count",
-                displayName:"哥布林猎手",
-                description:"杀死100个哥布林",
-                reward:10
-            }
-        },
-        isPassed:function(){
-            return statistic.kill.monsterCount["goblin"] >= 100;
-        }
-    })
-
-    exports.GoblinCount2Achievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"goblin-count2",
-                displayName:"哥布林屠夫",
-                description:"杀死1000个哥布林",
+                name:"golem-level",
+                displayName:"魔像的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级魔像",
                 reward:50
             }
         },
-        isValid:function(){
-            return localStorage.getItem("get-reward-goblin-count");
-        },
         isPassed:function(){
-            return statistic.kill.monsterCount["goblin"] >= 1000;
+            return statistic.kill.monsterLevel["golem"] >= 3*WISDOM_THRESHOLD;
         }
     })
 
-    exports.GoblinCount3Achievement = exports.Achievement.extend({
+    exports.KoboldLevelAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
-                name:"goblin-count3",
-                displayName:"哥布林灭绝者",
-                description:"杀死10000个哥布林",
-                reward:200
+                name:"kobold-level",
+                displayName:"狗头人的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级狗头人",
+                reward:30
             }
         },
-        isValid:function(){
-            return localStorage.getItem("get-reward-goblin-count2");
-        },
         isPassed:function(){
-            return statistic.kill.monsterCount["goblin"] >= 10000;
+            return statistic.kill.monsterLevel["kobold"] >= 3*WISDOM_THRESHOLD;
         }
     })
 
@@ -634,34 +520,6 @@ define(function(require,exports,module){
         }
     })
 
-    exports.GhostLevelAchievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"ghost-level",
-                displayName:"幽灵的华丽谢幕",
-                description:"杀死一个3<span class='star'></span>级幽灵",
-                reward:20
-            }
-        },
-        isPassed:function(){
-            return statistic.kill.monsterLevel["ghost"] >= 3*WISDOM_THRESHOLD;
-        }
-    })
-
-    exports.ArcherLevelAchievement = exports.Achievement.extend({
-        defaults:function(){
-            return {
-                name:"archer-level",
-                displayName:"骷髅弓箭手的华丽谢幕",
-                description:"杀死一个3<span class='star'></span>级骷髅弓箭手",
-                reward:20
-            }
-        },
-        isPassed:function(){
-            return statistic.kill.monsterLevel["archer"] >= 3*WISDOM_THRESHOLD;
-        }
-    })
-
     exports.MinotaurLevelAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
@@ -690,6 +548,20 @@ define(function(require,exports,module){
         }
     })
 
+    exports.OrcLevelAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"orc-level",
+                displayName:"兽人的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级兽人",
+                reward:20
+            }
+        },
+        isPassed:function(){
+            return statistic.kill.monsterLevel["orc"] >= 3*WISDOM_THRESHOLD;
+        }
+    })
+
     exports.ShamanLevelAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
@@ -701,6 +573,34 @@ define(function(require,exports,module){
         },
         isPassed:function(){
             return statistic.kill.monsterLevel["shaman"] >= 3*WISDOM_THRESHOLD;
+        }
+    })
+
+    exports.SkeletonLevelAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"skeleton-level",
+                displayName:"骷髅的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级骷髅",
+                reward:20
+            }
+        },
+        isPassed:function(){
+            return statistic.kill.monsterLevel["skeleton"] >= 3*WISDOM_THRESHOLD;
+        }
+    })
+
+    exports.SlimeLevelAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"slime-level",
+                displayName:"史莱姆的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级史莱姆",
+                reward:20
+            }
+        },
+        isPassed:function(){
+            return statistic.kill.monsterLevel["slime"] >= 3*WISDOM_THRESHOLD;
         }
     })
 
@@ -903,25 +803,12 @@ define(function(require,exports,module){
     })
 
     exports.AllAchievements = [
-
-//        new exports.SlimeCountAchievement(),
-//        new exports.SlimeCount2Achievement(),
-//        new exports.SlimeCount3Achievement(),
-
-//        new exports.SkeletonCountAchievement(),
-//        new exports.SkeletonCount2Achievement(),
-//        new exports.SkeletonCount3Achievement(),
-
-//        new exports.OrcCountAchievement(),
-//        new exports.OrcCount2Achievement(),
-//        new exports.OrcCount3Achievement(),
-
-//        new exports.GoblinCountAchievement(),
-//        new exports.GoblinCount2Achievement(),
-//        new exports.GoblinCount3Achievement(),
         new exports.ArcherLevelAchievement(),
+        new exports.GargoyleLevelAchievement(),
         new exports.GhostLevelAchievement(),
         new exports.GoblinLevelAchievement(),
+        new exports.GolemLevelAchievement(),
+        new exports.KoboldLevelAchievement(),
         new exports.MedusaLevelAchievement(),
         new exports.MimicLevelAchievement(),
         new exports.MinotaurLevelAchievement(),
