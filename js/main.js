@@ -54,7 +54,7 @@ define(function(require,exports,module){
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             currentMonsterMaxLevel : 1,
-            currentBossTypes:["boss-beholder","boss-death","boss-hydra"],
+            currentBossTypes:["boss-beholder","boss-death","boss-hydra","boss-lich"],
             generateItemRate: 0,
             currentItemTypes:["potion"],
             tutorial:{

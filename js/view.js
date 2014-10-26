@@ -520,12 +520,13 @@ define(function(require,exports,module){
         attack:function(){
             var attackDirection = this.checkInRange();
             if ( attackDirection != null ) {
-
+                var isRange = this.model.get("range");
                 var x = this.model.get("position").x * blockSize.width;
                 var y = this.model.get("position").y * blockSize.height;
                 var moveX = x  + increment[attackDirection].x * blockSize.width*0.35;
                 var moveY = y  + increment[attackDirection].y * blockSize.height*0.35;
-                this.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:moveX, top:moveY});
+                if ( !isRange )
+                    this.$el.css({transition: "left "+TIME_SLICE/1000+"s ease-in-out 0s,top "+TIME_SLICE/1000+"s ease-in-out 0s", left:moveX, top:moveY});
                 this.$el.addClass("attacking0");
                 this.$el.removeClass("d0 d1 d2 d3").addClass("d"+attackDirection);
                 (function t(self) {
@@ -548,7 +549,8 @@ define(function(require,exports,module){
                         } else {
                             self.onHitHero();
                         }
-                        self.$el.css({transition: "left " + TIME_SLICE / 1000 + "s ease-in-out 0s,top " + TIME_SLICE / 1000 + "s ease-in-out 0s", left: x, top: y});
+                        if ( !isRange )
+                            self.$el.css({transition: "left " + TIME_SLICE / 1000 + "s ease-in-out 0s,top " + TIME_SLICE / 1000 + "s ease-in-out 0s", left: x, top: y});
                     }, TIME_SLICE);
                     setTimeout(function(){
                         self.$el.removeClass("attacking0").addClass("attacking1");
@@ -623,6 +625,11 @@ define(function(require,exports,module){
         calRange:function(){
             var x = this.model.get("position").x;
             var y = this.model.get("position").y;
+            if ( this.model.get("range") ) {
+                if ( window.hero.isInRange(x,y,this.model.get("range")) ){
+                    return 1;
+                } return null;
+            }
             var ret = window.hero.isPositionNear(x,y);
             if ( ret )
                 return ret.direction;
@@ -650,7 +657,7 @@ define(function(require,exports,module){
     })
 
     exports.ArcherView = exports.MonsterView.extend({
-        attack:function(){
+        /*attack:function(){
             var attackDirection = this.checkInRange();
             if ( attackDirection != null ) {
                 this.$el.addClass("attacking0");
@@ -692,7 +699,7 @@ define(function(require,exports,module){
                 return 3;
             }
             return null;
-        }
+        }*/
     })
 
     exports.GargoyleView = exports.MonsterView.extend({
@@ -857,16 +864,6 @@ define(function(require,exports,module){
     })
 
     exports.TrollView = exports.MonsterView.extend({
-        calRange:function(){
-            var x = this.model.get("position").x;
-            var y = this.model.get("position").y;
-            var heroX = window.hero.get("position").x;
-            var heroY = window.hero.get("position").y;
-            if ( Math.abs(x-heroX) + Math.abs(y-heroY) <= this.getAttackRange() ) {
-                return 1;
-            }
-            return null;
-        }
     })
 
     exports.VampireView = exports.MonsterView.extend({
@@ -904,6 +901,10 @@ define(function(require,exports,module){
         }
     })
 
+    exports.BossLichView = exports.BossView.extend({
+
+    })
+
     exports.ViewMap = {
         archer:exports.ArcherView,
         gargoyle:exports.GargoyleView,
@@ -926,7 +927,8 @@ define(function(require,exports,module){
 
         "boss-beholder":exports.BossBeholderView,
         "boss-death": exports.BossDeathView,
-        "boss-hydra": exports.BossHydraView
+        "boss-hydra": exports.BossHydraView,
+        "boss-lich": exports.BossLichView
     };
 
     exports.ItemView = MovableView.extend({

@@ -123,6 +123,9 @@ define(function(require,exports,module) {
         "boss-hydra1-0.png",
         "boss-hydra1-3.png",
         "boss-hydra1-4.png",
+        "boss-lich1-0.png",
+        "boss-lich1-3.png",
+        "boss-lich1-4.png",
 
         "potion.png",
 

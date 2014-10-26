@@ -61,7 +61,8 @@ define(function(require,exports,module) {
 
         "boss-beholder":"Boss眼魔",
         "boss-death":"Boss死神",
-        "boss-hydra":"Boss九头蛇"
+        "boss-hydra":"Boss九头蛇",
+        "boss-lich":"Boss巫妖"
     }
     exports.monsterDescription = {
         "archer":{
@@ -139,16 +140,20 @@ define(function(require,exports,module) {
 
         //boss help
         "boss-beholder":{
-            text:"所有怪物击中英雄后一定概率使英雄<u><i>麻痹</i></u>、<u><i>晕眩</i></u><br/>、<u><i>封魔</i></u>、<u><i>干扰</i></u>攻击力：英雄最大生命值的1/3<br/>经验值：超高",
+            text:"所有怪物击中英雄后一定概率使英雄<u><i>麻痹</i></u>、<u><i>晕眩</i></u><br/>、<u><i>封魔</i></u>、<u><i>干扰</i></u><br/>攻击力：英雄最大生命值的1/3<br/>经验值：超高",
             imageClass:"boss-beholder-help"
         },
         "boss-death":{
-            text:"<br/>攻击力：英雄最大生命值的2/3<br/>经验值：超高",
+            text:"攻击力：英雄最大生命值的2/3<br/>经验值：超高",
             imageClass:"boss-death-help"
         },
         "boss-hydra":{
             text:"所有其他怪物攻击力加倍<br/>攻击力：英雄最大生命值的1/2<br/>经验值：超高",
             imageClass:"boss-hydra-help"
+        },
+        "boss-lich":{
+            text:"远程攻击（射程无限）<br/>攻击力：英雄最大生命值的1/10<br/>经验值：超高",
+            imageClass:"boss-lich-help"
         }
     }
 });

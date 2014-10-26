@@ -641,11 +641,22 @@ body {
     background-image: url("../img/boss-hydra1-0.png");
 }
 .monster.boss-hydra.attacking1 {
-    background-image: url("../img/boss-hydra1-4.png");
+    background-image: url("../img/boss-hydra1-3.png");
 }
 .monster.boss-hydra.attacking2 {
     background-image: url("../img/boss-hydra1-4.png");
 }
+
+.monster.boss-lich {
+    background-image: url("../img/boss-lich1-0.png");
+}
+.monster.boss-lich.attacking1 {
+    background-image: url("../img/boss-lich1-3.png");
+}
+.monster.boss-lich.attacking2 {
+    background-image: url("../img/boss-lich1-4.png");
+}
+
 
 .item.potion {
     background-image: url("../img/potion.png");
@@ -1057,6 +1068,9 @@ body {
 }
 .boss-hydra-help {
     background-image: url("../img/boss-hydra1-0.png");
+}
+.boss-lich-help {
+    background-image: url("../img/boss-lich1-0.png");
 }
 
 .select-hero-type-item {

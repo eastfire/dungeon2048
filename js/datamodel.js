@@ -116,6 +116,14 @@ define(function (require, exports, module) {
             if ( attackDirection == null )
                 return null;
             return {direction:attackDirection};
+        },
+        isInRange:function(x,y,range){
+            var heroX = window.hero.get("position").x;
+            var heroY = window.hero.get("position").y;
+            if ( Math.abs(x-heroX) + Math.abs(y-heroY) <= range ) {
+                return true;
+            }
+            return false
         }
     })
 
@@ -424,6 +432,21 @@ define(function (require, exports, module) {
         }
     })
 
+    exports.BossLich = exports.Boss.extend({
+        defaults:function(){
+            var data = exports.Monster.prototype.defaults.call(this);
+            data.attackType = "range normal";
+            data.range = 1000;
+            return data;
+        },
+        calAttack: function (level) {
+            return Math.floor(window.hero.get("maxHp")/10);
+        },
+        calExp: function (level) {
+            return Math.floor(window.hero.get("maxHp")/2);
+        }
+    })
+
     exports.ModelMap = {
         archer: exports.Archer,
         gargoyle: exports.Gargoyle,
@@ -446,7 +469,8 @@ define(function (require, exports, module) {
 
         "boss-beholder":exports.BossBeholder,
         "boss-death":exports.BossDeath,
-        "boss-hydra":exports.BossHydra
+        "boss-hydra":exports.BossHydra,
+        "boss-lich":exports.BossLich
     }
 
     exports.Item = Backbone.Model.extend({
