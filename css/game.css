@@ -475,6 +475,19 @@ body {
     transform:scaleX(-1);
 }
 
+.monster.rat-man.d0,.monster.rat-man.d1,.monster.rat-man.d2,.monster.rat-man.d3 {
+    background-image: url("../img/rat-man2-0.png");
+}
+.monster.rat-man.d0.attacking0, .monster.rat-man.d1.attacking0, .monster.rat-man.d2.attacking0, .monster.rat-man.d3.attacking0 {
+    background-image: url("../img/rat-man2-3.png");
+}
+.monster.rat-man.d0.attacking1, .monster.rat-man.d1.attacking1, .monster.rat-man.d2.attacking1, .monster.rat-man.d3.attacking1 {
+    background-image: url("../img/rat-man2-4.png");
+}
+.monster.rat-man.d0.attacking2, .monster.rat-man.d1.attacking2, .monster.rat-man.d2.attacking2, .monster.rat-man.d3.attacking2 {
+    background-image: url("../img/rat-man2-3.png");
+}
+
 .monster.slime.d0, .monster.slime.d1, .monster.slime.d2, .monster.slime.d3 {
     background-image: url("../img/slime2-0.png");
 }
@@ -833,7 +846,7 @@ body {
     font-size: 0.95em;
 }
 .score-board td {
-    padding: 0 10px;
+    padding: 0 5px;
 }
 .score-row.current {
     background: none repeat scroll 0 0 lightblue;
@@ -1013,6 +1026,9 @@ body {
 }
 .orc-help {
     background-image: url("../img/orc1-0.png");
+}
+.rat-man-help {
+    background-image: url("../img/rat-man2-0.png");
 }
 .shaman-help {
     background-image: url("../img/shaman2-0.png");

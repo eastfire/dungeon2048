@@ -562,6 +562,20 @@ define(function(require,exports,module){
         }
     })
 
+    exports.RatManLevelAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"rat-man-level",
+                displayName:"鼠人的华丽谢幕",
+                description:"杀死一个3<span class='star'></span>级鼠人",
+                reward:20
+            }
+        },
+        isPassed:function(){
+            return statistic.kill.monsterLevel["rat-man"] >= 3*WISDOM_THRESHOLD;
+        }
+    })
+
     exports.ShamanLevelAchievement = exports.Achievement.extend({
         defaults:function(){
             return {
@@ -814,6 +828,7 @@ define(function(require,exports,module){
         new exports.MinotaurLevelAchievement(),
         new exports.OgreLevelAchievement(),
         new exports.OrcLevelAchievement(),
+        new exports.RatManLevelAchievement(),
         new exports.ShamanLevelAchievement(),
         new exports.SkeletonLevelAchievement(),
         new exports.SlimeLevelAchievement(),

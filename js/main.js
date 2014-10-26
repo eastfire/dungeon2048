@@ -23,6 +23,7 @@ define(function(require,exports,module){
     window.PHASE_GENERATE = 0;
     window.PHASE_USER = 1;
     window.PHASE_MOVE = 2;
+    window.PHASE_BEFORE_HERO_TAKE_ITEM = 2.3;
     window.PHASE_HERO_TAKE_ITEM = 2.5;
     window.PHASE_HERO_ATTACK = 3;
     window.PHASE_MONSTER_ATTACK = 4;
@@ -48,7 +49,7 @@ define(function(require,exports,module){
             globalEffect:{},
             currentMonsterWave: ["slime"],
             currentMonsterTypeNumber:1,
-            monsterPool:["archer","gargoyle","ghost","goblin","golem","kobold","medusa","mimic","minotaur","ogre","orc","shaman","skeleton","slime","snake","troll","vampire"],
+            monsterPool:["archer","gargoyle","ghost","goblin","golem","kobold","medusa","mimic","minotaur","ogre","orc","rat-man","shaman","skeleton","slime","snake","troll","vampire"],
             currentMonsterTypes: ["slime"],
             currentMonsterLevels:[1],
             currentMonsterMaxLevel : 1,
@@ -731,9 +732,27 @@ define(function(require,exports,module){
         }
 
         setTimeout(function(){
+            gameStatus.phase = PHASE_BEFORE_HERO_TAKE_ITEM;
+            beforeHeroTakeItem();
+        },maxMovement*TIME_SLICE+1);
+    }
+
+    var beforeHeroTakeItem = function(){
+        var pass = true;
+        for ( var i = 0 ; i < mapWidth; i++){
+            for ( var j = 0 ; j < mapHeight; j++){
+                var block = map[i][j];
+                if ( block.type == "monster" && block.view.onBeforeHeroTakeItem ){
+                    var ret = block.view.onBeforeHeroTakeItem.call(block.view);
+                    if ( pass )
+                        pass = ret;
+                }
+            }
+        }
+        setTimeout(function(){
             gameStatus.phase = PHASE_HERO_TAKE_ITEM;
             heroTakeItem();
-        },maxMovement*TIME_SLICE+1);
+        },pass ? 1 : TIME_SLICE);
     }
 
     var heroTakeItem = function(){
@@ -802,14 +821,14 @@ define(function(require,exports,module){
             if ( gameStatus.turn % 31 == 0 ) {
                 calMonsterWave();
             }
-            if ( gameStatus.turn % 97 == 0 ) {
+            if ( gameStatus.turn % 101 == 0 ) {
                 calMonsterLevel();
             }
         }
 
         generateMonster();
 
-        if ( gameStatus.turn % 167 == 0 || gameStatus.tryingToGenerateBoss ) {
+        if ( (gameStatus.turn + 50) % 167 == 0 || gameStatus.tryingToGenerateBoss ) {
             gameStatus.tryingToGenerateBoss = true;
             var success = generateBoss();
             if ( success ) {

@@ -758,6 +758,62 @@ define(function(require,exports,module){
         }
     })
 
+    exports.RatManView = exports.MonsterView.extend({
+        onBeforeHeroTakeItem:function(){
+            if ( !this.model.get("willSteal") )
+                return true;
+            var x = this.model.get("position").x;
+            var y = this.model.get("position").y;
+
+            var candidate = [];
+            var block = getMapBlock(x-1,y);
+            if ( block && block.type === "item" ) {
+                candidate.push(block)
+            }
+            block = getMapBlock(x+1,y);
+            if ( block && block.type === "item" ) {
+                candidate.push(block)
+            }
+            block = getMapBlock(x,y-1);
+            if ( block && block.type === "item" ) {
+                candidate.push(block)
+            }
+            block = getMapBlock(x,y+1);
+            if ( block && block.type === "item" ) {
+                candidate.push(block)
+            }
+
+            if ( candidate.length > 0 ) {
+                var block = getRandomItem(candidate);
+                var itemView = block.view;
+                itemView.$el.css({transition: "all "+(TIME_SLICE*4/5000)+"s ease-in-out 0s", left:x*blockSize.width,
+                    top:y*blockSize.width,
+                    transform:"scale(0.5)",
+                    opcacity:0.5});
+                var self = this;
+                setTimeout(function(){
+                    var l = itemView.model.get("level");
+                    itemView.model.destroy();
+                    self.effecQueue.add.call(self.effecQueue,"Level Up");
+                    self.model.setToLevel(self.model.get("level")+l);
+                },1+TIME_SLICE*4/5)
+
+                block.view = null;
+                block.model = null;
+                block.type = "blank";
+                return false;
+            }
+            return true;
+        },
+        onNewRound:function(){
+            exports.MonsterView.prototype.onNewRound.call(this);
+            this.model.set("willSteal",false);
+        },
+        onMerged:function(){
+            this.model.set("willSteal",true);
+        }
+    })
+
     exports.ShamanView = exports.MonsterView.extend({
         checkMonster:function(x,y){
             if ( !map[x] )
@@ -848,6 +904,7 @@ define(function(require,exports,module){
         minotaur:exports.MinotaurView,
         ogre:exports.OgreView,
         orc:exports.OrcView,
+        "rat-man":exports.RatManView,
         shaman:exports.ShamanView,
         slime:exports.SlimeView,
         skeleton:exports.SkeletonView,

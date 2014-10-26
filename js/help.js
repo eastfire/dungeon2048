@@ -51,6 +51,7 @@ define(function(require,exports,module) {
         "minotaur":"牛头怪",
         "ogre":"食人魔",
         "orc":"兽人",
+        "rat-man":"鼠人",
         "shaman":"萨满",
         "skeleton":"骷髅",
         "slime":"史莱姆",
@@ -106,6 +107,10 @@ define(function(require,exports,module) {
         "orc":{
             text:"出现或合并后<i><u>愤怒</u></i>(攻击力3倍)直到下回合<br/>攻击力：中（与等级相同）<br/>经验值：中",
             imageClass:"orc-help"
+        },
+        "rat-man":{
+            text:"合并后随机偷走其上下左右的1个宝物并升级<br/>攻击力：弱（为等级的1/2）<br/>经验值：中偏高",
+            imageClass:"rat-man-help"
         },
         "shaman":{
             text:"出现或合并后使周围怪物<i><u>愤怒</u></i>(攻击力3倍)直到下回合<br/>攻击力：弱（为等级的1/2）<br/>经验值：中",

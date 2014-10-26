@@ -295,6 +295,15 @@ define(function (require, exports, module) {
         }
     })
 
+    exports.RatMan = exports.Monster.extend({
+        calAttack: function (level) {
+            return Math.round(level / 2);
+        },
+        calExp: function (level) {
+            return Math.floor(level * 5 / 2);
+        }
+    })
+
     exports.Shaman = exports.Monster.extend({
         calAttack: function (level) {
             return Math.round(level / 2);
@@ -409,6 +418,7 @@ define(function (require, exports, module) {
         mimic: exports.Mimic,
         ogre: exports.Ogre,
         orc: exports.Orc,
+        "rat-man":exports.RatMan,
         shaman: exports.Shaman,
         skeleton: exports.Skeleton,
         slime: exports.Slime,
