@@ -691,16 +691,16 @@ define(function(require,exports,module) {
                 type: "active",
                 displayName: "操控亡灵",
                 level: 1,
-                maxLevel: 1,
+                maxLevel: 5,
                 currentCount: 1000,
                 coolDown: 18
             }
         },
         generateDescription: function () {
-            return "不死生物不会攻击英雄（boss除外）。持续3回合"
+            return "不死生物不会攻击英雄（boss除外）。持续"+this.getEffect()+"回合"
         },
         onActive:function(){
-            this.set("duration",3);
+            this.set("duration",this.getEffect());
             this.used();
         },
         adjustRange:function( type,range){
@@ -713,6 +713,10 @@ define(function(require,exports,module) {
                 return range;
             } else
                 return range;
+        },
+        getEffect:function(level){
+            var l = level || this.get("level");
+            return 2+l;
         }
     })
 
@@ -756,13 +760,18 @@ define(function(require,exports,module) {
                 type:"active",
                 displayName:"超度亡灵",
                 level:1,
-                maxLevel:1,
+                maxLevel:3,
                 currentCount:1000,
                 coolDown:50
             }
         },
         generateDescription:function(){
-            return "消灭所有不死生物（不包括boss）"
+            var str = "消灭所有不死生物（不包括boss）"
+            str += this.get("level") > 1 ? "，冷却时间减少-5" : "";
+            return str;
+        },
+        getBasicCoolDown:function(){
+            return this.get("coolDown") - ( this.get("level") - 1 )* 5;
         },
         onActive:function(){
             var totalHit = 0;

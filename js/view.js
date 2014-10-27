@@ -41,7 +41,7 @@ define(function(require,exports,module){
             var newblock = map[x1][y1];
             setTimeout(function(){
                 self.onMoveComplete.call(self, oldblock, newblock);
-            },1+TIME_SLICE*movement)
+            },10+TIME_SLICE*movement)
         },
         setToPosition:function(x,y){
             var oldx = this.model.get("position").x;
@@ -963,16 +963,23 @@ define(function(require,exports,module){
         onMoveComplete:function(oldblock, newblock){
             var merge = oldblock.merge;
             if ( merge ) {
+                console.log("merge")
                 var mergeToModel = oldblock.mergeTo;
                 if ( mergeToModel ) {
                     mergeToModel.setToLevel(this.model.get("level")+mergeToModel.get("level"));
                 }
                 this.model.destroy();
             } else {
-                newblock.view = this;
-                newblock.type = "item";
-                newblock.model = this.model;
-                this.model.set("position",{x:newblock.x,y:newblock.y});
+                if ( oldblock.beTaken ) {
+                    console.log("be taken")
+                    this.beTaken();
+                } else {
+                    console.log("new position")
+                    newblock.view = this;
+                    newblock.type = "item";
+                    newblock.model = this.model;
+                    this.model.set("position",{x:newblock.x,y:newblock.y});
+                }
             }
         },
         moveStar:function(el){
@@ -1066,7 +1073,7 @@ define(function(require,exports,module){
             this.score.html(this.model.get("score")+"分")
             if ( window.windowOriention == "landscape") {
                 this.$el.css({
-                    width:blockSize.width*1.5
+                    width:blockSize.width
                 })
             }
             return this;

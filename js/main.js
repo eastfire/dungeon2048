@@ -24,6 +24,7 @@ define(function(require,exports,module){
     window.PHASE_USER = 1;
     window.PHASE_MOVE = 2;
     window.PHASE_BEFORE_HERO_TAKE_ITEM = 2.3;
+    window.PHASE_ITEM_FLY_TO_HERO = 2.4;
     window.PHASE_HERO_TAKE_ITEM = 2.5;
     window.PHASE_HERO_ATTACK = 3;
     window.PHASE_MONSTER_ATTACK = 4;
@@ -41,6 +42,7 @@ define(function(require,exports,module){
 
     window.mapWidth = 5;
     window.mapHeight = 5;
+    window.extraBlock = 3;
 
     var initGameStatus = function() {
         window.gameStatus = {
@@ -104,10 +106,16 @@ define(function(require,exports,module){
         var blockW,blockH;
         if ( winW > winH ) {
             window.windowOriention = "landscape";
-            blockW = blockH = (winH)/mapWidth-0.1;
+            if ( winW*mapWidth >= winH*(mapWidth+extraBlock) )
+                blockW = blockH = (winH)/mapWidth-0.1;
+            else
+                blockW = blockH = (winW)/(mapWidth + extraBlock)-0.1;
         } else {
             window.windowOriention = "portrait";
-            blockW = blockH = (winW)/mapWidth-0.1;
+            if ( winH*mapWidth >= winW*(mapWidth+extraBlock) )
+                blockW = blockH = (winW)/mapWidth-0.1;
+            else
+                blockW = blockH = (winH)/(mapWidth + extraBlock)-0.1;
         }
         return {width:blockW, height:blockH}
     }
@@ -470,11 +478,13 @@ define(function(require,exports,module){
         })
         if ( windowOriention == "portrait") {
             $(".main-window").css({
-                width:mapWidth*blockSize.width
+                width:mapWidth*blockSize.width,
+                "margin-left":(winW-mapWidth*blockSize.width)/2
             })
         } else {
             $(".main-window").css({
-                height:mapHeight*blockSize.height
+                height:mapHeight*blockSize.height,
+                "margin-top":(winH-mapHeight*blockSize.height)/2
             })
         }
         $(".main-window").addClass(window.windowOriention);
@@ -640,6 +650,10 @@ define(function(require,exports,module){
                 if ( mymodel.get("type") == curblock.model.get("type") ) {
                     //can merge
                     movement += (curblock.movement + 1);
+                    if ( curblock.beTaken ) {
+                        mapblock.beTaken = true;
+                        break;
+                    }
                     mapblock.merge = true;
                     if ( curblock.mergeTo == null ) {
                         mapblock.mergeTo = curblock.model;
@@ -653,7 +667,15 @@ define(function(require,exports,module){
                     movement += curblock.movement;
                     break;
                 }
-            } else if ( mytype != curblock.type ) {
+            } else if ( (mytype == "item" && curblock.type == "hero") ||
+                ( mytype == "hero" && curblock.type == "item")) {
+                //can take
+                movement += (curblock.movement + 1);
+                if ( curblock.type == "hero" ) {
+                    mapblock.beTaken = true;
+                }
+                break;
+            }else if ( mytype != curblock.type ) {
                 movement += curblock.movement;
                 break;
             }
@@ -674,6 +696,7 @@ define(function(require,exports,module){
                 m.merge = false;
                 m.mergeTo = null;
                 m.mergeToView = null;
+                m.beTaken = false;
             }
         }
         //console.log("--MAP END--")
@@ -747,9 +770,27 @@ define(function(require,exports,module){
             }
         }
         setTimeout(function(){
+            gameStatus.phase = PHASE_ITEM_FLY_TO_HERO;
+            itemFlyToHero();
+        },pass ? 1 : 2*TIME_SLICE+10);
+    }
+
+    var itemFlyToHero = function(){
+        var opDirection = ( 2 + window.moveDirection ) % 4;
+        var x = hero.get("position").x;
+        var y = hero.get("position").y;
+        x += increment[opDirection].x;
+        y += increment[opDirection].y;
+        var block = getMapBlock(x,y);
+        var pass = true;
+        if ( block && block.type == "item" ){
+            block.view.move(1, window.moveDirection);
+            pass = false
+        }
+        setTimeout(function(){
             gameStatus.phase = PHASE_HERO_TAKE_ITEM;
             heroTakeItem();
-        },pass ? 1 : TIME_SLICE);
+        },pass ? 1 : 2*TIME_SLICE+10);
     }
 
     var heroTakeItem = function(){
@@ -758,14 +799,14 @@ define(function(require,exports,module){
         setTimeout(function(){
             gameStatus.phase = PHASE_HERO_ATTACK;
             heroAttack();
-        },pass ? 1 : 2*TIME_SLICE+1);
+        },pass ? 1 : 2*TIME_SLICE+10);
     }
 
     var waitForMonsterAttack = function(){
         if ( gameStatus.phase == PHASE_MONSTER_ATTACK && !gameStatus.showingDialog ){
             monsterAttack();
         } else {
-            setTimeout(waitForMonsterAttack, TIME_SLICE)
+            setTimeout(waitForMonsterAttack, TIME_SLICE+10)
         }
     }
 
