@@ -754,7 +754,7 @@ define(function(require,exports,module){
         setTimeout(function(){
             gameStatus.phase = PHASE_BEFORE_HERO_TAKE_ITEM;
             beforeHeroTakeItem();
-        },maxMovement*TIME_SLICE+1);
+        },maxMovement*TIME_SLICE+10);
     }
 
     var beforeHeroTakeItem = function(){
@@ -770,8 +770,10 @@ define(function(require,exports,module){
             }
         }
         setTimeout(function(){
-            gameStatus.phase = PHASE_ITEM_FLY_TO_HERO;
-            itemFlyToHero();
+            //gameStatus.phase = PHASE_ITEM_FLY_TO_HERO;
+            //itemFlyToHero();
+            gameStatus.phase = PHASE_HERO_ATTACK;
+            heroAttack();
         },pass ? 1 : 2*TIME_SLICE+10);
     }
 
@@ -790,7 +792,7 @@ define(function(require,exports,module){
         setTimeout(function(){
             gameStatus.phase = PHASE_HERO_TAKE_ITEM;
             heroTakeItem();
-        },pass ? 1 : 2*TIME_SLICE+10);
+        },pass ? 10 : 2*TIME_SLICE+10);
     }
 
     var heroTakeItem = function(){
@@ -799,7 +801,7 @@ define(function(require,exports,module){
         setTimeout(function(){
             gameStatus.phase = PHASE_HERO_ATTACK;
             heroAttack();
-        },pass ? 1 : 2*TIME_SLICE+10);
+        },pass ? 10 : 2*TIME_SLICE+10);
     }
 
     var waitForMonsterAttack = function(){
@@ -822,7 +824,7 @@ define(function(require,exports,module){
         setTimeout(function(){
             gameStatus.phase = PHASE_MONSTER_ATTACK;
             waitForMonsterAttack();
-        },willAttack ? 4*TIME_SLICE+1 : 1);
+        },willAttack ? 4*TIME_SLICE+10 : 10);
     }
 
     var monsterAttack = function(){

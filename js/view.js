@@ -963,7 +963,7 @@ define(function(require,exports,module){
         onMoveComplete:function(oldblock, newblock){
             var merge = oldblock.merge;
             if ( merge ) {
-                console.log("merge")
+                //console.log("merge")
                 var mergeToModel = oldblock.mergeTo;
                 if ( mergeToModel ) {
                     mergeToModel.setToLevel(this.model.get("level")+mergeToModel.get("level"));
@@ -971,10 +971,10 @@ define(function(require,exports,module){
                 this.model.destroy();
             } else {
                 if ( oldblock.beTaken ) {
-                    console.log("be taken")
+                    //console.log("be taken")
                     this.beTaken();
                 } else {
-                    console.log("new position")
+                    //console.log("new position")
                     newblock.view = this;
                     newblock.type = "item";
                     newblock.model = this.model;
