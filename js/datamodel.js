@@ -24,6 +24,7 @@ define(function (require, exports, module) {
                     x: 2,
                     y: 2
                 },
+                baseHp: 10,
                 constitution: 0,
                 cunning: 0,
                 wisdom: 0,
@@ -37,6 +38,10 @@ define(function (require, exports, module) {
             this.on("change:constitution", this.onConstitutionChange, this);
             this.on("change:cunning", this.onCunningChange, this);
             this.expUnused = 0;
+            this.set({
+                "hp":this.calMaxHp(this.get("level")),
+                "maxHp":this.calMaxHp(this.get("level"))
+            });
         },
         getExp: function (exp, level) {
             if (level >= WISDOM_THRESHOLD) {
@@ -98,7 +103,7 @@ define(function (require, exports, module) {
             });
         },
         calMaxHp: function (lv) {
-            return lv * 10 + this.get("constitution") * CONSTITUTION_EFFECT;
+            return lv * 10 + this.get("constitution") * CONSTITUTION_EFFECT + this.get("baseHp");
         },
         isPositionNear:function(x,y){
             var heroX = window.hero.get("position").x;
@@ -496,7 +501,7 @@ define(function (require, exports, module) {
             })
         },
         calEffect:function(level){
-            return level * (level + 1) / 2;
+            return level * (level + 1);
         },
         effectHappen: function () {
             if (this.get("type") == "potion") {
