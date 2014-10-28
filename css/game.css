@@ -857,7 +857,7 @@ body {
     font-size: 0.95em;
 }
 .score-board td {
-    padding: 0 5px;
+    padding: 0 1px;
 }
 .score-row.current {
     background: none repeat scroll 0 0 lightblue;
@@ -1074,11 +1074,11 @@ body {
 }
 
 .select-hero-race {
-    margin: 0 10%;
+    margin: 0 5%;
 }
 
 .select-hero-type {
-    height: 80%;
+    height: 50%;
     width: 100%;
 }
 
@@ -1087,9 +1087,9 @@ body {
 }
 
 .select-hero-type-item {
-    width:25%;
-    height:25%;
     display: inline-block;
+    height: 50%;
+    width: 25%;
 }
 
 .hero-type-image {

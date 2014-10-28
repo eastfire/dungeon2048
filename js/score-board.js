@@ -212,9 +212,8 @@ define(function(require,exports,module) {
             if ( !found && this.score ) {
                 var type = Help.heroTypeDisplayName[this.score.type];
                 type = type || Help.heroTypeDisplayName["warrior"];//默认值
-                var race = Help.heroRaceDisplayName[score.race];
-                race = race || "原初"
-                list.append("<tr class='score-row placeholder'><td><b>……</b></td><td></td></td><td></td><td></td><td></td></tr>");
+                var race = Help.heroRaceDisplayName[this.score.race];
+                 list.append("<tr class='score-row placeholder'><td><b>……</b></td><td></td></td><td></td><td></td><td></td></tr>");
                 list.append("<tr class='score-row current'>" +
                     "<td class='score-cell player-name'>"+this.score.name+"</td>"+
                     "<td class='score-cell player-level'>"+"lv"+this.score.level+"</td>"+
