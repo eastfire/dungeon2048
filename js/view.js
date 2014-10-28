@@ -257,18 +257,25 @@ define(function(require,exports,module){
             return true;
         },
         getHp:function(hp){
-            hp += this.model.get("recover")*window.RECOVER_EFFECT;
+            hp += Math.round( hp * this.model.get("recover")*window.RECOVER_EFFECT /100);
             this.model.getScore(hp);
             var realHeal = Math.min(hp, this.model.get("maxHp") - this.model.get("hp") );
             if ( realHeal > 0 ){
                 this.effecQueue.add.call(this.effecQueue,"♥+"+realHeal, "effect-get-hp");
                 this.model.set({
                     hp:this.model.get("hp")+realHeal,
-                    poison:0
                 });
             }
         },
+        curePoison:function(){
+            this.model.set({
+                poison:0
+            });
+        },
         onNewRound:function(){
+            if ( this.model.get("regeneration") ){
+                this.getHp(REGENERATION_EFFECT*this.model.get("regeneration"));
+            }
             if ( this.model.get("poison") ){
                 this.effecQueue.add.call(this.effecQueue,"♥-"+this.model.get("poison"));
                 this.model.set("hp",this.model.get("hp")-this.model.get("poison"));
@@ -1045,7 +1052,7 @@ define(function(require,exports,module){
             this.model.on("change",this.render, this);
         },
         render:function(){
-            this.type.html(Help.heroTypeDisplayName[this.model.get("type")])
+            this.type.html(Help.heroRaceDisplayName[this.model.get("race")]+Help.heroTypeDisplayName[this.model.get("type")])
             var hp = this.model.get("hp");
             this.hp.html("<span class='hp-symbol'>♥</span>"+(hp>0?hp:0)+"/"+this.model.get("maxHp"));
             if ( hp <= this.model.get("maxHp")/5) {

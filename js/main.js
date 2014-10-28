@@ -19,6 +19,9 @@ define(function(require,exports,module){
     var HelpView = Help.HelpView;
     var ScoreBoard = require("./score-board");
     var Unlock = require("./unlock")
+    var Race = require("./race");
+
+    window.GAME_VERSION = 1;
 
     window.PHASE_GENERATE = 0;
     window.PHASE_USER = 1;
@@ -72,7 +75,9 @@ define(function(require,exports,module){
             },
             gainStar:0,
             allTypes:["warrior","priest","wizard","thief"],
-            selectableType:["warrior"]
+            selectableType:["warrior"],
+            allRaces:["human","half-orc","elf","dwarf"],
+            selectableRace:["human","half-orc","elf","dwarf"]
         }
 
         var store = localStorage.getItem("tutorial");
@@ -373,7 +378,8 @@ define(function(require,exports,module){
     }
 
     window.showLevelUpDialog = function(callback){
-        var skillArray = getRandomItems(window.gameStatus.skillPool, 2);
+        var selectableSkillNumber = hero.get("selectableSkillNumber");
+        var skillArray = getRandomItems(window.gameStatus.skillPool,selectableSkillNumber );
         if ( skillArray == null || skillArray.length == 0 ){
             callback.call();
             return;
@@ -980,7 +986,8 @@ define(function(require,exports,module){
         renderMap();
 
         var callback = function() {
-            hero = new Model.Hero({type:gameStatus.selectedType});
+            hero = new Model.Hero({type:gameStatus.selectedType, race:gameStatus.selectedRace});
+            window.heroRace = Race.allRaces[gameStatus.selectedRace]
             heroView = new View.HeroView({model: hero});
 
             mapEl.append(heroView.render().$el);
@@ -989,11 +996,13 @@ define(function(require,exports,module){
             heroStatusView.render();
 
             generateSkillPool();
+            heroRace.adjustSkillPool();
 
             _.each(Unlock.AllUnlocks, function (unlock) {
                 if (unlock.isUnlocked() && unlock.adjustHero)
                     unlock.adjustHero.call(unlock);
             })
+            heroRace.adjustHero()
 
             heroView.renderSkillList();
 
@@ -1009,24 +1018,50 @@ define(function(require,exports,module){
             setTimeout(generateMonster, TIME_SLICE);
         }
 
-        if ( gameStatus.selectableType.length > 1 ) {
+        if ( !gameStatus.tutorial.on ) {
             //show select hero dialog
-            var el = $("<div class='select-hero-body'><div class='select-hero-title'>请选择</div></div>");
+            var el = $("<div class='select-hero-body'><div class='select-hero-title'>请选择</div>" +
+                "<div class='select-hero-race'>" +
+                "<div class='btn-group select-hero-race-selector' data-toggle='buttons'></div>" +
+                "<div class='hero-race-description'></div>"+
+                "</div><div class='select-hero-type'></div></div>");
             gameStatus.showingDialog = true;
             $(".main-window").append(el);
+            var selectTypeEl = el.find(".select-hero-type");
+            var selectRaceEl = el.find(".select-hero-race-selector");
+            var raceDescriptionEl = el.find(".hero-race-description")
+            raceDescriptionEl.html(Help.heroRaceDescription["human"]);
             var self = this;
+            _.each(gameStatus.allRaces, function(race){
+                if ( isInArray(gameStatus.selectableRace,race) ) {
+                    var active = race == "human"?"active":"";
+                    var checked = race=="human"?"checked":"";
+                    var raceEl = $('<label class="btn btn-primary '+active+'">' +
+                    '<input type="radio" name="options" id="'+race+'" '+checked+'>'+ Help.heroRaceDisplayName[race]
+                    + '</label>');
+                    selectRaceEl.append(raceEl);
+                    raceEl.on("click",function(event){
+                        var target = $(event.currentTarget);
+                        var race = target.find("input").attr("id")
+                        raceDescriptionEl.html(Help.heroRaceDescription[race]);
+                    })
+                }
+            },this)
+            $('.btn').button()
+
             _.each(gameStatus.allTypes, function(type){
                 if ( isInArray(gameStatus.selectableType,type) ) {
                     var typeEl = $("<div class='select-hero-type-item' name='" + type + "'>" +
                         "<div class='hero-type-image " + type + "'></div>" +
                         "<div class='hero-type-name'>" + Help.heroTypeDisplayName[type] + "</div>" +
                         "</div>")
-                    el.append(typeEl)
+                    selectTypeEl.append(typeEl)
                     typeEl.on("click", function (event) {
                         var target = $(event.currentTarget);
                         $(".select-hero-body").remove();
                         gameStatus.selectedType = target.attr("name");
                         gameStatus.showingDialog = false;
+                        gameStatus.selectedRace = selectRaceEl.find(".active").find("input").attr("id");
                         callback.call(self);
                     })
                 } else {
@@ -1034,11 +1069,12 @@ define(function(require,exports,module){
                         "<div class='hero-type-image locked'></div>" +
                         "<div class='hero-type-name'>"+Help.heroTypeDisplayName[type]+"</div>" +
                         "</div>")
-                    el.append(typeEl)
+                    selectTypeEl.append(typeEl)
                 }
             },this)
         } else {
             gameStatus.selectedType = gameStatus.selectableType[0]
+            gameStatus.selectedRace = "human"
             callback.call(this);
         }
     }

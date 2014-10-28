@@ -1,12 +1,16 @@
 define(function(require,exports,module) {
-    window.DIXTERITY_EFFECT = 3;
-    window.CUNNING_EFFECT = 5;
-    window.CONSTITUTION_EFFECT = 10;
-    window.WISDOM_EFFECT = 10;
-    window.WISDOM_THRESHOLD = 6;
-    window.TREASURE_HUNTING_EFFECT = 5;
-    window.COOLING_EFFECT = 10;
-    window.RECOVER_EFFECT = 2;
+    var initSkillConst = function(){
+        window.DIXTERITY_EFFECT = 3;
+        window.CUNNING_EFFECT = 5;
+        window.CONSTITUTION_EFFECT = 10;
+        window.LEVELUP_HP_EFFECT = 10;
+        window.WISDOM_EFFECT = 10;
+        window.WISDOM_THRESHOLD = 6;
+        window.TREASURE_HUNTING_EFFECT = 5;
+        window.COOLING_EFFECT = 10;
+        window.RECOVER_EFFECT = 25;
+        window.REGENERATION_EFFECT = 1;
+    }
 
     exports.SkillView = Backbone.View.extend({
         initialize:function(options){
@@ -135,9 +139,12 @@ define(function(require,exports,module) {
         onNewRound:function(){
             if ( this.get("duration") )
                 this.set("duration", this.get("duration") - 1);
+            heroRace.adjustSkillDuration(this);
+
             var count = this.get("currentCount");
             if ( count < this.calCoolDown() ){
                 this.set("currentCount", count+1);
+                heroRace.adjustSkillCount(this);
             } else {
                 this.set("currentCount", 1000); //set to very big
             }
@@ -166,7 +173,7 @@ define(function(require,exports,module) {
             }
         },
         generateDescription:function(){
-            return "生命值上限加"+CONSTITUTION_EFFECT;
+            return "最大生命值加"+CONSTITUTION_EFFECT;
         },
         onGet:function(){
             window.hero.set("constitution", this.get("level"))
@@ -188,6 +195,24 @@ define(function(require,exports,module) {
         },
         generateDescription:function(){
             return "升级所需的经验值减少"+(CUNNING_EFFECT*this.get("level"))+"%";
+        }
+    })
+
+    exports.RegenerationSkill = exports.Skill.extend({
+        defaults:function(){
+            return {
+                name:"regeneration",
+                type:"passive",
+                displayName:"再生",
+                level:1,
+                maxLevel:5
+            }
+        },
+        onGet:function(){
+            window.hero.set("regeneration", this.get("level"))
+        },
+        generateDescription:function(){
+            return "每回合开始恢复"+(REGENERATION_EFFECT*this.get("level"))+"<span class='hp-symbol'>♥</span>";
         }
     })
 
@@ -241,7 +266,7 @@ define(function(require,exports,module) {
             window.hero.set("recover", this.get("level"))
         },
         generateDescription:function(){
-            return "回复生命时多回复"+(this.get("level")*RECOVER_EFFECT)+"生命";
+            return "回复生命时多回复"+(this.get("level")*RECOVER_EFFECT)+"%生命";
         }
     })
 
@@ -588,6 +613,7 @@ define(function(require,exports,module) {
         },
         onActive:function(){
             window.heroView.getHp(this.getEffect());
+            window.heroView.curePoison();
             this.used();
         },
         getEffect:function(level){
@@ -730,18 +756,18 @@ define(function(require,exports,module) {
                 type: "active",
                 displayName: "复活术",
                 level: 1,
-                maxLevel: 3,
+                maxLevel: 4,
                 currentCount: 1000,
                 coolDown: 60,
                 hideDuration:true
             }
         },
         generateDescription: function () {
-            return "如果本轮死亡，将以1/"+(5-this.get("level"))+"生命复活"
+            return "如果本轮死亡，将以"+(20*this.get("level"))+"%生命复活"
         },
         onDying : function() {
             if ( this.get("duration") ) {
-                hero.set("hp",Math.floor(hero.get("maxHp")/(5-this.get("level"))));
+                hero.set("hp",Math.floor(hero.get("maxHp")*0.2*this.get("level")));
             }
         },
         onActive:function(){
@@ -951,7 +977,7 @@ define(function(require,exports,module) {
             }
         },
         generateDescription:function(){
-            var str = "随机杀死英雄上下左右的"+this.getEffect()+"个怪物和与之同名的所有怪物";
+            var str = "随机杀死英雄周围的"+this.getEffect()+"个怪物和与之同名的所有怪物";
             if ( this.get("level") > 1 ) {
                 str += "，但冷却时间＋５"
             }
@@ -965,33 +991,16 @@ define(function(require,exports,module) {
             var candidate = [];
             var x = window.hero.get("position").x;
             var y = window.hero.get("position").y;
-            var block = getMapBlock(x-1,y);
-            if ( block && block.type === "monster" ) {
-                candidate.push({
-                    type: block.view.model.get("type"),
-                    d: 3
-                })
-            }
-            block = getMapBlock(x+1,y);
-            if ( block && block.type === "monster" ) {
-                candidate.push({
-                    type: block.view.model.get("type"),
-                    d: 1
-                })
-            }
-            var block = getMapBlock(x,y-1);
-            if ( block && block.type === "monster" ) {
-                candidate.push({
-                    type: block.view.model.get("type"),
-                    d: 0
-                })
-            }
-            var block = getMapBlock(x,y+1);
-            if ( block && block.type === "monster" ) {
-                candidate.push({
-                    type: block.view.model.get("type"),
-                    d: 2
-                })
+            for ( var i = x-1 ; i <= x+1 ; i++ ) {
+                for ( var j = y-1 ; j <= y+1 ; j++ ) {
+                    var b = getMapBlock(i,j);
+                    if ( b && b.type === "monster" ) {
+                        candidate.push({
+                            type: b.view.model.get("type"),
+                            d: 0
+                        })
+                    }
+                }
             }
 
             if ( candidate.length > 0 ) {
@@ -1040,6 +1049,8 @@ define(function(require,exports,module) {
     })
 
     exports.initSkillPool = function(){
+        initSkillConst();
+
         exports.commonSkillPoolEntry = [
             exports.ConstitutionSkill,
             exports.CunningSkill,
@@ -1062,7 +1073,8 @@ define(function(require,exports,module) {
 
         exports.wizardBasicSkillPoolEntry = [
             exports.SpiderWebSkill,
-            exports.MagicMissileSkill
+//            exports.LighteningChainSkill,
+            exports.MagicMissileSkill,
         ]
     }
 

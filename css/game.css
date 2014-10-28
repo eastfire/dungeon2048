@@ -1073,6 +1073,19 @@ body {
     background-image: url("../img/boss-lich1-0.png");
 }
 
+.select-hero-race {
+    margin: 0 10%;
+}
+
+.select-hero-type {
+    height: 80%;
+    width: 100%;
+}
+
+.hero-race-description {
+    height: 40px;
+}
+
 .select-hero-type-item {
     width:25%;
     height:25%;
@@ -1130,7 +1143,7 @@ body {
 .levelup-body .skill-image-icon {
     display: inline-block;
     width: 20%;
-    margin:5% 5%;
+    margin:2%;
     vertical-align: middle;
  }
 
@@ -1225,6 +1238,9 @@ body {
 }
 .skill-image-treasurehunting {
     background-image: url("../img/skill-treasurehunting.png");
+}
+.skill-image-regeneration {
+    background-image: url("../img/skill-regeneration.png");
 }
 
 /*warrior skill*/

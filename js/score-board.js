@@ -154,6 +154,8 @@ define(function(require,exports,module) {
             this.score = null;
             this.$el.addClass("loading");
             if ( options && options.currentScore && options.currentScore.killBy ) {
+                options.currentScore.version = GAME_VERSION;
+                options.currentScore.agent = navigator.userAgent;
                 this.score = options.currentScore;
                 this.scoreRef.push(options.currentScore, function(){
                     console.log("score upload complete");
@@ -197,10 +199,12 @@ define(function(require,exports,module) {
                 }
                 var type = Help.heroTypeDisplayName[score.type];
                 type = type || Help.heroTypeDisplayName["warrior"];//默认值
+                var race = Help.heroRaceDisplayName[score.race];
+                race = race || "原初"
                 list.prepend("<tr class='score-row "+current+"'>" +
                         "<td class='score-cell player-name'>"+score.name+"</td>"+
                         "<td class='score-cell player-level'>"+"lv"+score.level+"</td>"+
-                        "<td class='score-cell player-type'>"+type+"</td>"+
+                        "<td class='score-cell player-type'>"+race+type+"</td>"+
                         "<td class='score-cell player-score'>"+score.score+"分</td>"+
                         "<td class='score-cell player-kill-by'>"+self.getReason(score)+"</td>"+
                     "</tr>")
@@ -208,11 +212,13 @@ define(function(require,exports,module) {
             if ( !found && this.score ) {
                 var type = Help.heroTypeDisplayName[this.score.type];
                 type = type || Help.heroTypeDisplayName["warrior"];//默认值
+                var race = Help.heroRaceDisplayName[score.race];
+                race = race || "原初"
                 list.append("<tr class='score-row placeholder'><td><b>……</b></td><td></td></td><td></td><td></td><td></td></tr>");
                 list.append("<tr class='score-row current'>" +
                     "<td class='score-cell player-name'>"+this.score.name+"</td>"+
                     "<td class='score-cell player-level'>"+"lv"+this.score.level+"</td>"+
-                    "<td class='score-cell player-type'>"+type+"</td>"+
+                    "<td class='score-cell player-type'>"+race+type+"</td>"+
                     "<td class='score-cell player-score'>"+this.score.score+"分</td>"+
                     "<td class='score-cell player-kill-by'>"+self.getReason(this.score)+"</td>"+
                     "</tr>")

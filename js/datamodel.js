@@ -25,13 +25,15 @@ define(function (require, exports, module) {
                     y: 2
                 },
                 baseHp: 10,
+                selectableSkillNumber: 2,
                 constitution: 0,
                 cunning: 0,
                 wisdom: 0,
                 dexterity: 0,
                 cooling: 0,
                 recover: 0,
-                treasureHunting: 0
+                treasureHunting: 0,
+                regeneration: 0
             }
         },
         initialize: function () {
@@ -103,7 +105,7 @@ define(function (require, exports, module) {
             });
         },
         calMaxHp: function (lv) {
-            return lv * 10 + this.get("constitution") * CONSTITUTION_EFFECT + this.get("baseHp");
+            return lv * LEVELUP_HP_EFFECT + this.get("constitution") * CONSTITUTION_EFFECT + this.get("baseHp");
         },
         isPositionNear:function(x,y){
             var heroX = window.hero.get("position").x;
@@ -506,6 +508,7 @@ define(function (require, exports, module) {
         effectHappen: function () {
             if (this.get("type") == "potion") {
                 window.heroView.getHp(this.get("effect"));
+                window.heroView.curePoison();
             }
         }
     })
