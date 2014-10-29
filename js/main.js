@@ -1024,7 +1024,9 @@ define(function(require,exports,module){
                 "<div class='select-hero-race'>" +
                 "<div class='btn-group select-hero-race-selector' data-toggle='buttons'></div>" +
                 "<div class='hero-race-description'></div>"+
-                "</div><div class='select-hero-type'></div></div>");
+                "</div><div class='select-hero-type'></div>" +
+                "<button class='btn btn-default to-menu' type='button'>主菜单</button>" +
+                "</div>");
             gameStatus.showingDialog = true;
             $(".main-window").append(el);
             var selectTypeEl = el.find(".select-hero-type");
@@ -1072,6 +1074,11 @@ define(function(require,exports,module){
                     selectTypeEl.append(typeEl)
                 }
             },this)
+
+            el.find(".to-menu").on("click",function(){
+                $(".select-hero-body").remove();
+                gameOver()
+            })
         } else {
             gameStatus.selectedType = gameStatus.selectableType[0]
             gameStatus.selectedRace = "human"

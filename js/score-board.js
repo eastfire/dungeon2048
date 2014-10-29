@@ -154,8 +154,6 @@ define(function(require,exports,module) {
             this.score = null;
             this.$el.addClass("loading");
             if ( options && options.currentScore && options.currentScore.killBy ) {
-                options.currentScore.version = GAME_VERSION;
-                options.currentScore.agent = navigator.userAgent;
                 this.score = options.currentScore;
                 this.scoreRef.push(options.currentScore, function(){
                     console.log("score upload complete");
@@ -200,7 +198,7 @@ define(function(require,exports,module) {
                 var type = Help.heroTypeDisplayName[score.type];
                 type = type || Help.heroTypeDisplayName["warrior"];//默认值
                 var race = Help.heroRaceDisplayName[score.race];
-                race = race || "原初"
+                race = race || ""
                 list.prepend("<tr class='score-row "+current+"'>" +
                         "<td class='score-cell player-name'>"+score.name+"</td>"+
                         "<td class='score-cell player-level'>"+"lv"+score.level+"</td>"+
@@ -213,7 +211,8 @@ define(function(require,exports,module) {
                 var type = Help.heroTypeDisplayName[this.score.type];
                 type = type || Help.heroTypeDisplayName["warrior"];//默认值
                 var race = Help.heroRaceDisplayName[this.score.race];
-                 list.append("<tr class='score-row placeholder'><td><b>……</b></td><td></td></td><td></td><td></td><td></td></tr>");
+                race = race || ""
+                list.append("<tr class='score-row placeholder'><td><b>……</b></td><td></td></td><td></td><td></td><td></td></tr>");
                 list.append("<tr class='score-row current'>" +
                     "<td class='score-cell player-name'>"+this.score.name+"</td>"+
                     "<td class='score-cell player-level'>"+"lv"+this.score.level+"</td>"+
