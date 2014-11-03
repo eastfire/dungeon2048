@@ -15,6 +15,28 @@ define(function(require,exports,module){
             this.model.on("change:direction",this.renderDirection,this);
             this.model.on("change:freeze",this.renderFreeze,this);
         },
+        moveEffect:function(movement, direction, callback, callbackContext){
+            if ( movement <= 0 )
+                return;
+            this.model.set("direction",direction);
+            var oldx = this.model.get("position").x;
+            var oldy = this.model.get("position").y;
+            var x1 = oldx;
+            var y1 = oldy;
+            for ( var i = 0 ;i < movement ; i++ ){
+                x1 += increment[direction].x;
+                y1 += increment[direction].y;
+            }
+
+            var x2 = x1*blockSize.width;
+            var y2 = y1*blockSize.height;
+            //console.log(this.model.get("type")+" move to "+x1+" "+y1);
+            this.$el.css({transition: "left "+(TIME_SLICE/1000)*movement+"s ease-in-out 0s, top "+(TIME_SLICE/1000)*movement+"s ease-in-out 0s", left:x2, top:y2});
+            setTimeout(function(){
+                if ( callback )
+                    callback.call(callbackContext)
+            },10+TIME_SLICE*movement)
+        },
         move:function(movement, direction){
             if ( movement <= 0 )
                 return;
@@ -110,6 +132,7 @@ define(function(require,exports,module){
             this.model.on("change:poison",this.renderPoison,this);
             this.model.on("change:dizzy",this.renderDizzy,this);
             this.model.on("change:locked",this.renderLocked,this);
+            this.model.on("change:cursed",this.renderCursed,this);
             this.model.on("change:hp",this.checkAlive,this);
             this.skillList = [];
         },
@@ -151,9 +174,9 @@ define(function(require,exports,module){
             for ( ; i < this.model.get("skillSlot") ; i++ ){
                 var emptySlot = $("<div class='empty-skill-slot'></div>")
                 emptySlot.css({
-                    width: blockSize.width*3/4,
-                    height: blockSize.height*3/4,
-                    margin: blockSize.width/8
+                    width: roomWidth/basicMapWidth*3/4,
+                    height: roomHeight/basicMapHeight*3/4,
+                    margin: roomWidth/basicMapWidth/8
                 })
                 list.append(emptySlot)
             }
@@ -263,7 +286,7 @@ define(function(require,exports,module){
             if ( realHeal > 0 ){
                 this.effecQueue.add.call(this.effecQueue,"♥+"+realHeal, "effect-get-hp");
                 this.model.set({
-                    hp:this.model.get("hp")+realHeal,
+                    hp:this.model.get("hp")+realHeal
                 });
             }
         },
@@ -272,12 +295,12 @@ define(function(require,exports,module){
                 poison:0
             });
         },
-        onNewRound:function(){
+        onNewTurn:function(){
             if ( this.model.get("regeneration") ){
                 this.getHp(REGENERATION_EFFECT*this.model.get("regeneration"));
             }
             if ( this.model.get("poison") ){
-                this.effecQueue.add.call(this.effecQueue,"♥-"+this.model.get("poison"));
+                this.effecQueue.add.call(this.effecQueue,"♥-"+this.model.get("poison")*(this.model.get("curse")?2:1));
                 this.model.set("hp",this.model.get("hp")-this.model.get("poison"));
                 if ( !this.model.get("hp") ) {
                     gameStatus.killBy = {
@@ -296,8 +319,8 @@ define(function(require,exports,module){
                 this.model.set("locked",this.model.get("locked")-1);
             }
             _.each(this.skillList, function(skill){
-                if ( skill.onNewRound ){
-                    skill.onNewRound.call(skill);
+                if ( skill.onNewTurn ){
+                    skill.onNewTurn.call(skill);
                 }
             },this);
         },
@@ -331,6 +354,14 @@ define(function(require,exports,module){
                 },this);
             }
         },
+        renderCursed:function(){
+            if ( this.model.get("cursed") && !this.model.previous("cursed")) {
+                this.$el.append("<div class='status-cursed'></div>")
+                this.effecQueue.add.call(this.effecQueue, "诅咒");
+            } else if ( !this.model.get("cursed") && this.model.previous("cursed")) {
+                this.$(".status-cursed").remove();
+            }
+        },
         onDying:function(){
             _.each(this.skillList, function(skill){
                 if ( skill.onDying ){
@@ -352,15 +383,23 @@ define(function(require,exports,module){
             }
         },
         getPoison:function(p){
-            this.model.set("poison",p);
+            this.model.set("poison",this.model.get("cursed") ? p*2 : p );
+            return true;
+        },
+        getCursed:function(p){
+            this.model.set("cursed",p);
             return true;
         },
         getDizzy:function(d){
-            this.model.set("dizzy",d);
+            this.model.set("dizzy",this.model.get("cursed")?d+1:d);
+            return true;
+        },
+        getFreeze:function(f){
+            this.model.set("freeze",this.model.get("cursed")?f+1:f);
             return true;
         },
         getLocked:function(d){
-            this.model.set("locked",d);
+            this.model.set("locked",this.model.get("cursed")?d+1:d);
             return true;
         },
         getDisturb:function(d){
@@ -543,6 +582,9 @@ define(function(require,exports,module){
                             att = att * 3;
                         if ( gameStatus.globalEffect.doubleAttack > 0 )
                             att = att * 2;
+                        if ( self.model.get("level") >= 3*WISDOM_THRESHOLD )
+                            att = att * 2;
+
                         gameStatus.killBy = {
                             type :"monster",
                             monsterLevel:self.model.get("level"),
@@ -577,7 +619,7 @@ define(function(require,exports,module){
         },
         onDie:function(){
         },
-        onNewRound:function(){
+        onNewTurn:function(){
             if ( this.model.get("freeze") ){
                 this.model.set("freeze",this.model.get("freeze")-1);
             }
@@ -587,6 +629,10 @@ define(function(require,exports,module){
         },
         onHitHero:function(){
             this.model.onHitHero();
+            var curseRate = this.model.getCursePower();
+            if ( Math.random() < curseRate ) {
+                heroView.getCursed(1);
+            }
             var freezeRate = this.model.getFreezePower();
             if ( Math.random() < freezeRate ) {
                 heroView.getFreeze(2);
@@ -606,7 +652,7 @@ define(function(require,exports,module){
         },
 
         onDropItem:function(x,y){
-            generateItem(this.model.get("position").x, this.model.get("position").y, this.model.get("level"));
+            roomView.generateItem(this.model.get("position").x, this.model.get("position").y, this.model.get("level"));
         },
 
         onMergeTo:function(mergeToModel, mergeToView){
@@ -749,11 +795,15 @@ define(function(require,exports,module){
 
     exports.MimicView = exports.MonsterView.extend({
         onDropItem:function(x,y){
-            generateItemForSure(x,y, Math.ceil(this.model.get("level")/3));
+            roomView.generateItemForSure(x,y, Math.ceil(this.model.get("level")/3));
         }
     })
 
     exports.MinotaurView = exports.MonsterView.extend({
+
+    })
+
+    exports.MummyView = exports.MonsterView.extend({
 
     })
 
@@ -821,8 +871,8 @@ define(function(require,exports,module){
             }
             return true;
         },
-        onNewRound:function(){
-            exports.MonsterView.prototype.onNewRound.call(this);
+        onNewTurn:function(){
+            exports.MonsterView.prototype.onNewTurn.call(this);
             this.model.set("willSteal",false);
         },
         onMerged:function(){
@@ -922,6 +972,7 @@ define(function(require,exports,module){
         medusa:exports.MedusaView,
         mimic:exports.MimicView,
         minotaur:exports.MinotaurView,
+        mummy:exports.MummyView,
         ogre:exports.OgreView,
         orc:exports.OrcView,
         "rat-man":exports.RatManView,
@@ -1043,6 +1094,9 @@ define(function(require,exports,module){
     });
 
     exports.HeroStatusView = Backbone.View.extend({
+        events:{
+            "click .room-sign": "showRoomSign"
+        },
         initialize:function(){
             this.type = this.$(".hero-type");
             this.hp = this.$(".hero-hp");
@@ -1078,12 +1132,30 @@ define(function(require,exports,module){
                 this.exp.removeClass("almost-level-up");
             }
             this.score.html(this.model.get("score")+"分")
+
             if ( window.windowOriention == "landscape") {
                 this.$el.css({
-                    width:blockSize.width
+                    width:roomWidth/basicMapWidth*0.9
+                })
+                this.$(".room-sign").css({
+                    width:roomWidth/basicMapWidth*0.5,
+                    height:roomWidth/basicMapWidth*0.5
+                })
+            } else {
+                this.$el.css({
+                    height:roomHeight/basicMapHeight*0.9
+                })
+                this.$(".room-sign").css({
+                    width:roomHeight/basicMapHeight*0.5,
+                    height:roomHeight/basicMapHeight*0.5
                 })
             }
             return this;
+        },
+
+        showRoomSign:function(event){
+            event.stopPropagation();
+            showRoomObject();
         }
     })
 

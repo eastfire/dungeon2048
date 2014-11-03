@@ -16,14 +16,14 @@ define(function(require,exports,module) {
 
             this.$el.on("click",function(){
                 self.remove();
-                window.gameStatus.showingDialog = false;
+                window.showingDialog = false;
             })
         },
         render:function(){
             return this;
         },
         show:function(){
-            gameStatus.showingDialog = true;
+            window.showingDialog = true;
             $(".main-window").append(this.render().$el);
         }
     });
@@ -59,6 +59,7 @@ define(function(require,exports,module) {
         "medusa":"美杜莎",
         "mimic":"宝箱怪",
         "minotaur":"牛头怪",
+        "mummy":"木乃伊",
         "ogre":"食人魔",
         "orc":"兽人",
         "rat-man":"鼠人",
@@ -111,6 +112,10 @@ define(function(require,exports,module) {
             text:"攻击力：非常强（为等级的平方）<br/>经验值：非常高",
             imageClass:"minotaur-help"
         },
+        "mummy":{
+            text:"击中英雄后一定概率使英雄<i><u>被诅咒</u></i>（不良状态持续时间加倍，中毒效果加倍，升级后解除）<br/>攻击力：非常中（与等级相同）<br/>经验值：中",
+            imageClass:"mummy-help"
+        },
         "ogre":{
             text:"攻击力：强（为等级的2倍）<br/>经验值：高",
             imageClass:"ogre-help"
@@ -162,7 +167,7 @@ define(function(require,exports,module) {
             imageClass:"boss-hydra-help"
         },
         "boss-lich":{
-            text:"远程攻击（射程无限）<br/>攻击力：英雄最大生命值的1/10<br/>经验值：超高",
+            text:"远程攻击（射程无限）<br/>攻击力：英雄最大生命值的1/8<br/>经验值：超高",
             imageClass:"boss-lich-help"
         }
     }

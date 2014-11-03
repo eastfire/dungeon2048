@@ -136,7 +136,7 @@ define(function(require,exports,module) {
         used:function(){
             this.set("currentCount",0);
         },
-        onNewRound:function(){
+        onNewTurn:function(){
             if ( this.get("duration") )
                 this.set("duration", this.get("duration") - 1);
             heroRace.adjustSkillDuration(this);
@@ -648,10 +648,13 @@ define(function(require,exports,module) {
                 score++;
             if ( hero.get("dizzy") )
                 score++;
+            if ( hero.get("cursed") )
+                score++;
             window.hero.set({
                 poison:0,
                 freeze:0,
-                dizzy:0
+                dizzy:0,
+                cursed:0
             })
             for ( var y = 0; y < mapHeight; y++  ){
                 for ( var x = 0; x < mapWidth; x++) {

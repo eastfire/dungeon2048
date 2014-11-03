@@ -45,9 +45,17 @@ define(function(require,exports,module){
 
     window.mapWidth = 5;
     window.mapHeight = 5;
-    window.extraBlock = 3;
+    window.basicMapWidth = 5;
+    window.basicMapHeight = 5;
+    window.extraBlock = 2.5;
 
     var initGameStatus = function() {
+        window.gameModeStatus = {
+            allTypes: ["warrior", "priest", "wizard", "thief"],
+            selectableType: ["warrior"],
+            allRaces: ["human", "half-orc", "elf", "dwarf"],
+            selectableRace: ["human", "half-orc", "elf", "dwarf"]
+        }
         window.gameStatus = {
             phase: PHASE_GENERATE,
             turn: 0,
@@ -73,11 +81,7 @@ define(function(require,exports,module){
                 lock:10,
                 disturb:8
             },
-            gainStar:0,
-            allTypes:["warrior","priest","wizard","thief"],
-            selectableType:["warrior"],
-            allRaces:["human","half-orc","elf","dwarf"],
-            selectableRace:["human","half-orc","elf","dwarf"]
+            gainStar:0
         }
 
         var store = localStorage.getItem("tutorial");
@@ -87,10 +91,11 @@ define(function(require,exports,module){
     }
 
     var generateSkillPool = function(){
-        window.gameStatus.skillPool = Skill.getSkillPool(hero.get("type"));
+        window.gameModeStatus.skillPool = Skill.getSkillPool(hero.get("type"));
     }
 
-    var calculateBlockSize = function(){
+    var calculateScreenSize = function(){
+
         window.winW = 630;
         window.winH = 460;
         if (document.body && document.body.offsetWidth) {
@@ -111,18 +116,23 @@ define(function(require,exports,module){
         var blockW,blockH;
         if ( winW > winH ) {
             window.windowOriention = "landscape";
-            if ( winW*mapWidth >= winH*(mapWidth+extraBlock) )
-                blockW = blockH = (winH)/mapWidth-0.1;
+            if ( winW*basicMapWidth >= winH*(basicMapWidth+extraBlock) )
+                blockW = blockH = (winH)/basicMapWidth-0.1;
             else
-                blockW = blockH = (winW)/(mapWidth + extraBlock)-0.1;
+                blockW = blockH = (winW)/(basicMapWidth + extraBlock)-0.1;
         } else {
             window.windowOriention = "portrait";
-            if ( winH*mapWidth >= winW*(mapWidth+extraBlock) )
-                blockW = blockH = (winW)/mapWidth-0.1;
+            if ( winH*basicMapWidth >= winW*(basicMapWidth+extraBlock) )
+                blockW = blockH = (winW)/basicMapWidth-0.1;
             else
-                blockW = blockH = (winH)/(mapWidth + extraBlock)-0.1;
+                blockW = blockH = (winH)/(basicMapWidth + extraBlock)-0.1;
         }
-        return {width:blockW, height:blockH}
+        window.roomWidth = basicMapWidth*blockW;
+        window.roomHeight = mapWidth*blockH;
+    }
+
+    var calculateBlockSize = function(){
+        return {width:roomWidth/mapWidth, height:roomHeight/mapHeight};
     }
 
     window.generateItem = function(x,y, monsterLevel){
@@ -358,9 +368,9 @@ define(function(require,exports,module){
     }
 
     var removeSkillFromPool = function(skill){
-        for ( var i = 0; i < window.gameStatus.skillPool.length ; i++) {
-            if ( window.gameStatus.skillPool[i].get("name") == skill.get("name") ) {
-                window.gameStatus.skillPool.splice(i,1);
+        for ( var i = 0; i < window.gameModeStatus.skillPool.length ; i++) {
+            if ( window.gameModeStatus.skillPool[i].get("name") == skill.get("name") ) {
+                window.gameModeStatus.skillPool.splice(i,1);
                 return;
             }
         }
@@ -368,24 +378,24 @@ define(function(require,exports,module){
 
     var removeAllOtherActiveSkillFromPool = function(){
         var newPool = [];
-        for ( var i = 0; i < window.gameStatus.skillPool.length ; i++) {
-            var skill = window.gameStatus.skillPool[i];
+        for ( var i = 0; i < window.gameModeStatus.skillPool.length ; i++) {
+            var skill = window.gameModeStatus.skillPool[i];
             if ( skill.get("type") != "active" || window.heroView.hasSkill(skill)) {
-                newPool.push(window.gameStatus.skillPool[i])
+                newPool.push(window.gameModeStatus.skillPool[i])
             }
         }
-        window.gameStatus.skillPool = newPool;
+        window.gameModeStatus.skillPool = newPool;
     }
 
     window.showLevelUpDialog = function(callback){
         var selectableSkillNumber = hero.get("selectableSkillNumber");
-        var skillArray = getRandomItems(window.gameStatus.skillPool,selectableSkillNumber );
+        var skillArray = getRandomItems(window.gameModeStatus.skillPool,selectableSkillNumber );
         if ( skillArray == null || skillArray.length == 0 ){
             callback.call();
             return;
         }
         var el = $("<div class='levelup-body'><div class='levelup-title'>请选择升级技能</div></div>");
-        gameStatus.showingDialog = true;
+        showingDialog = true;
         $(".main-window").append(el);
         _.each(skillArray, function(model){
             var view = new Skill.SkillView({model: model, mode:"select"})
@@ -404,7 +414,7 @@ define(function(require,exports,module){
                 if ( model.get("level") > model.get("maxLevel") ) {
                     removeSkillFromPool(model);
                 }
-                gameStatus.showingDialog = false;
+                showingDialog = false;
                 $(".levelup-body").remove();
                 callback.call();
             })
@@ -475,7 +485,7 @@ define(function(require,exports,module){
 
 
     var renderMap = function () {
-        $("body .main-window-wrapper").html(mainTemplate());
+
         mapEl = $(".map");
         mapEl.css({
             "font-size":blockSize.height/5+"px",
@@ -485,12 +495,12 @@ define(function(require,exports,module){
         if ( windowOriention == "portrait") {
             $(".main-window").css({
                 width:mapWidth*blockSize.width,
-                "margin-left":(winW-mapWidth*blockSize.width)/2
+                "margin-left":(winW-roomWidth)/2
             })
         } else {
             $(".main-window").css({
                 height:mapHeight*blockSize.height,
-                "margin-top":(winH-mapHeight*blockSize.height)/2
+                "margin-top":(winH-roomHeight)/2
             })
         }
         $(".main-window").addClass(window.windowOriention);
@@ -555,8 +565,8 @@ define(function(require,exports,module){
         gameStatus.phase = askContext.prevPhase;
     }
 
-    window.isDirectionInputValid = function(){
-        return (gameStatus.phase == PHASE_USER || gameStatus.phase == PHASE_ASK_DIRECTION ) && !gameStatus.showingDialog;
+    var isDirectionInputValid = function(){
+        return (gameStatus.phase == PHASE_USER || gameStatus.phase == PHASE_ASK_DIRECTION ) && !showingDialog;
     }
 
     var directionInput = function(direction){
@@ -574,26 +584,26 @@ define(function(require,exports,module){
             swipe_velocity:0.08
         })
         hammertime.on("swipeup", function(event) {
-            if ( window.isDirectionInputValid() )
+            if ( isDirectionInputValid() )
                 directionInput(0);
         }).on("swiperight", function(event) {
-            if ( window.isDirectionInputValid() )
+            if ( isDirectionInputValid() )
                 directionInput(1);
         }).on("swipedown", function(event) {
-            if ( window.isDirectionInputValid() )
+            if ( isDirectionInputValid() )
                 directionInput(2);
         }).on("swipeleft", function(event) {
-            if ( window.isDirectionInputValid() )
+            if ( isDirectionInputValid() )
                 directionInput(3);
         });
 
         $(document).on("keydown",function(event) {
             var levelUpShowing = $(".levelup-body").length > 0;
 
-            if (gameStatus.showingDialog) {
+            if (showingDialog) {
                 if ( $(".help").length ) {
                     $(".help").remove();
-                    window.gameStatus.showingDialog = false;
+                    window.showingDialog = false;
                     return;
                 }
             }
@@ -610,7 +620,7 @@ define(function(require,exports,module){
                 }
                 return;
             }
-            if ( !window.isDirectionInputValid() )
+            if ( !isDirectionInputValid() )
                 return;
             switch(event.keyCode){
                 case 38:
@@ -811,7 +821,7 @@ define(function(require,exports,module){
     }
 
     var waitForMonsterAttack = function(){
-        if ( gameStatus.phase == PHASE_MONSTER_ATTACK && !gameStatus.showingDialog ){
+        if ( gameStatus.phase == PHASE_MONSTER_ATTACK && !showingDialog ){
             monsterAttack();
         } else {
             setTimeout(waitForMonsterAttack, TIME_SLICE+10)
@@ -966,6 +976,9 @@ define(function(require,exports,module){
 
     window.startGame = function(){
         $("body .main-window-wrapper").empty();
+        $("body .main-window-wrapper").html(mainTemplate());
+
+        window.blockSize = calculateBlockSize();
         initGameStatus();
 
         window.map = initMap();
@@ -983,11 +996,12 @@ define(function(require,exports,module){
                 unlock.adjustSkillPool.call(unlock);
         })
 
+
         renderMap();
 
         var callback = function() {
-            hero = new Model.Hero({type:gameStatus.selectedType, race:gameStatus.selectedRace});
-            window.heroRace = Race.allRaces[gameStatus.selectedRace]
+            hero = new Model.Hero({type:gameModeStatus.selectedType, race:gameModeStatus.selectedRace});
+            window.heroRace = Race.allRaces[gameModeStatus.selectedRace]
             heroView = new View.HeroView({model: hero});
 
             mapEl.append(heroView.render().$el);
@@ -1027,15 +1041,15 @@ define(function(require,exports,module){
                 "</div><div class='select-hero-type'></div>" +
                 "<button class='btn btn-default to-menu' type='button'>主菜单</button>" +
                 "</div>");
-            gameStatus.showingDialog = true;
+            showingDialog = true;
             $(".main-window").append(el);
             var selectTypeEl = el.find(".select-hero-type");
             var selectRaceEl = el.find(".select-hero-race-selector");
             var raceDescriptionEl = el.find(".hero-race-description")
             raceDescriptionEl.html(Help.heroRaceDescription["human"]);
             var self = this;
-            _.each(gameStatus.allRaces, function(race){
-                if ( isInArray(gameStatus.selectableRace,race) ) {
+            _.each(gameModeStatus.allRaces, function(race){
+                if ( isInArray(gameModeStatus.selectableRace,race) ) {
                     var active = race == "human"?"active":"";
                     var checked = race=="human"?"checked":"";
                     var raceEl = $('<label class="btn btn-primary '+active+'">' +
@@ -1051,8 +1065,8 @@ define(function(require,exports,module){
             },this)
             $('.btn').button()
 
-            _.each(gameStatus.allTypes, function(type){
-                if ( isInArray(gameStatus.selectableType,type) ) {
+            _.each(gameModeStatus.allTypes, function(type){
+                if ( isInArray(gameModeStatus.selectableType,type) ) {
                     var typeEl = $("<div class='select-hero-type-item' name='" + type + "'>" +
                         "<div class='hero-type-image " + type + "'></div>" +
                         "<div class='hero-type-name'>" + Help.heroTypeDisplayName[type] + "</div>" +
@@ -1061,9 +1075,9 @@ define(function(require,exports,module){
                     typeEl.on("click", function (event) {
                         var target = $(event.currentTarget);
                         $(".select-hero-body").remove();
-                        gameStatus.selectedType = target.attr("name");
-                        gameStatus.showingDialog = false;
-                        gameStatus.selectedRace = selectRaceEl.find(".active").find("input").attr("id");
+                        gameModeStatus.selectedType = target.attr("name");
+                        showingDialog = false;
+                        gameModeStatus.selectedRace = selectRaceEl.find(".active").find("input").attr("id");
                         callback.call(self);
                     })
                 } else {
@@ -1080,15 +1094,15 @@ define(function(require,exports,module){
                 gameOver()
             })
         } else {
-            gameStatus.selectedType = gameStatus.selectableType[0]
-            gameStatus.selectedRace = "human"
+            gameModeStatus.selectedType = gameModeStatus.selectableType[0]
+            gameModeStatus.selectedRace = "human"
             callback.call(this);
         }
     }
 
     require("./preload").preload(function(){
         $("body").append("<div class='main-window-wrapper'></div>")
-        window.blockSize = calculateBlockSize();
+        calculateScreenSize();
 
         startGame();
     })

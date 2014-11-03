@@ -90,6 +90,7 @@ define(function(require,exports,module) {
             },100);
         },
         restartGame:function(){
+            $(".game-over").remove();
             window.startGame();
         },
         toGameMenu:function(){
@@ -236,6 +237,9 @@ define(function(require,exports,module) {
                 if ( score.killBy.isBoss )
                     lvStr = "";
                 reason="被"+lvStr+Help.monsterDisplayName[score.killBy.monsterType]+"杀死";
+            }
+            if ( score.roomName ){
+                reason += "于<i><u>"+score.roomName+"</u></i>";
             }
             return reason;
         }

@@ -49,6 +49,8 @@ define(function (require, exports, module) {
             if (level >= WISDOM_THRESHOLD) {
                 exp += Math.round(exp * this.get("wisdom") * WISDOM_EFFECT / 100);
             }
+            if ( level >= 3*WISDOM_THRESHOLD )
+                this.getScore(exp);
             if (level) {
                 this.getScore(exp);
             }
@@ -86,7 +88,8 @@ define(function (require, exports, module) {
                 maxHp: newMaxHp,
                 hp: newMaxHp,
                 maxExp: this.calExpRequire(newLevel),
-                poison: 0
+                poison: 0,
+                cursed: 0
             })
         },
         calExpRequire: function (lv) {
@@ -174,6 +177,11 @@ define(function (require, exports, module) {
         getFreezePower:function(){
             if ( gameStatus.globalEffect.madness )
                 return Math.min( this.get("level") * gameStatus.monsterPower.freeze, 96 ) / 100;
+            return 0;
+        },
+        getCursePower:function(){
+            if ( gameStatus.globalEffect.madness )
+                return Math.min( this.get("level") * gameStatus.monsterPower.curse, 80 ) / 100;
             return 0;
         },
         getDizzyPower:function(){
@@ -297,6 +305,15 @@ define(function (require, exports, module) {
         },
         calExp: function (level) {
             return level * level;
+        }
+    })
+
+    exports.Mummy = exports.Monster.extend({
+        calExp: function (level) {
+            return level * 2;
+        },
+        getCursePower:function(){
+            return Math.min( this.get("level") * gameStatus.monsterPower.curse, 80 ) / 100;
         }
     })
 
@@ -441,13 +458,13 @@ define(function (require, exports, module) {
 
     exports.BossLich = exports.Boss.extend({
         defaults:function(){
-            var data = exports.Monster.prototype.defaults.call(this);
+            var data = exports.Boss.prototype.defaults.call(this);
             data.attackType = "range normal";
             data.range = 1000;
             return data;
         },
         calAttack: function (level) {
-            return Math.floor(window.hero.get("maxHp")/10);
+            return Math.floor(window.hero.get("maxHp")/8);
         },
         calExp: function (level) {
             return Math.floor(window.hero.get("maxHp")/2);
@@ -463,6 +480,7 @@ define(function (require, exports, module) {
         kobold: exports.Kobold,
         medusa: exports.Medusa,
         mimic: exports.Mimic,
+        mummy: exports.Mummy,
         ogre: exports.Ogre,
         orc: exports.Orc,
         "rat-man":exports.RatMan,

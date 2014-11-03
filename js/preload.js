@@ -88,12 +88,20 @@ define(function(require,exports,module) {
         "minotaur2-4.png",
         "minotaur3-3.png",
         "minotaur3-4.png",
+        "mummy2-0.png",
+        "mummy2-3.png",
+        "mummy2-4.png",
+        "mummy3-3.png",
+        "mummy3-4.png",
         "ogre2-0.png",
         "ogre2-3.png",
         "ogre2-4.png",
         "orc1-0.png",
         "orc1-3.png",
         "orc1-4.png",
+        "rat-man2-0.png",
+        "rat-man2-3.png",
+        "rat-man2-4.png",
         "shaman2-0.png",
         "shaman2-3.png",
         "shaman2-4.png",
@@ -130,10 +138,11 @@ define(function(require,exports,module) {
         "potion.png",
 
         "status-angry.png",
+        "status-cursed.png",
         "status-elite.png",
-        "status-poison.png",
         "status-freeze.png",
         "status-locked.png",
+        "status-poison.png",
         "icon-hourglass.png",
 
         "skill-constitution.png",
@@ -143,6 +152,7 @@ define(function(require,exports,module) {
         "skill-wisdom.png",
         "skill-recover.png",
         "skill-treasurehunting.png",
+        "skill-regeneration.png",
 
         "skill-slash.png",
         "skill-whirl.png",
@@ -163,6 +173,7 @@ define(function(require,exports,module) {
         "skill-teleport.png",
         "skill-lightening-chain.png",
 
+        "room-sign.png",
         "loading.gif"
     ];
 

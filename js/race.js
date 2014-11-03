@@ -14,13 +14,13 @@ define(function(require,exports,module) {
         adjustSkillCount:function(skill){
 
         },
-        onNewRound:function(){
+        onNewTurn:function(){
 
         }
     })
     exports.HumanRace = exports.Race.extend({
         adjustSkillPool:function(){
-            _.each(window.gameStatus.skillPool,function(skill){
+            _.each(window.gameModeStatus.skillPool,function(skill){
                 if ( skill.get("maxLevel") > 1 ) {
                     skill.set("maxLevel",skill.get("maxLevel")+1)
                 }
@@ -60,7 +60,7 @@ define(function(require,exports,module) {
             var s = new Skill.RegenerationSkill()
             s.set("level",2)
             s.modelClass =  Skill.RegenerationSkill;
-            window.gameStatus.skillPool.push(s)
+            window.gameModeStatus.skillPool.push(s)
         },
         adjustHero:function(){
             hero.set({

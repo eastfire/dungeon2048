@@ -125,7 +125,7 @@ define(function(require,exports,module){
             }
         },
         adjustSkillPool:function(){
-            gameStatus.selectableType.push("priest")
+            gameModeStatus.selectableType.push("priest")
         }
     })
     exports.HolyShieldUnlock = exports.Unlockable.extend({
@@ -233,7 +233,7 @@ define(function(require,exports,module){
             }
         },
         adjustSkillPool:function(){
-            gameStatus.selectableType.push("wizard")
+            gameModeStatus.selectableType.push("wizard")
         }
     })
 
@@ -357,56 +357,6 @@ define(function(require,exports,module){
             localStorage.setItem("get-reward-"+this.get("name"), true);
         }
     })
-
-
-//
-//    exports.SlimeCountAchievement = exports.Achievement.extend({
-//        defaults:function(){
-//            return {
-//                name:"slime-count",
-//                displayName:"史莱姆猎手",
-//                description:"杀死100个史莱姆",
-//                reward:10
-//            }
-//        },
-//        isPassed:function(){
-//            return statistic.kill.monsterCount["slime"] >= 100;
-//        }
-//    })
-//
-//    exports.SlimeCount2Achievement = exports.Achievement.extend({
-//        defaults:function(){
-//            return {
-//                name:"slime-count2",
-//                displayName:"史莱姆屠夫",
-//                description:"杀死1000个史莱姆",
-//                reward:50
-//            }
-//        },
-//        isValid:function(){
-//            return localStorage.getItem("get-reward-slime-count");
-//        },
-//        isPassed:function(){
-//            return statistic.kill.monsterCount["slime"] >= 1000;
-//        }
-//    })
-//
-//    exports.SlimeCount3Achievement = exports.Achievement.extend({
-//        defaults:function(){
-//            return {
-//                name:"slime-count3",
-//                displayName:"史莱姆灭绝者",
-//                description:"杀死10000个史莱姆",
-//                reward:200
-//            }
-//        },
-//        isValid:function(){
-//            return localStorage.getItem("get-reward-slime-count2");
-//        },
-//        isPassed:function(){
-//            return statistic.kill.monsterCount["slime"] >= 10000;
-//        }
-//    })
 
     exports.ArcherLevelAchievement = exports.Achievement.extend({
         defaults:function(){
