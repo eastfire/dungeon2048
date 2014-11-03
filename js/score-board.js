@@ -222,9 +222,11 @@ define(function(require,exports,module) {
                     "<td class='score-cell player-kill-by'>"+self.getReason(this.score)+"</td>"+
                     "</tr>")
             }
-            this.$el.animate({
-                scrollTop: list.find(".score-row.current").offset().top
-            })
+            if ( list.find(".score-row.current").length ) {
+                this.$el.animate({
+                    scrollTop: list.find(".score-row.current").offset().top
+                })
+            }
         },
         getReason:function(score){
             var reason;

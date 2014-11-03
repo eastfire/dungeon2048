@@ -352,7 +352,12 @@ define(function(require,exports,module) {
 
             el.find(".to-menu").on("click",function(){
                 $(".select-hero-body").remove();
-                gameOver()
+                gameStatus = {
+                    gainStar:0,
+                    death:null
+                }
+                var view = new ScoreBoard.GameOver();
+                $(".main-window").append(view.render().$el);
             })
         } else {
             gameModeStatus.selectedType = gameModeStatus.selectableType[0]
@@ -474,6 +479,34 @@ define(function(require,exports,module) {
         },TIME_SLICE);
     }
 
+    var initStatistic = function(){
+        var json = localStorage.getItem("statistic")
+        if ( json )
+            window.statistic = JSON.parse(json);
+        else
+            window.statistic = {
+                kill:{
+                    total:0,
+                    monsterCount:{},
+                    monsterLevel:{}
+                },
+                killed:{
+                    total:0,
+                    byPoison:0,
+                    byFull:0,
+                    byMonsters:{}
+                },
+                skills:{},
+                most:{
+                    level:1,
+                    hp:1
+                },
+                items:{
+                    total:0
+                }
+            }
+    }
+
     require("./preload").preload(function(){
         $("body").append("<div class='main-window-wrapper'></div>")
         calculateScreenSize();
@@ -492,6 +525,8 @@ define(function(require,exports,module) {
         if ( store != null ){
             gameModeStatus.tutorial.on = JSON.parse(store);
         }
+
+        initStatistic();
 
         startGame();
     })

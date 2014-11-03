@@ -240,34 +240,6 @@ define(function(require,exports,module) {
             return m;
         },
 
-        initStatistic : function(){
-            var json = localStorage.getItem("statistic")
-            if ( json )
-                window.statistic = JSON.parse(json);
-            else
-                window.statistic = {
-                    kill:{
-                        total:0,
-                        monsterCount:{},
-                        monsterLevel:{}
-                    },
-                    killed:{
-                        total:0,
-                        byPoison:0,
-                        byFull:0,
-                        byMonsters:{}
-                    },
-                    skills:{},
-                    most:{
-                        level:1,
-                        hp:1
-                    },
-                    items:{
-                        total:0
-                    }
-                }
-        },
-
         calculateBlockSize : function(){
             return {width:roomWidth/mapWidth, height:roomHeight/mapHeight};
         },
@@ -294,8 +266,6 @@ define(function(require,exports,module) {
             block.view = heroView;
 
             this.$el.append(heroView.render().$el);
-
-            this.initStatistic();
 
             if ( gameStatus.win ) {
                 this.renderExit();
