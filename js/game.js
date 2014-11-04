@@ -1,4 +1,5 @@
 define(function(require,exports,module) {
+    //→←↑↓
     try {
         var appCache = window.applicationCache;
 
@@ -47,7 +48,7 @@ define(function(require,exports,module) {
 
     window.basicMapWidth = 5;
     window.basicMapHeight = 5;
-    window.extraBlock = 2.9;
+    window.extraBlock = 2.75;
 
 
     var calculateScreenSize = function(){
@@ -254,21 +255,24 @@ define(function(require,exports,module) {
                 title:"英雄的试炼２",
                 flavorDescription:"",
                 winCondition:"survive",
-                turnLimit:25,
+                specialCondition:{
+                    hideAll:true
+                },
+                turnLimit:20,
                 initMonsterTypes:["orc","ghost","minotaur"]
             })
             var trailRoom1 = new Room.Room({
                 title:"英雄的试炼１",
                 flavorDescription:"",
                 winCondition:"survive",
-                turnLimit:25,
+                turnLimit:20,
                 initMonsterTypes:["slime","skeleton","goblin"],
                 winExit0:trailRoom2
             })
 
             var startingRoom = new Room.Room({
                 title:"起点",
-                flavorDescription:"上：冒险模式<br/>右：无尽的房间",
+                flavorDescription:"↑：冒险模式<br/>→：无尽的房间",
                 generateMonsterPerTurn:0,
                 specialCondition:{
                     alreadyWin:true
@@ -387,15 +391,7 @@ define(function(require,exports,module) {
     }
 
     window.showRoomObject = function(callback){
-        showingDialog = true;
-        var el = $("<div class='room-object-dialog'><div class='room-title'>"+room.getTitle()+"</div><div class='room-description'>"+room.getObjectContent()+"</div><label class='close-help'>&gt;&gt;点击（任意键）继续&lt;&lt;</button></div>");
-        $(".main-window").append(el);
-        el.on("click",function(){
-            showingDialog = false;
-            $(".room-object-dialog").remove();
-            if ( callback )
-                callback.call();
-        })
+        roomView.showObject(callback);
     }
 
     window.showLevelUpDialog = function(callback){

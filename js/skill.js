@@ -964,6 +964,78 @@ define(function(require,exports,module) {
         }
     })
 
+    exports.ShapeShiftSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.ShapeShiftSkill
+        },
+        defaults:function(){
+            return {
+                name:"shape-shift",
+                type:"active",
+                displayName:"变形术",
+                level:1,
+                maxLevel:4,
+                currentCount:1000,
+                coolDown:18
+            }
+        },
+        generateDescription:function(){
+            var str = "将房间里所有的某1种怪物变为房间里的另1种怪物";
+            if ( this.get("level") > 1 ) {
+                str += "，冷却时间-2"
+            }
+            return str;
+        },
+        getBasicCoolDown:function(){
+            return this.get("coolDown") - ( this.get("level") - 1 )* 2;
+        },
+        onActive:function(){
+            var totalHit = 0;
+            var types = {};
+            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                    var b = getMapBlock(i,j);
+                    if ( b && b.type === "monster" ) {
+                        types[b.model.get("type")] = 1;
+                    }
+                }
+            }
+            var keys = [];
+            for ( var key in types ){
+                keys.push(key)
+            }
+            if ( keys.length > 1 ) {
+                var twoTypes = getRandomItems(keys,2);
+                var fromType = twoTypes[0];
+                var toType = twoTypes[1];
+                for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                    for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                        var b = getMapBlock(i,j);
+                        if ( b && b.type === "monster" ) {
+                            if (b.model.get("type") == fromType){
+                                totalHit++;
+                                var level = b.model.get("level");
+                                var freeze = b.model.get("freeze");
+                                var angry = b.model.get("angry");
+                                b.model.destroy();
+                                b.model = null;
+                                b.view = null;
+                                roomView.createOneMonster(toType, i, j, level);
+                                b.model.set({
+                                    freeze:freeze,
+                                    angry:angry
+                                })
+                            }
+                        }
+                    }
+                }
+
+                hero.getScore(totalHit);
+            }
+            this.used();
+        }
+    })
+
     exports.LighteningChainSkill = exports.Skill.extend({
         initialize:function() {
             this.modelClass = exports.LighteningChainSkill
@@ -982,12 +1054,12 @@ define(function(require,exports,module) {
         generateDescription:function(){
             var str = "随机杀死英雄周围的"+this.getEffect()+"个怪物和与之同名的所有怪物";
             if ( this.get("level") > 1 ) {
-                str += "，但冷却时间＋５"
+                str += "，但冷却时间＋4"
             }
             return str;
         },
         getBasicCoolDown:function(){
-            return this.get("coolDown") + ( this.get("level") - 1 )* 5;
+            return this.get("coolDown") + ( this.get("level") - 1 )* 4;
         },
         onActive:function(){
             var totalHit = 0;
@@ -1051,6 +1123,168 @@ define(function(require,exports,module) {
         }
     })
 
+    exports.MeteorShowersSkill = exports.Skill.extend({
+        initialize: function () {
+            this.modelClass = exports.MeteorShowersSkill
+        },
+        defaults: function () {
+            return {
+                name: "meteor-showers",
+                type: "active",
+                displayName: "流星雨",
+                level: 1,
+                maxLevel: 5,
+                currentCount: 1000,
+                coolDown: 25
+            }
+        },
+        generateDescription: function () {
+            var str = "以"+this.getEffect()+"%的概率随机杀死每个怪物";
+            if (this.get("level") > 1) {
+                str += "，但冷却时间＋5"
+            }
+            return str;
+        },
+        getBasicCoolDown:function(){
+            return this.get("coolDown") + ( this.get("level") - 1 )* 5;
+        },
+        getEffect:function(level){
+            var l = level || this.get("level");
+            return l*15+5;
+        },
+        onActive:function(){
+            var totalHit = 0;
+            var rate = this.getEffect()/100;
+            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                    var block = getMapBlock(i,j);
+                    if ( block && block.type === "monster" && Math.random() < rate ) {
+                        var monsterView = block.view;
+                        var result = monsterView.beAttacked(0,window.hero.get("attack"), "magic skill");
+                        if ( result )
+                            totalHit++
+                    }
+                }
+            }
+
+            hero.getScore(totalHit);
+            if ( totalHit >= 15 && this.checkAllDead())
+                statistic.skills[this.get("name")]=true;
+            this.used();
+        },
+        checkAllDead:function(){
+            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                    var block = getMapBlock(i,j);
+                    if ( block && block.type === "monster" ) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    });
+
+    exports.TelekinesisSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.TelekinesisSkill
+        },
+        defaults:function(){
+            return {
+                name:"telekinesis",
+                type:"active",
+                displayName:"隔空取物",
+                level:1,
+                maxLevel:3,
+                currentCount:1000,
+                coolDown:15
+            }
+        },
+        generateDescription:function(){
+            var str = "随机取得地图上的"+this.getEffect()+"个宝物";
+            return str;
+        },
+        getEffect:function(level){
+            var l = level || this.get("level");
+            return l;
+        },
+        onActive:function(){
+            var candidate = [];
+            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                    var block = getMapBlock(i,j);
+                    if ( block && block.type === "item" ) {
+                        candidate.push(block)
+                    }
+                }
+            }
+            if ( candidate.length ) {
+                hero.getScore(candidate.length);
+                var blocks = getRandomItems(candidate, this.getEffect())
+                _.each(blocks, function(block){
+                    var itemView = block.view;
+                    var x = hero.get("position").x;
+                    var y = hero.get("position").y;
+                    itemView.$el.css({transition: "all "+(TIME_SLICE*4/5000)+"s ease-in-out 0s", left:x*blockSize.width,
+                        top:y*blockSize.width,
+                        transform:"scale(0.6)"});
+                    var self = this;
+                    setTimeout(function(){
+                        itemView.beTaken();
+                    },1+TIME_SLICE*4/5)
+
+                    block.view = null;
+                    block.model = null;
+                    block.type = "blank";
+                })
+            }
+
+            this.used();
+        }
+    });
+
+    exports.StealthSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.TelekinesisSkill
+        },
+        defaults:function(){
+            return {
+                name:"stealth",
+                type:"active",
+                displayName:"隐身",
+                level:1,
+                maxLevel:3,
+                currentCount:1000,
+                coolDown:24
+            }
+        },
+        generateDescription:function(){
+            var str = "持续"+this.getEffect()+"回合，所有怪物不攻击英雄";
+            if ( this.get("level") > 1 ) {
+                str+="但冷却时间+4";
+            }
+            return str;
+        },
+        getBasicCoolDown:function(){
+            return this.get("coolDown") + ( this.get("level") - 1 )* 4;
+        },
+
+        getEffect:function(level){
+            var l = level || this.get("level");
+            return l+1;
+        },
+        onActive:function(){
+            this.set("duration",this.getEffect());
+            this.used();
+        },
+        adjustRange:function( type,range){
+            if ( this.get("duration") ) {
+                return null;
+            } else
+                return range;
+        }
+    });
+
     exports.initSkillPool = function(){
         initSkillConst();
 
@@ -1076,8 +1310,12 @@ define(function(require,exports,module) {
 
         exports.wizardBasicSkillPoolEntry = [
             exports.SpiderWebSkill,
-//            exports.LighteningChainSkill,
-            exports.MagicMissileSkill,
+            exports.MagicMissileSkill
+        ]
+
+        exports.thiefBasicSkillPoolEntry = [
+            exports.StealthSkill,
+            exports.TelekinesisSkill
         ]
     }
 

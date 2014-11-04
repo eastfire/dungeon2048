@@ -855,7 +855,7 @@ define(function(require,exports,module){
                 itemView.$el.css({transition: "all "+(TIME_SLICE*4/5000)+"s ease-in-out 0s", left:x*blockSize.width,
                     top:y*blockSize.width,
                     transform:"scale(0.5)",
-                    opcacity:0.5});
+                    opacity:0.5});
                 var self = this;
                 setTimeout(function(){
                     var l = itemView.model.get("level");
@@ -1143,7 +1143,7 @@ define(function(require,exports,module){
                 })
             } else {
                 this.$el.css({
-                    height:roomHeight/basicMapHeight*0.9
+                    height:roomHeight/basicMapHeight*0.75
                 })
                 this.$(".room-sign").css({
                     width:roomHeight/basicMapHeight*0.5,
@@ -1155,7 +1155,7 @@ define(function(require,exports,module){
 
         showRoomSign:function(event){
             event.stopPropagation();
-            showRoomObject();
+            roomView.showRoomSign();
         }
     })
 

@@ -38,12 +38,14 @@ define(function(require,exports,module) {
                 generateMonsterPerTurn : 2, // 0 = no appear
                 dropItemPerLevel: 5,
 
-                specialCondition:{}, // noExp, noHp, noItem, noLevel , hideWinCondition, hideLoseCondition, hideReward, hidePunish, alreadyWin
+                specialCondition:{}, // noExp, noHp, noItem, noLevel ,hideAll, hideWinCondition, hideLoseCondition, hideReward, hidePunish, alreadyWin
                 preCondition: null,
                 reward:null
             }
         },
         getTitle:function(){
+            if ( this.get("specialCondition").hideAll )
+                return "未知的房间";
             return this.get("title")
         },
         getObjectContent:function(){
@@ -51,7 +53,7 @@ define(function(require,exports,module) {
 
             if ( this.get("winCondition") ) {
                 str += "<br/>胜利条件："
-                if ( this.get("specialCondition")["hideWinCondition"] ) {
+                if ( this.get("specialCondition")["hideAll"] || this.get("specialCondition")["hideWinCondition"] ) {
                     str += "??未知??"
                 } else {
                     if (this.get("winCondition") == "survive") {
@@ -73,8 +75,8 @@ define(function(require,exports,module) {
             }
 
             if ( this.get("loseCondition") ) {
-                str += "<br/>胜利条件："
-                if ( this.get("specialCondition")["hideLoseCondition"] ) {
+                str += "<br/>失败条件："
+                if ( this.get("specialCondition")["hideAll"] || this.get("specialCondition")["hideLoseCondition"] ) {
                     str += "??未知??"
                 } else {
                     if (this.get("loseCondition") == "timeout") {
@@ -142,6 +144,27 @@ define(function(require,exports,module) {
                 gainStar:0,
                 win: this.model.get("specialCondition").alreadyWin
             }
+        },
+
+        showObject:function(callback){
+            if ( this.model.get("specialCondition").hideAll ) {
+                if ( callback )
+                    callback.call();
+                return;
+            }
+
+            this.showRoomSign(callback)
+        },
+        showRoomSign:function(callback){
+            showingDialog = true;
+            var el = $("<div class='room-object-dialog'><div class='room-title'>"+room.getTitle()+"</div><div class='room-description'>"+room.getObjectContent()+"</div><label class='close-help'>&gt;&gt;点击（任意键）继续&lt;&lt;</button></div>");
+            $(".main-window").append(el);
+            el.on("click",function(){
+                showingDialog = false;
+                $(".room-object-dialog").remove();
+                if ( callback )
+                    callback.call();
+            })
         },
 
         render : function () {

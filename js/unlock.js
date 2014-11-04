@@ -121,7 +121,7 @@ define(function(require,exports,module){
             return {
                 name:"priest",
                 description:"解锁牧师",
-                cost:120
+                cost:100
             }
         },
         adjustSkillPool:function(){
@@ -229,7 +229,7 @@ define(function(require,exports,module){
             return {
                 name:"wizard",
                 description:"解锁法师",
-                cost:120
+                cost:100
             }
         },
         adjustSkillPool:function(){
@@ -253,6 +253,22 @@ define(function(require,exports,module){
         }
     })
 
+    exports.ShapeShiftUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"shape-shift",
+                description:"法师 的 变形术技能",
+                cost:15
+            }
+        },
+        isValid:function(){
+            return (new exports.WizardUnlock()).isUnlocked();
+        },
+        adjustSkillPool:function(){
+            Skill.wizardBasicSkillPoolEntry.push( Skill.ShapeShiftSkill )
+        }
+    })
+
     exports.LighteningChainUnlock = exports.Unlockable.extend({
         defaults:function(){
             return {
@@ -266,6 +282,22 @@ define(function(require,exports,module){
         },
         adjustSkillPool:function(){
             Skill.wizardBasicSkillPoolEntry.push( Skill.LighteningChainSkill )
+        }
+    })
+
+    exports.MeteorShowersUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"meteor-showers",
+                description:"法师 的 流星雨技能",
+                cost:100
+            }
+        },
+        isValid:function(){
+            return (new exports.WizardUnlock()).isUnlocked();
+        },
+        adjustSkillPool:function(){
+            Skill.wizardBasicSkillPoolEntry.push( Skill.MeteorShowersSkill )
         }
     })
 
@@ -305,6 +337,55 @@ define(function(require,exports,module){
         }
     })
 
+    exports.ThiefUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"thief",
+                description:"解锁盗贼",
+                cost:100
+            }
+        },
+        adjustSkillPool:function(){
+            gameModeStatus.selectableType.push("thief")
+        }
+    })
+
+    exports.ThiefThirdSkillUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"thief-third-skill",
+                description:"盗贼 的 第3个技能槽",
+                cost:100
+            }
+        },
+        isValid:function(){
+            return (new exports.ThiefUnlock()).isUnlocked();
+        },
+        adjustHero:function(){
+            if ( hero.get("type") == "thief" ){
+                if ( hero.get("skillSlot") == 2 )
+                    hero.set("skillSlot",3)
+            }
+        }
+    })
+    exports.ThiefFourthSkillUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"thief-fourth-skill",
+                description:"盗贼 的 第4个技能槽",
+                cost:300
+            }
+        },
+        isValid:function(){
+            return (new exports.ThiefThirdSkillUnlock()).isUnlocked();
+        },
+        adjustHero:function(){
+            if ( hero.get("type") == "thief" ){
+                hero.set("skillSlot",4)
+            }
+        }
+    })
+
     exports.AllUnlocks = [
         new exports.RevertSlashUnlock(),
         new exports.BigWhirlUnlock(),
@@ -324,9 +405,15 @@ define(function(require,exports,module){
 
         new exports.WizardUnlock(),
         new exports.TeleportUnlock(),
+        new exports.ShapeShiftUnlock(),
         new exports.LighteningChainUnlock(),
+        new exports.MeteorShowersUnlock(),
         new exports.WizardThirdSkillUnlock(),
-        new exports.WizardFourthSkillUnlock()
+        new exports.WizardFourthSkillUnlock(),
+
+        new exports.ThiefUnlock(),
+        new exports.ThiefThirdSkillUnlock(),
+        new exports.ThiefFourthSkillUnlock()
     ]
 
     exports.Achievement = Backbone.Model.extend({
@@ -755,11 +842,28 @@ define(function(require,exports,module){
                 name:"skill-lightening-chain",
                 displayName:"宙斯之怒",
                 description:"闪电链消灭所有且至少15个怪物",
-                reward:60
+                reward:70
             }
         },
         isValid:function(){
             return (new exports.LighteningChainUnlock()).isUnlocked();
+        },
+        isPassed:function(){
+            return statistic.skills["lightening-chain"];
+        }
+    })
+
+    exports.SkillMeteorShowersAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"skill-meteor-shower",
+                displayName:"灭绝之谜",
+                description:"流星雨消灭所有且至少15个怪物",
+                reward:70
+            }
+        },
+        isValid:function(){
+            return (new exports.MeteorShowersUnlock()).isUnlocked();
         },
         isPassed:function(){
             return statistic.skills["lightening-chain"];
@@ -799,6 +903,7 @@ define(function(require,exports,module){
         new exports.SkillTurnUndeadAchievement(),
 
         new exports.SkillTeleportAchievement(),
-        new exports.SkillLighteningChainAchievement()
+        new exports.SkillLighteningChainAchievement(),
+        new exports.SkillMeteorShowersAchievement()
     ]
 });

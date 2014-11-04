@@ -172,6 +172,11 @@ define(function(require,exports,module) {
         "skill-spider-web.png",
         "skill-teleport.png",
         "skill-lightening-chain.png",
+        "skill-shape-shift.png",
+        "skill-meteor-showers.png",
+
+        "skill-stealth.png",
+        "skill-telekinesis.png",
 
         "room-sign.png",
         "loading.gif"

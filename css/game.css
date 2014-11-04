@@ -1183,6 +1183,9 @@ body {
 .hero-type-image.wizard, .unlock-icon-wizard {
     background-image: url("../img/wizard2-0.png");
 }
+.hero-type-image.thief, .unlock-icon-thief {
+    background-image: url("../img/thief2-0.png");
+}
 .hero-type-image.locked {
     background-image: url("../img/status-locked.png");
 }
@@ -1211,7 +1214,7 @@ body {
 }
 
 .room-description {
-    font-size: 1em;
+    font-size: 1.2em;
     margin: 5%;
     text-align: center;
 }
@@ -1422,6 +1425,21 @@ body {
 }
 .skill-image-lightening-chain, .unlock-icon-lightening-chain {
     background-image: url("../img/skill-lightening-chain.png");
+}
+.skill-image-shape-shift, .unlock-icon-shape-shift {
+    background-image: url("../img/skill-shape-shift.png");
+}
+.skill-image-meteor-showers, .unlock-icon-meteor-showers {
+    background-image: url("../img/skill-meteor-showers.png");
+}
+
+
+/* thief skill */
+.skill-image-stealth {
+    background-image: url("../img/skill-stealth.png");
+}
+.skill-image-telekinesis {
+    background-image: url("../img/skill-telekinesis.png");
 }
 
 .skill-image.skill-locked {
