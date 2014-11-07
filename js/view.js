@@ -54,10 +54,8 @@ define(function(require,exports,module){
             var y2 = y1*blockSize.height;
             //console.log(this.model.get("type")+" move to "+x1+" "+y1);
             this.$el.css({transition: "left "+(TIME_SLICE/1000)*movement+"s ease-in-out 0s, top "+(TIME_SLICE/1000)*movement+"s ease-in-out 0s", left:x2, top:y2});
+            clearMapBlock(oldx, oldy)
             var oldblock = map[oldx][oldy];
-            oldblock.type = "blank";
-            oldblock.view = null;
-            oldblock.model = null;
 
             var self = this;
             var newblock = map[x1][y1];
@@ -487,6 +485,19 @@ define(function(require,exports,module){
             }
         },
         beAttacked:function(direction, attack, type){
+            if ( this.isAttacked ) //防止同时多次攻击一个怪物
+                return false;
+            this.isAttacked = true;
+            var result = this.beAttackedForReal(direction, attack, type);
+            if ( result ) {
+                //命中
+            } else {
+                //没命中的话可以再打一次
+                this.isAttacked = false;
+            }
+            return result;
+        },
+        beAttackedForReal:function(direction, attack, type){
             var oldx = this.model.get("position").x * blockSize.width ;
             var oldy = this.model.get("position").y * blockSize.height;
             var x = oldx + increment[direction].x * blockSize.width*0.35;
@@ -759,7 +770,7 @@ define(function(require,exports,module){
     })
 
     exports.GhostView = exports.MonsterView.extend({
-        beAttacked:function(direction, attack, type){
+        beAttackedForReal:function(direction, attack, type){
             if ( type.contains("normal") ) {
                 var dodgeRate = this.model.getDodgePower();
                 if ( Math.random() < dodgeRate ) {
@@ -767,7 +778,7 @@ define(function(require,exports,module){
                     return false;
                 }
             }
-            return exports.MonsterView.prototype.beAttacked.call(this,direction, attack, type);
+            return exports.MonsterView.prototype.beAttackedForReal.call(this,direction, attack, type);
         }
     })
 
@@ -779,11 +790,11 @@ define(function(require,exports,module){
     })
 
     exports.GolemView = exports.MonsterView.extend({
-        beAttacked:function(direction, attack, type){
+        beAttackedForReal:function(direction, attack, type){
             if ( type.contains("skill") ) {
                 return false;
             }
-            return exports.MonsterView.prototype.beAttacked.call(this,direction, attack, type);
+            return exports.MonsterView.prototype.beAttackedForReal.call(this,direction, attack, type);
         }
     })
 

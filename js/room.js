@@ -36,7 +36,7 @@ define(function(require,exports,module) {
                 initLevelPool:[1],
                 initMonsterTypes:null,
                 generateMonsterPerTurn : 2, // 0 = no appear
-                dropItemPerLevel: 5,
+                dropItemPerLevel: TREASURE_HUNTING_EFFECT,
 
                 specialCondition:{}, // noExp, noHp, noItem, noLevel ,hideAll, hideWinCondition, hideLoseCondition, hideReward, hidePunish, alreadyWin
                 preCondition: null,
@@ -309,6 +309,7 @@ define(function(require,exports,module) {
         },
         generateItemForSure:function(x,y, itemLevel){
             var block = map[x][y];
+            block.type = "item";
             block.model = new Model.Item({
                 type:getRandomItem(gameStatus.currentItemTypes),
                 position:{
@@ -321,7 +322,6 @@ define(function(require,exports,module) {
             this.$el.append(itemView.render().$el);
 
             block.view = itemView;
-            block.type = "item";
         },
 
         calMonsterWave: function(){
