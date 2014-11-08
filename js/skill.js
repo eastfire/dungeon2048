@@ -995,7 +995,7 @@ define(function(require,exports,module) {
             for ( var i = 0 ; i < window.mapWidth ; i++ ) {
                 for ( var j = 0 ; j < window.mapHeight ; j++ ) {
                     var b = getMapBlock(i,j);
-                    if ( b && b.type === "monster" ) {
+                    if ( b && b.type === "monster" && b.model.get("subType")!="boss" ) {
                         types[b.model.get("type")] = 1;
                     }
                 }

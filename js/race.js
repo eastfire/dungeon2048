@@ -46,10 +46,10 @@ define(function(require,exports,module) {
 
     exports.ElfRace = exports.Race.extend({
         adjustSkillCount:function(skill){
-            if ( hero.get("hp") < hero.get("maxHp") / 5 ) {
+            if ( hero.get("hp") < hero.get("maxHp") / 2 ) {
                 skill.set("currentCount", skill.get("currentCount")+1)
             }
-            if ( hero.get("hp") < hero.get("maxHp") / 10 ) {
+            if ( hero.get("hp") < hero.get("maxHp") / 5 ) {
                 skill.set("currentCount", skill.get("currentCount")+1)
             }
         }
