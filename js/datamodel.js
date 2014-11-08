@@ -530,4 +530,74 @@ define(function (require, exports, module) {
             }
         }
     })
+
+    exports.Terrain = Backbone.Model.extend({
+        defaults: function () {
+            return {
+                type: "pillar",
+                position: {
+                    x: 0,
+                    y: 0
+                },
+                direction: 2,
+                canPass: true,
+                canGenerateIn: true,
+                canCatch: false
+            }
+        }
+    })
+
+    exports.PillarTerrain = exports.Terrain.extend({
+        defaults: function () {
+            return {
+                type: "pillar",
+                position: {
+                    x: 0,
+                    y: 0
+                },
+                direction: 2,
+                canPass: false,
+                canGenerateIn: false,
+                canCatch: false
+            }
+        }
+    })
+
+    exports.PitTerrain = exports.Terrain.extend({
+        defaults: function () {
+            return {
+                type: "pit",
+                position: {
+                    x: 0,
+                    y: 0
+                },
+                direction: 2,
+                canPass: true,
+                canGenerateIn: true,
+                canCatch: true
+            }
+        }
+    })
+
+    exports.TrapTerrain = exports.Terrain.extend({
+        defaults: function () {
+            return {
+                type: "trap",
+                position: {
+                    x: 0,
+                    y: 0
+                },
+                direction: 2,
+                canPass: true,
+                canGenerateIn: true,
+                canCatch: true
+            }
+        }
+    })
+
+    exports.terrainMap = {
+        pillar: exports.PillarTerrain,
+        pit: exports.PitTerrain,
+        trap: exports.TrapTerrain
+    }
 });

@@ -104,6 +104,9 @@ define(function(require,exports,module){
             this.$el.removeClass("d0 d1 d2 d3")
                 .addClass("d"+this.model.get("direction"))
         },
+        canMove:function(){
+            return !this.model.get("freeze")
+        },
         renderFreeze:function(){
             if ( this.model.get("freeze") && !this.model.previous("freeze")) {
                 this.$el.append("<div class='status-freeze'></div>")
@@ -1103,6 +1106,30 @@ define(function(require,exports,module){
             },TIME_SLICE);
         }
     });
+
+    exports.TerrainView = MovableView.extend({
+        initialize:function(){
+            MovableView.prototype.initialize.call(this);
+            this.model.on("destroy",this.remove,this);
+        },
+        render:function(){
+            this.$el = $("<div class='terrain'></div>")
+            MovableView.prototype.render.call(this);
+            return this;
+        },
+        canMove:function(){
+            return false;
+        },
+        canPass:function(){
+            return this.model.get("canPass")
+        },
+        canGenerateIn:function(){
+            return this.model.get("canGenerateIn")
+        },
+        canCatch:function(){
+            return this.model.get("canCatch")
+        }
+    })
 
     exports.HeroStatusView = Backbone.View.extend({
         events:{

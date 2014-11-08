@@ -255,11 +255,14 @@ define(function(require,exports,module) {
                     m[i][j] = {
                         type:"blank",
                         model:null,
+                        view: null,
+                        terrain:null,
                         x:i,
                         y:j
                     }
                 }
             }
+
             return m;
         },
 
@@ -297,6 +300,20 @@ define(function(require,exports,module) {
             setTimeout(function(){
                 self.newTurn.call(self)
             }, TIME_SLICE);
+
+//            map[1][1].terrain=new View.TerrainView({
+//                model: new Model.Terrain({
+//                    type:"trap",
+//                    position:{
+//                        x:1,
+//                        y:1
+//                    },
+//                    canPass:true,
+//                    canGenerateIn:true,
+//                    canCatch: true
+//                })
+//            })
+//            this.$el.append( map[1][1].terrain.render().$el )
         },
 
         generateItem : function(x,y, monsterLevel){
@@ -370,7 +387,7 @@ define(function(require,exports,module) {
             do {
                 x = Math.floor(Math.random()*window.mapWidth);
                 y = Math.floor(Math.random()*window.mapHeight);
-            } while ( map[x][y].type != "blank" || hero.isPositionNear(x,y) );
+            } while ( map[x][y].type != "blank" || hero.isPositionNear(x,y) || (map[x][y].terrain && !map[x][y].terrain.canGenerateIn()));
 
             var monsterType = getRandomItem(gameStatus.bossPool);
             this.createOneMonster(monsterType, x,y, 1);
@@ -388,7 +405,7 @@ define(function(require,exports,module) {
             do {
                 x = Math.floor(Math.random()*window.mapWidth);
                 y = Math.floor(Math.random()*window.mapHeight);
-            } while ( map[x][y].type != "blank" );
+            } while ( map[x][y].type != "blank" || (map[x][y].terrain && !map[x][y].terrain.canGenerateIn()) );
 
             var monsterType = getRandomItem(gameStatus.currentMonsterTypes);
 
@@ -468,8 +485,13 @@ define(function(require,exports,module) {
         checkAllFill : function(){
             for ( var i = 0 ; i < mapWidth; i++){
                 for ( var j = 0 ; j < mapHeight; j++){
-                    if ( map[i][j].type == "blank" )
-                        return false;
+                    if ( map[i][j].type == "blank" ) {
+                        if ( map[i][j].terrain ) {
+                            if ( map[i][j].terrain.canGenerateIn() )
+                                return false;
+                        } else
+                            return false;
+                    }
                 }
             }
             return true;
@@ -508,7 +530,7 @@ define(function(require,exports,module) {
 
             var mymodel = mapblock.model;
 
-            if (mymodel.get("freeze")) {
+            if (!mapblock.view.canMove()) {
                 mapblock.movement = 0;
                 return;
             }
@@ -518,6 +540,15 @@ define(function(require,exports,module) {
                 if ( curx >= mapWidth || cury >= mapHeight || curx < 0 || cury < 0 )
                     break;
                 var curblock = window.map[curx][cury];
+                if ( curblock.terrain ){
+                    if ( !curblock.terrain.canPass() ) {
+                        break;
+                    }
+                    if ( curblock.terrain.canCatch() ) {
+                        movement++;
+                        break;
+                    }
+                }
                 if ( curblock.type == "blank" ) {
                     movement ++;
                 } else if ( mytype == curblock.type ){
@@ -802,6 +833,30 @@ define(function(require,exports,module) {
                     self.renderExit();
                 },2500)
             },10)
+        },
+
+        initStatistic : function(){
+            this.roomStatistic = {
+                kill:{
+                    total:0,
+                    monsterCount:{},
+                    monsterLevel:{}
+                },
+                killed:{
+                    total:0,
+                    byPoison:0,
+                    byFull:0,
+                    byMonsters:{}
+                },
+                skills:{},
+                most:{
+                    level:1,
+                    hp:1
+                },
+                items:{
+                    total:0
+                }
+            }
         }
     });
 
