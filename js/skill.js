@@ -1365,11 +1365,11 @@ define(function(require,exports,module) {
 
     exports.getSkillPool = function(type){
         var array = [];
-//        _.each(exports.commonSkillPoolEntry, function(skill){
-//             var s = new skill();
-//             s.modelClass = skill;
-//             array.push(s)
-//        });
+        _.each(exports.commonSkillPoolEntry, function(skill){
+             var s = new skill();
+             s.modelClass = skill;
+             array.push(s)
+        });
         var pool2 = exports[type+"BasicSkillPoolEntry"];
         if ( pool2 ) {
             _.each( pool2, function(skill){
@@ -1378,9 +1378,6 @@ define(function(require,exports,module) {
                 array.push(s)
             });
         }
-
-//        array = [new exports.BigWhirlSkill(),
-//            new exports.WhirlSkill()]
 
         return array;
     }
