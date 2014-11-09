@@ -12,12 +12,22 @@ define(function(require,exports,module) {
                 title:"",
                 flavorDescription:"",
 
-                turnLimit:null,//none, 4 ,etc
-                winCondition:null, //null, survive, kill, death, levelup
-                killTarget:null,
+                winCondition:{
+                    type:null, //null, turn, kill, move, levelUp
+                    turn: null,
+                    kill: null,
+                    move: null,
+                    levelUp: null
+                },
+                loseCondition:{
+                    type:null, //null, turn, kill, move, levelUp
+                    turn: null,
+                    kill: null,
+                    move: null,
+                    levelUp: null
+                },
+
                 rewardDescription:null,
-                loseCondition:null,//none, timeout, kill
-                dontKillTarget:null,
                 punishDescription:null,
 
                 blocks:null,
@@ -51,44 +61,84 @@ define(function(require,exports,module) {
         getObjectContent:function(){
             var str = this.get("flavorDescription");
 
-            if ( this.get("winCondition") ) {
-                str += "<br/>胜利条件："
+            var condition = this.get("winCondition");
+            if ( condition && condition.type ) {
+                str += "<br/>成功条件："
                 if ( this.get("specialCondition")["hideAll"] || this.get("specialCondition")["hideWinCondition"] ) {
                     str += "??未知??"
                 } else {
-                    if (this.get("winCondition") == "survive") {
-                        str += "生存" + this.get("turnLimit") + "回合"
-                    } else if (this.get("winCondition") == "kill") {
+                    if (condition.type == "turn") {
+                        str += "生存" + condition.turn + "回合"
+                    } else if (condition.type == "kill") {
                         str += "杀死";
-                        var target = this.get("killTarget");
+                        var target = condition.kill;
                         str += target.count + "个"
                         if (target.level) {
                             str += "lv" + target.level;
                         }
-                        str += Help.monsterDisplayName[target.monster];
-                    } else if (this.get("winCondition") == "levelup") {
-                        str += "升级"
-                    } else if (this.get("winCondition") == "death") {
+                        if ( target.monster )
+                            str += Help.monsterDisplayName[target.monster];
+                        else
+                            str += "怪物";
+                    } else if (condition.type == "levelUp") {
+                        str += "升"+condition.levelUp+"级"
+                    } else if (condition.type == "death") {
                         str += "英雄死亡"
+                    } else if (condition.type == "move") {
+                        str += "英雄";
+                        if ( condition.move.total ) {
+                            str+="移动"+condition.move.total+"格";
+                        } else if ( condition.move["0"] ) {
+                            str+="向上移动"+condition.move["0"]+"格";
+                        } else if ( condition.move["1"] ) {
+                            str+="向右移动"+condition.move["1"]+"格";
+                        } else if ( condition.move["2"] ) {
+                            str+="向下移动"+condition.move["2"]+"格";
+                        } else if ( condition.move["3"] ) {
+                            str+="向左移动"+condition.move["3"]+"格";
+                        }
+                    } else if (condition.type == "takeDamage") {
+                        str += "英雄受到"+condition.takeDamage+"伤害";
                     }
                 }
             }
 
-            if ( this.get("loseCondition") ) {
+            condition = this.get("loseCondition");
+            if ( condition && condition.type ) {
                 str += "<br/>失败条件："
                 if ( this.get("specialCondition")["hideAll"] || this.get("specialCondition")["hideLoseCondition"] ) {
                     str += "??未知??"
                 } else {
-                    if (this.get("loseCondition") == "timeout") {
-                        str += "超过" + this.get("turnLimit") + "回合"
-                    } else if (this.get("loseCondition") == "kill") {
+                    if (condition.type == "turn") {
+                        str += "超过" + condition.turn + "回合"
+                    } else if (condition.type == "kill") {
                         str += "杀死";
-                        var target = this.get("dontKillTarget");
+                        var target = condition.kill;
                         str += target.count + "个"
                         if (target.level) {
                             str += "lv" + target.level;
                         }
-                        str += Help.monsterDisplayName[target.monster];
+                        if ( target.monster )
+                            str += Help.monsterDisplayName[target.monster];
+                        else
+                            str += "怪物";
+                    } else if (condition.type == "levelUp") {
+                        str += "英雄升"+condition.levelUp+"级"
+                    } else if (condition.type == "move") {
+                        str += "英雄";
+                        if ( condition.move.total ) {
+                            str+="移动"+condition.move.total+"格";
+                        } else if ( condition.move["0"] ) {
+                            str+="向上移动"+condition.move["0"]+"格";
+                        } else if ( condition.move["1"] ) {
+                            str+="向右移动"+condition.move["1"]+"格";
+                        } else if ( condition.move["2"] ) {
+                            str+="向下移动"+condition.move["2"]+"格";
+                        } else if ( condition.move["3"] ) {
+                            str+="向左移动"+condition.move["3"]+"格";
+                        }
+                    } else if (condition.type == "takeDamage") {
+                        str += "英雄受到"+condition.takeDamage+"伤害";
                     }
                 }
             }
@@ -130,7 +180,7 @@ define(function(require,exports,module) {
                 currentMonsterMaxLevel : 1,
                 bossPool:this.model.get("bossPool"),
                 dropItemPerLevel: this.model.get("dropItemPerLevel"),
-                currentItemTypes:["potion"],
+                currentItemTypes:["potion","mana-potion"],
                 help:{
                 },
                 monsterPower:{
@@ -280,6 +330,7 @@ define(function(require,exports,module) {
 
         start: function(){
             this.initGameStatus();
+            this.initRoomStatistic();
 
             hero.set({
                 "position":this.model.get("heroAppearPosition"),
@@ -293,9 +344,8 @@ define(function(require,exports,module) {
 
             this.$el.append(heroView.render().$el);
 
-            if ( gameStatus.win ) {
-                this.renderExit();
-            }
+            this.renderExit();
+
             var self = this;
             setTimeout(function(){
                 self.newTurn.call(self)
@@ -473,7 +523,13 @@ define(function(require,exports,module) {
                 gameStatus.phase = PHASE_USER;
                 return;
             }
-            for (var i = 0; i < this.model.get("generateMonsterPerTurn") + this.model.extraMonsterNumberWhenNagative() ; i++) {
+            var generateMonsterCount = this.model.get("generateMonsterPerTurn") + this.model.extraMonsterNumberWhenNagative();
+            _.each(heroView.skillList, function(skill){
+                if ( skill.adjustGenerateMonsterCount ){
+                    generateMonsterCount = skill.adjustGenerateMonsterCount.call(skill, generateMonsterCount);
+                }
+            });
+            for (var i = 0; i < generateMonsterCount ; i++) {
                 this.generateOneMonster();
             }
 
@@ -599,7 +655,6 @@ define(function(require,exports,module) {
                 return;
             }
             window.moveDirection = direction;
-            //console.log("--MAP--")
             for ( var i = 0 ; i < mapWidth; i++){
                 for ( var j = 0 ; j < mapHeight; j++){
                     var m = map[i][j];
@@ -610,7 +665,6 @@ define(function(require,exports,module) {
                     m.beTaken = false;
                 }
             }
-            //console.log("--MAP END--")
 
             switch (direction){
                 case 0:
@@ -737,19 +791,11 @@ define(function(require,exports,module) {
 
         turnEnd : function(){
             if ( !gameStatus.win && !gameStatus.lose ) {
-                if (this.model.get("turnLimit")) {
-                    if (gameStatus.turn >= this.model.get("turnLimit")) {
-                        if (this.model.get("winCondition") == "survive") {
-                            //win
-                            this.win();
-                            return;
-                        }
-                        if (this.model.get("loseCondition") == "timeout") {
-                            //lose
-                            this.lose();
-                            return;
-                        }
-                    }
+                if ( this.checkCondition(this.model.get("loseCondition")) )
+                    return;
+                if ( this.checkCondition(this.model.get("winCondition")) ) {
+                    this.win();
+                    return;
                 }
             }
 
@@ -775,6 +821,58 @@ define(function(require,exports,module) {
             }
         },
 
+        checkCondition:function(condition){
+            if (condition.type=="turn") {
+                if (gameStatus.turn >= condition.turn) {
+                    return true;
+                }
+            } else if ( condition.type == "kill" ){
+                var target = condition.kill;
+                if ( target.monster ) { //指明某种怪物
+                    if ( target.level ) { //指明怪物等级
+                        if ( this.roomStatistic.kill[target.monster] &&
+                            this.roomStatistic.kill[target.monster].level[target.level] &&
+                            this.roomStatistic.kill[target.monster].level[target.level] > target.count ) {
+                            return ture;
+                        }
+                        this.roomStatistic.kill[target.monster].level[target.level];
+                    } else { //任意等级
+                        if ( this.roomStatistic.kill[target.monster] &&
+                            this.roomStatistic.kill[target.monster].total > target.count ) {
+                            return true;
+                        }
+                    }
+                } else {//任意怪物
+                    if ( this.roomStatistic.kill.total >= target.count )
+                        return true;
+                }
+            } else if ( condition.type == "move" ){
+                if ( condition.move.total ) {
+                    if ( this.roomStatistic.hero.move.total >= condition.move.total)
+                        return true;
+                } else if ( condition.move["0"] ) {
+                    if ( this.roomStatistic.hero.move["0"] >= condition.move["0"])
+                        return true;
+                } else if ( condition.move["1"] ) {
+                    if ( this.roomStatistic.hero.move["1"] >= condition.move["1"])
+                        return true;
+                } else if ( condition.move["2"] ) {
+                    if ( this.roomStatistic.hero.move["2"] >= condition.move["2"])
+                        return true;
+                } else if ( condition.move["3"] ) {
+                    if ( this.roomStatistic.hero.move["3"] >= condition.move["3"])
+                        return true;
+                }
+            } else if ( condition.type == "takeDamage") {
+                if ( this.roomStatistic.hero.takeDamage >= condition.takeDamage)
+                    return true;
+            } else if ( condition.type == "levelUp") {
+                if ( this.roomStatistic.hero.levelUp >= condition.levelUp)
+                    return true;
+            }
+            return false;
+        },
+
         win: function(){
             gameStatus.win = true;
             this.$el.append("<div class='room-result-sign'>成功</div>");
@@ -794,25 +892,33 @@ define(function(require,exports,module) {
         },
 
         renderExit:function(){
+            $(".exit-arrow").remove();
+
+            if ( !gameStatus.win && !gameStatus.lose ) {
+                return;
+            }
+
             var status = gameStatus.win ? "win" : "lose";
+
+
             if ( this.model.get(status+"Exit0") ) {
                 for ( var i = 0 ; i < mapWidth; i++){
-                    $("#mapblock"+i+"_"+0).append("<div class='exit-arrow0'></div>")
+                    $("#mapblock"+i+"_"+0).append("<div class='exit-arrow exit-arrow0'></div>")
                 }
             }
             if ( this.model.get(status+"Exit1") ) {
                 for ( var i = 0 ; i < mapHeight; i++){
-                    $("#mapblock"+(mapWidth-1)+"_"+i).append("<div class='exit-arrow1'></div>")
+                    $("#mapblock"+(mapWidth-1)+"_"+i).append("<div class='exit-arrow exit-arrow1'></div>")
                 }
             }
             if ( this.model.get(status+"Exit2") ) {
                 for ( var i = 0 ; i < mapWidth; i++){
-                    $("#mapblock"+i+"_"+(mapHeight-1)).append("<div class='exit-arrow2'></div>")
+                    $("#mapblock"+i+"_"+(mapHeight-1)).append("<div class='exit-arrow exit-arrow2'></div>")
                 }
             }
             if ( this.model.get(status+"Exit3") ) {
                 for ( var i = 0 ; i < mapHeight; i++){
-                    $("#mapblock"+0+"_"+i).append("<div class='exit-arrow3'></div>")
+                    $("#mapblock"+0+"_"+i).append("<div class='exit-arrow exit-arrow3'></div>")
                 }
             }
         },
@@ -835,26 +941,26 @@ define(function(require,exports,module) {
             },10)
         },
 
-        initStatistic : function(){
+        initRoomStatistic : function(){
             this.roomStatistic = {
                 kill:{
                     total:0,
-                    monsterCount:{},
-                    monsterLevel:{}
+                    type:{}
                 },
-                killed:{
+                hero:{
+                    takeDamage: 0,
+                    levelUp: 0,
+                    move: {
+                        total: 0,
+                        "0" : 0,
+                        "1" : 0,
+                        "2" : 0,
+                        "3" : 0
+                    }
+                },
+                item:{
                     total:0,
-                    byPoison:0,
-                    byFull:0,
-                    byMonsters:{}
-                },
-                skills:{},
-                most:{
-                    level:1,
-                    hp:1
-                },
-                items:{
-                    total:0
+                    type:{}
                 }
             }
         }
@@ -866,8 +972,10 @@ define(function(require,exports,module) {
             data.initMonsterTypes=["slime"];
             data.title = "新手教室";
             data.flavorDescription = "胜利条件：完成教程";
-            data.turnLimit = 6;
-            data.winCondition = "survive";
+            data.winCondition = {
+                type:"turn",
+                turn: 6
+            };
             data.dropItemPerLevel = 0;
             data.generateMonsterPerTurn = 0;
             return data;

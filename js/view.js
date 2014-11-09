@@ -142,6 +142,13 @@ define(function(require,exports,module){
             MovableView.prototype.render.call(this);
             return this;
         },
+        move:function(movement, direction){
+            MovableView.prototype.move.call(this,movement,direction);
+            //roomStatistic
+            roomView.roomStatistic.hero.move.total += movement;
+            roomView.roomStatistic.hero.move[direction] += movement;
+            //roomStatistic end
+        },
         getSkill:function(skill){
             var found = this.hasSkill(skill);
             if ( found ) {
@@ -183,6 +190,10 @@ define(function(require,exports,module){
             }
         },
         levelUp:function(){
+            //roomStatistic
+            roomView.roomStatistic.hero.levelUp++;
+            //roomStatistic end
+
             this.effecQueue.add.call(this.effecQueue,"Level Up");
         },
         onMoveComplete:function(oldblock, newblock){
@@ -275,6 +286,10 @@ define(function(require,exports,module){
                 }
             },this);
             if ( realDamage > 0 ){
+                //roomStatistic
+                roomView.roomStatistic.hero.takeDamage+=realDamage;
+                //roomStatistic end
+
                 this.effecQueue.add.call(this.effecQueue,"♥-"+realDamage);
                 this.model.set("hp",Math.max(this.model.get("hp")-realDamage,0));
             }
@@ -290,6 +305,14 @@ define(function(require,exports,module){
                     hp:this.model.get("hp")+realHeal
                 });
             }
+        },
+        getCoolDown:function(cooldown){
+            this.model.getScore(cooldown*cooldown*this.skillList.length);
+            _.each(this.skillList, function(skill){
+                if ( skill.getCoolDown ){
+                    skill.getCoolDown.call(skill, cooldown);
+                }
+            },this);
         },
         curePoison:function(){
             this.model.set({
@@ -562,6 +585,23 @@ define(function(require,exports,module){
                     statistic.kill.bossCount = statistic.kill.bossCount ? statistic.kill.bossCount + 1 : 1;
                 }
                 //end of statistic
+                //room statistic
+                roomView.roomStatistic.kill.total ++;
+                if ( roomView.roomStatistic.kill.type[type] ) {
+                    roomView.roomStatistic.kill.type[type].total ++;
+                    if ( roomView.roomStatistic.kill.type[type].level[this.model.get("level")] ) {
+                        roomView.roomStatistic.kill.type[type].level[this.model.get("level")]++;
+                    } else {
+                        roomView.roomStatistic.kill.type[type].level[this.model.get("level")] = 1;
+                    }
+                } else {
+                    roomView.roomStatistic.kill.type[type] = {
+                        total : 1,
+                        level: {}
+                    }
+                    roomView.roomStatistic.kill.type[type].level[this.model.get("level")] = 1;
+                }
+                //end of room statistic
 
                 //move star to hero
                 this.moveStar(this.$(".star1"));
@@ -1094,6 +1134,23 @@ define(function(require,exports,module){
                 statistic.items.itemLevel[type] = this.model.get("level")
             }
             //end of statistic
+            //room statistic
+            roomView.roomStatistic.item.total ++;
+            if ( roomView.roomStatistic.item.type[type] ) {
+                roomView.roomStatistic.item.type[type].total ++;
+                if ( roomView.roomStatistic.item.type[type].level[this.model.get("level")] ) {
+                    roomView.roomStatistic.item.type[type].level[this.model.get("level")]++;
+                } else {
+                    roomView.roomStatistic.item.type[type].level[this.model.get("level")] = 1;
+                }
+            } else {
+                roomView.roomStatistic.item.type[type] = {
+                    total : 1,
+                    level: {}
+                }
+                roomView.roomStatistic.item.type[type].level[this.model.get("level")] = 1;
+            }
+            //end of room statistic
 
             this.model.effectHappen();
             var self = this;

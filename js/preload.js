@@ -136,6 +136,7 @@ define(function(require,exports,module) {
         "boss-lich1-4.png",
 
         "potion.png",
+        "mana-potion.png",
 
         "status-angry.png",
         "status-cursed.png",
@@ -162,6 +163,7 @@ define(function(require,exports,module) {
         "skill-cross-slash.png",
 
         "skill-heal.png",
+        "skill-calm-monster.png",
         "skill-confuse-undead.png",
         "skill-turn-undead.png",
         "skill-holy-shield.png",

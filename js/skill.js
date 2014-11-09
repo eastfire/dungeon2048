@@ -149,6 +149,9 @@ define(function(require,exports,module) {
                 this.set("currentCount", 1000); //set to very big
             }
         },
+        getCoolDown:function(cooldown){
+            this.set("currentCount", this.get("currentCount")+cooldown);
+        },
         attackBlock:function(x,y,direction, type){
             var block = getMapBlock(x,y);
             if ( block && block.type == "monster" ) {
@@ -779,6 +782,46 @@ define(function(require,exports,module) {
         }
     })
 
+    exports.CalmMonsterSkill = exports.Skill.extend({
+        initialize: function () {
+            this.modelClass = exports.CalmMonsterSkill
+        },
+        defaults: function () {
+            return {
+                name: "calm-monster",
+                type: "active",
+                displayName: "安抚怪物",
+                level: 1,
+                maxLevel: 5,
+                currentCount: 1000,
+                coolDown: 30
+            }
+        },
+        generateDescription: function () {
+            var str = "持续"+this.getEffect()+"回合不会产生怪物(boss除外)";
+            if (this.get("level")>1)
+                str += "，但冷却时间+4"
+            return str;
+        },
+        getBasicCoolDown:function(){
+            return this.get("coolDown") + ( this.get("level") - 1 )* 4;
+        },
+        onActive:function(){
+            this.set("duration",this.getEffect());
+            this.used();
+        },
+        adjustGenerateMonsterCount:function(count){
+            if ( this.get("duration") ) {
+                return 0;
+            }
+            return count
+        },
+        getEffect:function(level){
+            var l = level || this.get("level");
+            return 2+l;
+        }
+    })
+
     exports.TurnUndeadSkill = exports.Skill.extend({
         initialize:function() {
             this.modelClass = exports.TurnUndeadSkill
@@ -980,7 +1023,7 @@ define(function(require,exports,module) {
             }
         },
         generateDescription:function(){
-            var str = "将房间里所有的某1种怪物变为房间里的另1种怪物";
+            var str = "将房间里所有的某1种怪物变为房间里的另1种怪物(boss除外)";
             if ( this.get("level") > 1 ) {
                 str += "，冷却时间-2"
             }
@@ -1305,7 +1348,8 @@ define(function(require,exports,module) {
 
         exports.priestBasicSkillPoolEntry = [
             exports.HealSkill,
-            exports.DispelSkill
+            exports.DispelSkill,
+            exports.CalmMonsterSkill
         ]
 
         exports.wizardBasicSkillPoolEntry = [
@@ -1321,11 +1365,11 @@ define(function(require,exports,module) {
 
     exports.getSkillPool = function(type){
         var array = [];
-        _.each(exports.commonSkillPoolEntry, function(skill){
-             var s = new skill();
-             s.modelClass = skill;
-             array.push(s)
-        });
+//        _.each(exports.commonSkillPoolEntry, function(skill){
+//             var s = new skill();
+//             s.modelClass = skill;
+//             array.push(s)
+//        });
         var pool2 = exports[type+"BasicSkillPoolEntry"];
         if ( pool2 ) {
             _.each( pool2, function(skill){

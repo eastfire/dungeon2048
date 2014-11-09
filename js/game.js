@@ -254,7 +254,10 @@ define(function(require,exports,module) {
             var trailRoom2 = new Room.Room({
                 title:"英雄的试炼２",
                 flavorDescription:"",
-                winCondition:"survive",
+                winCondition:{
+                    type:"turn",
+                    turn: 20
+                },
                 specialCondition:{
                     hideAll:true
                 },
@@ -264,8 +267,10 @@ define(function(require,exports,module) {
             var trailRoom1 = new Room.Room({
                 title:"英雄的试炼１",
                 flavorDescription:"",
-                winCondition:"survive",
-                turnLimit:20,
+                winCondition:{
+                    type:"levelUp",
+                    levelUp: 1
+                },
                 initMonsterTypes:["slime","skeleton","goblin"],
                 winExit0:trailRoom2
             })

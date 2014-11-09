@@ -704,6 +704,9 @@ body {
 .item.potion {
     background-image: url("../img/potion.png");
 }
+.item.mana-potion {
+    background-image: url("../img/mana-potion.png");
+}
 
 .status-angry {
     background-image: url("../img/status-angry.png");
@@ -1402,6 +1405,9 @@ body {
 }
 .skill-image-dispel {
     background-image: url("../img/skill-dispel.png");
+}
+.skill-image-calm-monster {
+    background-image: url("../img/skill-calm-monster.png");
 }
 .skill-image-holy-shield , .unlock-icon-holy-shield{
     background-image: url("../img/skill-holy-shield.png");

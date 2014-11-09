@@ -521,12 +521,18 @@ define(function (require, exports, module) {
             })
         },
         calEffect:function(level){
-            return level * (level + 1);
+            if (this.get("type") == "potion") {
+                return level * (level + 1);
+            } else if (this.get("type") == "mana-potion") {
+                return level;
+            }
         },
         effectHappen: function () {
             if (this.get("type") == "potion") {
                 window.heroView.getHp(this.get("effect"));
                 window.heroView.curePoison();
+            } else if (this.get("type") == "mana-potion") {
+                window.heroView.getCoolDown(this.get("effect"));
             }
         }
     })
