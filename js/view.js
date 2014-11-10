@@ -307,7 +307,8 @@ define(function(require,exports,module){
             }
         },
         getCoolDown:function(cooldown){
-            this.model.getScore(cooldown*cooldown*this.skillList.length);
+            cooldown += Math.round( cooldown * this.model.get("concentrate")*window.CONCENTRATE_EFFECT /100 )
+            this.model.getScore(cooldown);
             _.each(this.skillList, function(skill){
                 if ( skill.getCoolDown ){
                     skill.getCoolDown.call(skill, cooldown);

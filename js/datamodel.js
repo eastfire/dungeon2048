@@ -524,7 +524,7 @@ define(function (require, exports, module) {
             if (this.get("type") == "potion") {
                 return level * (level + 1);
             } else if (this.get("type") == "mana-potion") {
-                return level;
+                return level * (level+1)/2;
             }
         },
         effectHappen: function () {

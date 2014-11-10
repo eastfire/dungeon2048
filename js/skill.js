@@ -9,6 +9,7 @@ define(function(require,exports,module) {
         window.TREASURE_HUNTING_EFFECT = 5;
         window.COOLING_EFFECT = 10;
         window.RECOVER_EFFECT = 25;
+        window.CONCENTRATE_EFFECT = 25;
         window.REGENERATION_EFFECT = 1;
     }
 
@@ -270,6 +271,24 @@ define(function(require,exports,module) {
         },
         generateDescription:function(){
             return "回复生命时多回复"+(this.get("level")*RECOVER_EFFECT)+"%生命";
+        }
+    })
+
+    exports.ConcentrateSkill = exports.Skill.extend({
+        defaults:function(){
+            return {
+                name:"concentrate",
+                type:"passive",
+                displayName:"专注",
+                level:1,
+                maxLevel:5
+            }
+        },
+        onGet:function(){
+            window.hero.set("concentrate", this.get("level"))
+        },
+        generateDescription:function(){
+            return "获得魔法药时多减少"+(this.get("level")*CONCENTRATE_EFFECT)+"%冷却时间";
         }
     })
 
@@ -980,7 +999,8 @@ define(function(require,exports,module) {
                 for ( var j = 0 ; j < window.mapHeight ; j++ ) {
                     var block = getMapBlock(i,j);
                     if ( block && block.type === "blank" ) {
-                        candidate.push(block)
+                        if ( !block.terrain || block.terrain.canGenerateIn() )
+                            candidate.push(block)
                     }
                 }
             }
@@ -1338,7 +1358,8 @@ define(function(require,exports,module) {
             exports.CoolingSkill,
             exports.WisdomSkill,
             exports.TreasureHuntingSkill,
-            exports.RecoverSkill
+            exports.RecoverSkill,
+            exports.ConcentrateSkill
         ]
 
         exports.warriorBasicSkillPoolEntry = [

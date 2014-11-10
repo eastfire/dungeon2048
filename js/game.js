@@ -190,7 +190,7 @@ define(function(require,exports,module) {
         window.gameModeStatus.skillPool = Skill.getSkillPool(hero.get("type"));
     }
 
-    window.gotoRoom = function(r){
+    window.gotoRoom = function(r, from ){
         if ( window.roomView ) {
             window.roomView.remove();
         } else {
@@ -202,8 +202,7 @@ define(function(require,exports,module) {
         appendMap();
 
         window.room = r;
-        console.log("window.room"+window.room.get("title"));
-        window.roomView = new Room.RoomView({model:window.room, el:$(".map")})
+        window.roomView = new Room.RoomView({model:window.room, el:$(".map"), heroFrom:from})
         roomView.render();
         showRoomObject(function(){
             roomView.start();

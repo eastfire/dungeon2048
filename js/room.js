@@ -167,7 +167,7 @@ define(function(require,exports,module) {
     }
 
     exports.RoomView = Backbone.View.extend({
-        initGameStatus : function() {
+        initGameStatus : function(options) {
             window.gameStatus = {
                 phase: PHASE_GENERATE,
                 turn: 0,
@@ -193,7 +193,7 @@ define(function(require,exports,module) {
                 },
                 gainStar:0,
                 win: this.model.get("specialCondition").alreadyWin
-            }
+            };
         },
 
         showObject:function(callback){
@@ -326,16 +326,44 @@ define(function(require,exports,module) {
             window.blockSize = this.calculateBlockSize();
             this.initEvent();
             window.map = this.initMap();
+            if ( options ) {
+                this.heroFrom = options.heroFrom;
+            }
         },
 
         start: function(){
             this.initGameStatus();
             this.initRoomStatistic();
 
-            hero.set({
-                "position":this.model.get("heroAppearPosition"),
-                "direction":this.model.get("heroAppearDirection")
-            });
+            if ( this.model.get("specialCondition").fixPosition || !this.heroFrom ) {
+                hero.set({
+                    "position": this.model.get("heroAppearPosition"),
+                    "direction": this.model.get("heroAppearDirection")
+                });
+            } else {
+                var x,y;
+                var heroFromDirection = this.heroFrom.direction;
+                if ( heroFromDirection == 0 ) {
+                    y = 0;
+                    x = Math.min( this.heroFrom.offset, window.mapWidth - 1 );
+                } else if ( heroFromDirection == 2 ) {
+                    y = window.mapHeight-1;
+                    x = Math.min( this.heroFrom.offset, window.mapWidth - 1 );
+                } else if ( heroFromDirection == 1 ) {
+                    x = window.mapWidth-1;;
+                    y = Math.min( this.heroFrom.offset, window.mapHeight - 1 );
+                } else if ( heroFromDirection == 3 ) {
+                    x = 0;
+                    y = Math.min( this.heroFrom.offset, window.mapHeight - 1 );
+                }
+                hero.set({
+                    position: {
+                        x:x,
+                        y:y
+                    },
+                    direction:(2+heroFromDirection)%4
+                })
+            }
 
             var block = map[hero.get("position").x][hero.get("position").y];
             block.type = "hero";
@@ -700,9 +728,16 @@ define(function(require,exports,module) {
         },
 
         exitRoom:function(direction){
+            var offset ;
+            if ( direction == 0 || direction == 2 )
+                offset = hero.get("position").x;
+            else offset = hero.get("position").y;
             heroView.moveEffect(1,direction,function(){
                 var status = gameStatus.win?"win":"lose";
-                window.gotoRoom( this.model.get(status+"Exit"+direction ) );
+                window.gotoRoom( this.model.get(status+"Exit"+direction ) , {
+                    direction: (2+direction)%4,
+                    offset:offset
+                });
             },this)
         },
 

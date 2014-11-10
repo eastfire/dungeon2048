@@ -1365,6 +1365,9 @@ body {
 .skill-image-recover {
     background-image: url("../img/skill-recover.png");
 }
+.skill-image-concentrate {
+    background-image: url("../img/skill-concentrate.png");
+}
 .skill-image-treasurehunting {
     background-image: url("../img/skill-treasurehunting.png");
 }

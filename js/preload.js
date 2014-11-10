@@ -152,6 +152,7 @@ define(function(require,exports,module) {
         "skill-dexterity.png",
         "skill-wisdom.png",
         "skill-recover.png",
+        "skill-concentrate.png",
         "skill-treasurehunting.png",
         "skill-regeneration.png",
 
