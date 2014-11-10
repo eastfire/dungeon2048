@@ -58,8 +58,17 @@ body {
     height: auto;
     width: auto;
     position: relative;
-    background-image: url("../img/dungeon-tile.jpg");
     background-size: cover;
+}
+
+.map.size4 {
+    background-image: url("../img/dungeon-tile4.jpg");
+}
+.map.size5 {
+    background-image: url("../img/dungeon-tile5.jpg");
+}
+.map.size6 {
+    background-image: url("../img/dungeon-tile6.jpg");
 }
 
 .map-block {

@@ -32,6 +32,7 @@ define(function (require, exports, module) {
                 dexterity: 0,
                 cooling: 0,
                 recover: 0,
+                concentrate: 0,
                 treasureHunting: 0,
                 regeneration: 0
             }

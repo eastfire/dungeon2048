@@ -218,6 +218,8 @@ define(function(require,exports,module) {
         },
 
         render : function () {
+            this.$el.addClass("size"+this.model.get("size"));
+
             var renderMapBlock = function(block){
                 var el = $("<div></div>")
                     .addClass("map-block")

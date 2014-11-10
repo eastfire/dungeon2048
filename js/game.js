@@ -248,7 +248,8 @@ define(function(require,exports,module) {
                 monsterWaveChangeEachTurn : 31,
                 monsterLevelPoolChangeEachTurn: 101,
                 bossAppearEachTurn: 167,
-                bossAppearOffset: 50
+                bossAppearOffset: 50,
+                size:5
             })
             var trailRoom2 = new Room.Room({
                 title:"英雄的试炼２",
@@ -261,7 +262,8 @@ define(function(require,exports,module) {
                     hideAll:true
                 },
                 turnLimit:20,
-                initMonsterTypes:["orc","ghost","minotaur"]
+                initMonsterTypes:["orc","ghost","minotaur"],
+                size:6
             })
             var trailRoom1 = new Room.Room({
                 title:"英雄的试炼１",
@@ -271,7 +273,8 @@ define(function(require,exports,module) {
                     levelUp: 1
                 },
                 initMonsterTypes:["slime","skeleton","goblin"],
-                winExit0:trailRoom2
+                winExit0:trailRoom2,
+                size:4
             })
 
             var startingRoom = new Room.Room({
