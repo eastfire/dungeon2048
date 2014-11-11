@@ -29,7 +29,7 @@ define(function(require,exports,module) {
                     "<div class='skill-text'>"+this.model.generateDescription()+"</div>" +
                     "</span>")
                 this.$el.css({
-                    "font-size":blockSize.height/5+"px"
+                    "font-size":roomWidth/25+"px"
                 })
                 var image = this.$(".skill-image");
                 setTimeout(function(){
@@ -45,15 +45,15 @@ define(function(require,exports,module) {
                     "<div class='skill-duration' style='display:none'></div>" +
                     "</div>")
                 this.$el.css({
-                    "font-size":blockSize.height/6+"px"
+                    "font-size":roomWidth/30+"px"
                 })
-                var w = blockSize.width*3/4;
-                var h = blockSize.height*3/4;
+                var w = roomWidth*3/20;
+                var h = roomWidth*3/20;
                 this.$(".skill-level").width(w)
                 this.$(".skill-image-icon").width(w)
                 var image = this.$(".skill-image");
                 image.height(h).width(w)
-                this.$(".skill-image-icon").css("margin",(blockSize.width-w)/2)
+                this.$(".skill-image-icon").css("margin",(roomWidth/5-w)/2)
                 this.$(".skill-cool-down").css("line-height",h+"px");
                 this.coolDown = this.$(".skill-cool-down");
                 this.renderCoolDown();
@@ -826,7 +826,7 @@ define(function(require,exports,module) {
             return this.get("coolDown") + ( this.get("level") - 1 )* 4;
         },
         onActive:function(){
-            this.set("duration",this.getEffect());
+            this.set("duration",this.getEffect()+1);
             this.used();
         },
         adjustGenerateMonsterCount:function(count){
@@ -1288,8 +1288,8 @@ define(function(require,exports,module) {
                     var itemView = block.view;
                     var x = hero.get("position").x;
                     var y = hero.get("position").y;
-                    itemView.$el.css({transition: "all "+(TIME_SLICE*4/5000)+"s ease-in-out 0s", left:x*blockSize.width,
-                        top:y*blockSize.width,
+                    itemView.$el.css({transition: "all "+(TIME_SLICE*4/5000)+"s ease-in-out 0s", left:x*roomWidth/5,
+                        top:y*roomWidth/5,
                         transform:"scale(0.6)"});
                     var self = this;
                     setTimeout(function(){

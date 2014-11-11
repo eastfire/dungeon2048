@@ -605,6 +605,7 @@ define(function (require, exports, module) {
     exports.terrainMap = {
         pillar: exports.PillarTerrain,
         pit: exports.PitTerrain,
-        trap: exports.TrapTerrain
+        trap: exports.TrapTerrain,
+        campfire: exports.Terrain
     }
 });

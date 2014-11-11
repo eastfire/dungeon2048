@@ -204,9 +204,13 @@ define(function(require,exports,module) {
         window.room = r;
         window.roomView = new Room.RoomView({model:window.room, el:$(".map"), heroFrom:from})
         roomView.render();
-        showRoomObject(function(){
+        if (  room.get("status") != "passed" || room.get("specialCondition").showObjectEvenPassed ) {
+            showRoomObject(function () {
+                roomView.start();
+            })
+        } else {
             roomView.start();
-        })
+        }
     }
 
     window.startGame = function(){
@@ -251,6 +255,39 @@ define(function(require,exports,module) {
                 bossAppearOffset: 50,
                 size:5
             })
+            var trailRoom3 = new Room.Room({
+                title:"英雄的试炼3",
+                flavorDescription:"",
+                winCondition:{
+                    type:"turn",
+                    turn: 20
+                },
+                turnLimit:20,
+                initMonsterTypes:["vampire","golem","minotaur"],
+                size:6,
+                blocks:[
+                    {
+                        x:1,
+                        y:1,
+                        terrainType:"pillar"
+                    },
+                    {
+                        x:4,
+                        y:4,
+                        terrainType:"pillar"
+                    },
+                    {
+                        x:1,
+                        y:4,
+                        terrainType:"pillar"
+                    },
+                    {
+                        x:4,
+                        y:1,
+                        terrainType:"pillar"
+                    }
+                ]
+            })
             var trailRoom2 = new Room.Room({
                 title:"英雄的试炼２",
                 flavorDescription:"",
@@ -261,9 +298,10 @@ define(function(require,exports,module) {
                 specialCondition:{
                     hideAll:true
                 },
+                winExit0:trailRoom3,
                 turnLimit:20,
                 initMonsterTypes:["orc","ghost","minotaur"],
-                size:6
+                size:5
             })
             var trailRoom1 = new Room.Room({
                 title:"英雄的试炼１",
@@ -276,16 +314,28 @@ define(function(require,exports,module) {
                 winExit0:trailRoom2,
                 size:4
             })
+            trailRoom2.set({
+                normalExit2:trailRoom1,
+                winExit2:trailRoom1
+            });
 
             var startingRoom = new Room.Room({
                 title:"起点",
                 flavorDescription:"↑：冒险模式<br/>→：无尽的房间",
                 generateMonsterPerTurn:0,
                 specialCondition:{
-                    alreadyWin:true
+                    showObjectEvenPassed : true
                 },
                 winExit0:trailRoom1,
-                winExit1:endlessRoom
+                winExit1:endlessRoom,
+                blocks:[
+                    {
+                        x:2,
+                        y:2,
+                        terrainType:"campfire"
+                    }
+                ],
+                status: "passed"
             })
             if ( gameModeStatus.tutorial.on ) {
                 window.roomView = new Room.TutorialRoomView({
@@ -460,7 +510,7 @@ define(function(require,exports,module) {
                 score : window.hero.get("score"),
                 level : window.hero.get("level"),
                 killBy :gameStatus.killBy,
-                turn: gameStatus.turn,
+                turn: gameStatistic.turn,
                 timestamp : Firebase.ServerValue.TIMESTAMP,//(new Date()).getTime(),
                 r: Math.random(),
                 version: GAME_VERSION,
@@ -508,6 +558,9 @@ define(function(require,exports,module) {
                     total:0
                 }
             }
+        window.gameStatistic = {
+            turn: 0
+        }
     }
 
     require("./preload").preload(function(){

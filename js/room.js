@@ -30,7 +30,7 @@ define(function(require,exports,module) {
                 rewardDescription:null,
                 punishDescription:null,
 
-                blocks:null,
+                blocks:[],
                 heroAppearPosition:{
                     x:2,
                     y:2
@@ -48,9 +48,11 @@ define(function(require,exports,module) {
                 generateMonsterPerTurn : 2, // 0 = no appear
                 dropItemPerLevel: TREASURE_HUNTING_EFFECT,
 
-                specialCondition:{}, // noExp, noHp, noItem, noLevel ,hideAll, hideWinCondition, hideLoseCondition, hideReward, hidePunish, alreadyWin
+                specialCondition:{}, // noExp, noHp, noItem, noLevel ,hideAll, hideWinCondition, hideLoseCondition, hideReward, hidePunish
                 preCondition: null,
-                reward:null
+                reward:null,
+
+                status: "unvisited" //unvisited, passed, visited, known
             }
         },
         getTitle:function(){
@@ -192,7 +194,7 @@ define(function(require,exports,module) {
                     disturb:8
                 },
                 gainStar:0,
-                win: this.model.get("specialCondition").alreadyWin
+                win: this.model.get("status") == "passed"
             };
         },
 
@@ -318,6 +320,31 @@ define(function(require,exports,module) {
             return m;
         },
 
+        renderMap: function(){
+            _.each(this.model.get("blocks"),function(block){
+                var x = block.x;
+                var y = block.y;
+                var terrainType = block.terrainType;
+                if ( terrainType ) {
+                    map[x][y].terrain=new View.TerrainView({
+                        model: new Model.terrainMap[terrainType]({
+                            type:terrainType,
+                            position:{
+                                x:x,
+                                y:y
+                            }
+                        })
+                    })
+                    this.$el.append( map[x][y].terrain.render().$el )
+                }
+
+                var monsterType = block.monsterType;
+                if ( monsterType ) {
+                    this.createOneMonster(monsterType, x,y, block.monsterLevel || 1)
+                }
+            },this);
+        },
+
         calculateBlockSize : function(){
             return {width:roomWidth/mapWidth, height:roomHeight/mapHeight};
         },
@@ -336,6 +363,8 @@ define(function(require,exports,module) {
         start: function(){
             this.initGameStatus();
             this.initRoomStatistic();
+
+            this.renderMap();
 
             if ( this.model.get("specialCondition").fixPosition || !this.heroFrom ) {
                 hero.set({
@@ -371,6 +400,9 @@ define(function(require,exports,module) {
             block.type = "hero";
             block.model = hero;
             block.view = heroView;
+
+            if ( this.model.get("status")==="unvisited" )
+                this.model.set("status", "visited");
 
             this.$el.append(heroView.render().$el);
 
@@ -520,6 +552,8 @@ define(function(require,exports,module) {
         newTurn: function(){
             gameStatus.phase = PHASE_TURN_START;
             gameStatus.turn ++;
+
+            window.gameStatistic.turn ++;
 
             if ( this.model.get("monsterWaveChangeEachTurn") ) {
                 if ( gameStatus.turn % this.model.get("monsterWaveChangeEachTurn") == 0 ) {
@@ -735,7 +769,13 @@ define(function(require,exports,module) {
                 offset = hero.get("position").x;
             else offset = hero.get("position").y;
             heroView.moveEffect(1,direction,function(){
-                var status = gameStatus.win?"win":"lose";
+                var status;
+                if ( gameStatus.win )
+                    status = "win"
+                else if ( gameStatus.lose )
+                    status = "lost"
+                else
+                    status = "normal"
                 window.gotoRoom( this.model.get(status+"Exit"+direction ) , {
                     direction: (2+direction)%4,
                     offset:offset
@@ -912,6 +952,7 @@ define(function(require,exports,module) {
 
         win: function(){
             gameStatus.win = true;
+            this.model.set("status","passed");
             this.$el.append("<div class='room-result-sign'>成功</div>");
             this.$(".room-result-sign").css({top:"-100%","line-height":roomHeight+"px"})
             var self = this;
@@ -931,12 +972,12 @@ define(function(require,exports,module) {
         renderExit:function(){
             $(".exit-arrow").remove();
 
-            if ( !gameStatus.win && !gameStatus.lose ) {
-                return;
-            }
-
-            var status = gameStatus.win ? "win" : "lose";
-
+            var status;
+            if ( gameStatus.win )
+                status = "win"
+            else if ( gameStatus.lose )
+                status = "lose";
+            else status = "normal";
 
             if ( this.model.get(status+"Exit0") ) {
                 for ( var i = 0 ; i < mapWidth; i++){

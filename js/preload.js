@@ -185,6 +185,7 @@ define(function(require,exports,module) {
 
         "terrain-pillar.png",
         "terrain-trap.png",
+        "terrain-campfire.png",
 
         "room-sign.png",
         "loading.gif"
