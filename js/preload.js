@@ -188,6 +188,7 @@ define(function(require,exports,module) {
         "terrain-campfire.png",
 
         "room-sign.png",
+        "icon-map.png",
         "loading.gif"
     ];
 

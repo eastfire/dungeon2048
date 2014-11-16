@@ -351,10 +351,12 @@ define(function(require,exports,module){
         },
         renderPoison:function(){
             if ( this.model.get("poison") && !this.model.previous("poison")) {
-                this.$el.append("<div class='status-poison'></div>")
+                this.$el.append("<div class='status-poison'>"+this.model.get("poison")+"</div>")
                 this.effecQueue.add.call(this.effecQueue, "中毒");
             } else if ( !this.model.get("poison") && this.model.previous("poison")) {
                 this.$(".status-poison").remove();
+            } else if ( this.model.get("poison") ){
+                this.$(".status-poison").html(this.model.get("poison"));
             }
         },
         renderDizzy:function(){
@@ -408,7 +410,10 @@ define(function(require,exports,module){
             }
         },
         getPoison:function(p){
-            this.model.set("poison",this.model.get("cursed") ? p*2 : p );
+            if ( this.model.get("cursed") )
+                p = p*2;
+            if ( !this.model.get("poison") || p > this.model.get("poison") )
+                this.model.set("poison", p );
             return true;
         },
         getCursed:function(p){
@@ -850,7 +855,7 @@ define(function(require,exports,module){
 
     exports.MimicView = exports.MonsterView.extend({
         onDropItem:function(x,y){
-            roomView.generateItemForSure(x,y, Math.ceil(this.model.get("level")/3));
+            roomView.generateItemForSure(x,y, Math.ceil(this.model.get("level")/2));
         }
     })
 

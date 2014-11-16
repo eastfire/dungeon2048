@@ -8,6 +8,8 @@ define(function(require,exports,module) {
     exports.Room = Backbone.Model.extend({
         defaults:function(){
             return {
+                x:0,
+                y:0,
                 size: 5,
                 title:"",
                 flavorDescription:"",
@@ -52,7 +54,7 @@ define(function(require,exports,module) {
                 preCondition: null,
                 reward:null,
 
-                status: "unvisited" //unvisited, passed, visited, known
+                status: "unknown" //unvisited, passed, visited, unknown
             }
         },
         getTitle:function(){
@@ -358,6 +360,11 @@ define(function(require,exports,module) {
             if ( options ) {
                 this.heroFrom = options.heroFrom;
             }
+            if ( this.model.get("specialCondition").notInMap ) {
+                $(".map-btn").hide();
+            } else {
+                $(".map-btn").show();
+            }
         },
 
         start: function(){
@@ -479,8 +486,8 @@ define(function(require,exports,module) {
         },
 
         checkShowHelp: function(monsterType){
-            if ( !gameModeStatus.tutorial.on && !gameStatus.help[monsterType] ) {
-                gameStatus.help[monsterType] = true;
+            if ( !gameModeStatus.tutorial.on && !gameModeStatus.help[monsterType] ) {
+                gameModeStatus.help[monsterType] = true;
                 (function(monsterType) {
                     setTimeout(function () {
                         var description = Help.monsterDisplayName[monsterType] + "<br/>" + Help.monsterDescription[monsterType].text;
@@ -979,25 +986,38 @@ define(function(require,exports,module) {
                 status = "lose";
             else status = "normal";
 
+            var knowNextRoom = function( exit ){
+                if ( exit instanceof exports.Room ){
+                } else {
+                    exit = window.getRoomByPosition(exit[0],exit[1])
+                }
+                if ( exit.get("status") == "unknown" )
+                    exit.set("status","unvisited")
+            }
+
             if ( this.model.get(status+"Exit0") ) {
                 for ( var i = 0 ; i < mapWidth; i++){
                     $("#mapblock"+i+"_"+0).append("<div class='exit-arrow exit-arrow0'></div>")
                 }
+                knowNextRoom(this.model.get(status+"Exit0"));
             }
             if ( this.model.get(status+"Exit1") ) {
                 for ( var i = 0 ; i < mapHeight; i++){
                     $("#mapblock"+(mapWidth-1)+"_"+i).append("<div class='exit-arrow exit-arrow1'></div>")
                 }
+                knowNextRoom(this.model.get(status+"Exit1"));
             }
             if ( this.model.get(status+"Exit2") ) {
                 for ( var i = 0 ; i < mapWidth; i++){
                     $("#mapblock"+i+"_"+(mapHeight-1)).append("<div class='exit-arrow exit-arrow2'></div>")
                 }
+                knowNextRoom(this.model.get(status+"Exit2"));
             }
             if ( this.model.get(status+"Exit3") ) {
                 for ( var i = 0 ; i < mapHeight; i++){
                     $("#mapblock"+0+"_"+i).append("<div class='exit-arrow exit-arrow3'></div>")
                 }
+                knowNextRoom(this.model.get(status+"Exit3"));
             }
         },
 

@@ -377,8 +377,7 @@ define(function (require, exports, module) {
             return level * 2 - 1;
         },
         onHitHero: function () {
-            if (!window.hero.get("poison"))
-                window.heroView.getPoison(1);
+            window.heroView.getPoison( Math.ceil(this.get("level")/4));
         }
     })
 

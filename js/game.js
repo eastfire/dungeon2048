@@ -22,6 +22,7 @@ define(function(require,exports,module) {
     var Unlock = require("./unlock")
     var Race = require("./race");
     var Room = require("./room");
+    var MapDialog = require("./map-dialog");
 
     window.GAME_VERSION = "1.0.0";
 
@@ -152,6 +153,8 @@ define(function(require,exports,module) {
                     break;
             }
         })
+
+        $(".map-btn").on("click",showMap);
     }
 
     var renderGameWindow = function(){
@@ -190,7 +193,7 @@ define(function(require,exports,module) {
         window.gameModeStatus.skillPool = Skill.getSkillPool(hero.get("type"));
     }
 
-    window.gotoRoom = function(r, from ){
+    window.gotoRoom = function(position, from ){
         if ( window.roomView ) {
             window.roomView.remove();
         } else {
@@ -201,7 +204,10 @@ define(function(require,exports,module) {
         $(".map-wrapper").append("<div class='map'></div>")
         appendMap();
 
-        window.room = r;
+        if ( position instanceof Room.Room ){
+            window.room = position;
+        } else
+            window.room = getRoomByPosition(position[0],position[1]);
         window.roomView = new Room.RoomView({model:window.room, el:$(".map"), heroFrom:from})
         roomView.render();
         if (  room.get("status") != "passed" || room.get("specialCondition").showObjectEvenPassed ) {
@@ -211,6 +217,15 @@ define(function(require,exports,module) {
         } else {
             roomView.start();
         }
+    }
+
+    window.getRoomByPosition = function(x,y){
+        for ( var i =0 ;i < window.rooms.length; i++){
+            var r = window.rooms[i];
+            if ( r.get("x") == x && r.get("y") == y )
+                return r;
+        }
+        return null;
     }
 
     window.startGame = function(){
@@ -244,18 +259,16 @@ define(function(require,exports,module) {
 
             heroView.renderSkillList();
 
-            //gameModeStatus.tutorial.on = true;
+            $(".map-btn").show();
+            $(".map-btn").width(roomWidth/5)
+            $(".map-btn").height(roomHeight/5)
 
-            var endlessRoom = new Room.Room({
-                title:"无尽地城",
-                flavorDescription:"无回合限制",
-                monsterWaveChangeEachTurn : 31,
-                monsterLevelPoolChangeEachTurn: 101,
-                bossAppearEachTurn: 167,
-                bossAppearOffset: 50,
-                size:5
-            })
-            var trailRoom3 = new Room.Room({
+            //gameModeStatus.tutorial.on = true;
+            window.rooms = [];
+
+            rooms[2] = new Room.Room({
+                x:0,
+                y:-2,
                 title:"英雄的试炼3",
                 flavorDescription:"",
                 winCondition:{
@@ -288,7 +301,9 @@ define(function(require,exports,module) {
                     }
                 ]
             })
-            var trailRoom2 = new Room.Room({
+            rooms[1] = new Room.Room({
+                x:0,
+                y:-1,
                 title:"英雄的试炼２",
                 flavorDescription:"",
                 winCondition:{
@@ -298,12 +313,16 @@ define(function(require,exports,module) {
                 specialCondition:{
                     hideAll:true
                 },
-                winExit0:trailRoom3,
+                winExit0:[0,-2],
+                normalExit2:[0,0],
+                winExit2:[0,0],
                 turnLimit:20,
                 initMonsterTypes:["orc","ghost","minotaur"],
                 size:5
             })
-            var trailRoom1 = new Room.Room({
+            rooms[0] = new Room.Room({
+                x:0,
+                y:0,
                 title:"英雄的试炼１",
                 flavorDescription:"",
                 winCondition:{
@@ -311,22 +330,31 @@ define(function(require,exports,module) {
                     levelUp: 1
                 },
                 initMonsterTypes:["slime","skeleton","goblin"],
-                winExit0:trailRoom2,
+                winExit0:[0,-1],
                 size:4
             })
-            trailRoom2.set({
-                normalExit2:trailRoom1,
-                winExit2:trailRoom1
-            });
 
-            var startingRoom = new Room.Room({
+            var endlessRoom = new Room.Room({
+                title:"无尽地城",
+                flavorDescription:"无回合限制",
+                monsterWaveChangeEachTurn : 31,
+                monsterLevelPoolChangeEachTurn: 101,
+                bossAppearEachTurn: 167,
+                bossAppearOffset: 50,
+                size:5,
+                specialCondition:{
+                    notInMap:true
+                }
+            })
+            var startRoom = new Room.Room({
                 title:"起点",
                 flavorDescription:"↑：冒险模式<br/>→：无尽的房间",
                 generateMonsterPerTurn:0,
                 specialCondition:{
-                    showObjectEvenPassed : true
+                    showObjectEvenPassed : true,
+                    notInMap:true
                 },
-                winExit0:trailRoom1,
+                winExit0:[0,0],
                 winExit1:endlessRoom,
                 blocks:[
                     {
@@ -349,7 +377,7 @@ define(function(require,exports,module) {
                     roomView.start();
                 })
             } else {
-                gotoRoom(startingRoom)
+                gotoRoom(startRoom)
             }
 
         }
@@ -451,6 +479,12 @@ define(function(require,exports,module) {
         roomView.showObject(callback);
     }
 
+    window.showMap = function(){
+        var view = new MapDialog.MapDialog();
+        $(".main-window-wrapper").append(view.render().$el);
+        view.renderDialog();
+    }
+
     window.showLevelUpDialog = function(callback){
         var selectableSkillNumber = hero.get("selectableSkillNumber");
         var skillArray = getRandomItems(window.gameModeStatus.skillPool,selectableSkillNumber );
@@ -529,6 +563,7 @@ define(function(require,exports,module) {
             var view = new ScoreBoard.GameOver();
             $(".main-window").append(view.render().$el);
             $(".hero-active-skill").hide();
+            $(".map-btn").hide();
         },TIME_SLICE);
     }
 
@@ -575,6 +610,9 @@ define(function(require,exports,module) {
             tutorial:{
                 on:true,
                 step:0
+            },
+            help:{
+
             }
         }
         var store = localStorage.getItem("tutorial");
