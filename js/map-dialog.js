@@ -26,22 +26,28 @@ define(function(require,exports,module) {
             mc.get("pan").set({
                 direction: Hammer.DIRECTION_ALL
             });
-            mc.on("pan",function(event){
-                self.offsetX += event.deltaX;
-                self.offsetY += event.deltaY;
+            mc.on("panleft",function(event){
+                self.offsetX -= self.panStep;
+                self.renderWrapper();
+            }).on("panright",function(event){
+                self.offsetX += self.panStep;
+                self.renderWrapper();
+            }).on("panup",function(event){
+                self.offsetY -= self.panStep;
+                self.renderWrapper();
+            }).on("pandown",function(event){
+                self.offsetY += self.panStep;
                 self.renderWrapper();
             }).on("pinchin",function(event){
-                if ( event.scale > self.minScale ) {
-                    self.scale = event.scale;
-                } else
-                    self.scale = self.minScale;
-                self.renderWrapper();
+                if ( self.scale > self.minScale ) {
+                    self.scale -= self.scaleStep;
+                    self.renderWrapper();
+                }
             }).on("pinchout",function(event){
-                if ( event.scale < self.maxScale ) {
-                    self.scale = event.scale;
-                } else
-                    self.scale = self.maxScale;
-                self.renderWrapper();
+                if ( self.scale < self.maxScale ) {
+                    self.scale += self.scaleStep;
+                    self.renderWrapper();
+                }
             })
 
             this.$el.on("panByKey",function(event,data) {
