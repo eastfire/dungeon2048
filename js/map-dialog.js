@@ -12,8 +12,10 @@ define(function(require,exports,module) {
             this.offsetX = window.roomWidth/2;
             this.offsetY = window.roomHeight/2;
             this.scale = 1;
-            this.maxScale = 3;
+            this.maxScale = 2;
             this.minScale = 0.5;
+            this.scaleStep = 0.02;
+            this.panStep = 5;
             this.zoomRate = 20;
             this.renderWrapper();
             window.showingDialog = true;
@@ -21,28 +23,29 @@ define(function(require,exports,module) {
         initEvent:function(){
             var self = this;
             var mc = new Hammer($(".map-dialog"),{
-                pan_direction: Hammer.DIRECTION_ALL
+                pan_pointers:0,
+                pan_threshold:1
             });
             mc.on("panleft",function(event){
-                self.offsetX -= 20;
+                self.offsetX -= self.panStep;
                 self.renderWrapper();
             }).on("panright",function(event){
-                self.offsetX += 20;
+                self.offsetX += self.panStep;
                 self.renderWrapper();
             }).on("panup",function(event){
-                self.offsetY -= 20;
+                self.offsetY -= self.panStep;
                 self.renderWrapper();
             }).on("pandown",function(event){
-                self.offsetY += 20;
+                self.offsetY += self.panStep;
                 self.renderWrapper();
             }).on("pinchin",function(event){
                 if ( self.scale > self.minScale ) {
-                    self.scale -= 0.1;
+                    self.scale -= self.scaleStep;
                     self.renderWrapper();
                 }
             }).on("pinchout",function(event){
                 if ( self.scale < self.maxScale ) {
-                    self.scale += 0.1;
+                    self.scale += self.scaleStep;
                     self.renderWrapper();
                 }
             })
@@ -50,19 +53,19 @@ define(function(require,exports,module) {
             this.$el.on("panByKey",function(event,data) {
                 switch(data.keyCode){
                     case 38:
-                        self.offsetY += 20;
+                        self.offsetY += self.panStep;
                         self.renderWrapper();
                         break;
                     case 39:
-                        self.offsetX -= 20;
+                        self.offsetX -= self.panStep;
                         self.renderWrapper();
                         break;
                     case 40:
-                        self.offsetY -= 20;
+                        self.offsetY -= self.panStep;
                         self.renderWrapper();
                         break;
                     case 37:
-                        self.offsetX += 20;
+                        self.offsetX += self.panStep;
                         self.renderWrapper();
                         break;
                 }
