@@ -90,7 +90,7 @@ define(function(require,exports,module) {
     }
 
     var initEvent = function(){
-        var hammertime = Hammer($(".map-wrapper")[0],{
+        var hammertime = new Hammer($(".map-wrapper")[0],{
             swipe_velocity:0.08
         })
         hammertime.on("swipeup", function(event) {
@@ -117,6 +117,10 @@ define(function(require,exports,module) {
                 }
                 if ( $(".room-object-dialog").length ) {
                     $(".room-object-dialog").trigger("click");
+                    return;
+                }
+                if ( $(".map-dialog").length ){
+                    $(".map-dialog").trigger("panByKey",event);
                     return;
                 }
             }
@@ -482,6 +486,7 @@ define(function(require,exports,module) {
     window.showMap = function(){
         var view = new MapDialog.MapDialog();
         $(".main-window-wrapper").append(view.render().$el);
+        view.initEvent();
         view.renderDialog();
     }
 

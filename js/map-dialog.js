@@ -11,16 +11,69 @@ define(function(require,exports,module) {
             this.wrapper = this.$(".map-dialog-wrapper");
             this.offsetX = window.roomWidth/2;
             this.offsetY = window.roomHeight/2;
+            this.scale = 1;
+            this.maxScale = 3;
+            this.minScale = 0.5;
             this.zoomRate = 20;
             this.renderWrapper();
             window.showingDialog = true;
+        },
+        initEvent:function(){
+            var self = this;
+            var mc = new Hammer($(".map-dialog"),{
+                pan_direction: Hammer.DIRECTION_ALL
+            });
+            mc.on("panleft",function(event){
+                self.offsetX -= 20;
+                self.renderWrapper();
+            }).on("panright",function(event){
+                self.offsetX += 20;
+                self.renderWrapper();
+            }).on("panup",function(event){
+                self.offsetY -= 20;
+                self.renderWrapper();
+            }).on("pandown",function(event){
+                self.offsetY += 20;
+                self.renderWrapper();
+            }).on("pinchin",function(event){
+                if ( self.scale > self.minScale ) {
+                    self.scale -= 0.1;
+                    self.renderWrapper();
+                }
+            }).on("pinchout",function(event){
+                if ( self.scale < self.maxScale ) {
+                    self.scale += 0.1;
+                    self.renderWrapper();
+                }
+            })
+
+            this.$el.on("panByKey",function(event,data) {
+                switch(data.keyCode){
+                    case 38:
+                        self.offsetY += 20;
+                        self.renderWrapper();
+                        break;
+                    case 39:
+                        self.offsetX -= 20;
+                        self.renderWrapper();
+                        break;
+                    case 40:
+                        self.offsetY -= 20;
+                        self.renderWrapper();
+                        break;
+                    case 37:
+                        self.offsetX += 20;
+                        self.renderWrapper();
+                        break;
+                }
+            })
         },
         render:function(){
             return this;
         },
         renderWrapper:function(){
             this.wrapper.css({
-                transform:"translate("+this.offsetX+"px,"+this.offsetY+"px)"
+                transform:"translate("+this.offsetX+"px,"+this.offsetY+"px) scale("+this.scale+")"
             })
         },
         renderExit:function(roomEl, direction, length){
