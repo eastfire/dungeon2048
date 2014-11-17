@@ -15,39 +15,33 @@ define(function(require,exports,module) {
             this.maxScale = 2;
             this.minScale = 0.5;
             this.scaleStep = 0.02;
-            this.panStep = 5;
+            this.panStep = 4;
             this.zoomRate = 20;
             this.renderWrapper();
             window.showingDialog = true;
         },
         initEvent:function(){
             var self = this;
-            var mc = new Hammer($(".map-dialog"),{
-                pan_pointers:0,
-                pan_threshold:1
+            var mc = new Hammer($(".map-dialog")[0]);
+            mc.get("pan").set({
+                direction: Hammer.DIRECTION_ALL
             });
-            mc.on("panleft",function(event){
-                self.offsetX -= self.panStep;
-                self.renderWrapper();
-            }).on("panright",function(event){
-                self.offsetX += self.panStep;
-                self.renderWrapper();
-            }).on("panup",function(event){
-                self.offsetY -= self.panStep;
-                self.renderWrapper();
-            }).on("pandown",function(event){
-                self.offsetY += self.panStep;
+            mc.on("pan",function(event){
+                self.offsetX += event.deltaX;
+                self.offsetY += event.deltaY;
                 self.renderWrapper();
             }).on("pinchin",function(event){
-                if ( self.scale > self.minScale ) {
-                    self.scale -= self.scaleStep;
-                    self.renderWrapper();
-                }
+                if ( event.scale > self.minScale ) {
+                    self.scale = event.scale;
+                } else
+                    self.scale = self.minScale;
+                self.renderWrapper();
             }).on("pinchout",function(event){
-                if ( self.scale < self.maxScale ) {
-                    self.scale += self.scaleStep;
-                    self.renderWrapper();
-                }
+                if ( event.scale < self.maxScale ) {
+                    self.scale = event.scale;
+                } else
+                    self.scale = self.maxScale;
+                self.renderWrapper();
             })
 
             this.$el.on("panByKey",function(event,data) {

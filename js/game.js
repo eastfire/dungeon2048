@@ -90,8 +90,10 @@ define(function(require,exports,module) {
     }
 
     var initEvent = function(){
-        var hammertime = new Hammer($(".map-wrapper")[0],{
-            swipe_velocity:0.08
+        var hammertime = new Hammer($(".map-wrapper")[0]);
+        hammertime.get("swipe").set({
+            velocity:0.08,
+            direction: Hammer.DIRECTION_ALL
         })
         hammertime.on("swipeup", function(event) {
             if ( roomView )
