@@ -26,6 +26,7 @@ define(function(require,exports,module) {
             mc.get("pan").set({
                 direction: Hammer.DIRECTION_ALL
             });
+            mc.get('pinch').set({ enable: true });
             mc.on("panleft",function(event){
                 self.offsetX -= self.panStep;
                 self.renderWrapper();
