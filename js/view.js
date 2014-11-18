@@ -276,7 +276,7 @@ define(function(require,exports,module){
             }
         },
         takeDamage:function(attack, type){
-            if ( Math.random() < this.model.get("dexterity")*DIXTERITY_EFFECT/100 ) {
+            if ( !type.contains("trap") && Math.random() < this.model.get("dexterity")*DIXTERITY_EFFECT/100 ) {
                 return false;
             }
             var realDamage = attack - this.model.get("defend");
@@ -1191,6 +1191,16 @@ define(function(require,exports,module){
         },
         canCatch:function(){
             return this.model.get("canCatch")
+        },
+        onBeforeHeroAttack:function(block){
+            if ( this.model.onBeforeHeroAttack )
+                return this.model.onBeforeHeroAttack(block);
+            return true;
+        },
+        onBeforeTurnEnd:function(block){
+            if ( this.model.onBeforeTurnEnd )
+                return this.model.onBeforeTurnEnd(block);
+            return true;
         }
     })
 

@@ -808,16 +808,21 @@ define(function(require,exports,module) {
             }
             var self = this;
             setTimeout(function(){
-                self.beforeHeroTakeItem.call(self);
+                self.beforeHeroAttack.call(self);
             },maxMovement*TIME_SLICE+10);
         },
 
-        beforeHeroTakeItem : function(){
+        beforeHeroAttack : function(){
             gameStatus.phase = PHASE_BEFORE_HERO_TAKE_ITEM;
             var pass = true;
             for ( var i = 0 ; i < mapWidth; i++){
                 for ( var j = 0 ; j < mapHeight; j++){
                     var block = map[i][j];
+                    if ( block.terrain && block.terrain.onBeforeHeroAttack ) {
+                        var ret = block.terrain.onBeforeHeroAttack.call( block.terrain, block );
+                        if ( pass )
+                            pass = ret;
+                    }
                     if ( block.type == "monster" && block.view.onBeforeHeroTakeItem ){
                         var ret = block.view.onBeforeHeroTakeItem.call(block.view);
                         if ( pass )
@@ -869,8 +874,26 @@ define(function(require,exports,module) {
             var self = this;
             setTimeout(function(){
                 if ( gameStatus.phase != PHASE_GAME_OVER )
-                    self.turnEnd.call(self);
+                    self.beforeTurnEnd.call(self);
             },TIME_SLICE*2);
+        },
+
+        beforeTurnEnd:function(){
+            var pass = true;
+            for ( var i = 0 ; i < mapWidth; i++){
+                for ( var j = 0 ; j < mapHeight; j++){
+                    var block = map[i][j];
+                    if ( block.terrain && block.terrain.onBeforeTurnEnd ) {
+                        var ret = block.terrain.onBeforeTurnEnd.call( block.terrain, block );
+                        if ( pass )
+                            pass = ret;
+                    }
+                }
+            }
+            var self = this;
+            setTimeout(function(){
+                self.turnEnd.call(self);
+            },pass ? 1 : TIME_SLICE+10);
         },
 
         turnEnd : function(){

@@ -589,7 +589,8 @@ define(function(require,exports,module) {
                     total:0,
                     byPoison:0,
                     byFull:0,
-                    byMonsters:{}
+                    byMonsters:{},
+                    byTrap:0
                 },
                 skills:{},
                 most:{

@@ -598,6 +598,22 @@ define(function (require, exports, module) {
                 canGenerateIn: true,
                 canCatch: true
             }
+        },
+        onBeforeTurnEnd:function(block){
+            if ( block.type == "monster" ) {
+                block.model.destroy();
+                block.model = null;
+                block.view = null;
+                block.type = "blank";
+                return false;
+            } else if ( block.type == "hero" ){
+                gameStatus.killBy = {
+                    type :"trap"
+                }
+                window.heroView.takeDamage(Math.ceil(window.hero.get("maxHp")/20),"trap");
+                return false;
+            }
+            return true;
         }
     })
 

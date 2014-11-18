@@ -37,6 +37,11 @@ define(function(require,exports,module) {
                         statistic.killed.byMonsters[type] = 1;
                     if ( gameStatus.death.killBy.isBoss )
                         statistic.killed.byBoss = statistic.killed.byBoss ? statistic.killed.byBoss + 1 : 1;
+                } else if ( gameStatus.death.killBy.type == "trap" ) {
+                    if ( statistic.killed.byTrap )
+                        statistic.killed.byTrap ++;
+                    else
+                        statistic.killed.byTrap = 1;
                 }
                 localStorage.setItem("statistic", JSON.stringify(statistic));
             }
@@ -234,6 +239,8 @@ define(function(require,exports,module) {
                 reason="死于中毒"
             } else if ( score.killBy.type == "full" ){
                 reason="死于地城爆满"
+            } else if ( score.killBy.type == "trap" ){
+                reason="死于陷阱"
             } else if ( score.killBy.type == "monster" ){
                 var lvStr = "lv"+score.killBy.monsterLevel;
                 if ( score.killBy.isBoss )
@@ -241,7 +248,7 @@ define(function(require,exports,module) {
                 reason="被"+lvStr+Help.monsterDisplayName[score.killBy.monsterType]+"杀死";
             }
             if ( score.roomName ){
-                reason += "于<i><u>"+score.roomName+"</u></i>";
+                reason += "在<i><u>"+score.roomName+"</u></i>";
             }
             return reason;
         }
