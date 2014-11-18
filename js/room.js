@@ -184,7 +184,7 @@ define(function(require,exports,module) {
                 currentMonsterMaxLevel : 1,
                 bossPool:this.model.get("bossPool"),
                 dropItemPerLevel: this.model.get("dropItemPerLevel"),
-                currentItemTypes:["potion","mana-potion"],
+                currentItemTypes: this.model.get("initItemTypes") || ["potion","mana-potion"],
                 help:{
                 },
                 monsterPower:{
@@ -435,19 +435,19 @@ define(function(require,exports,module) {
 //            this.$el.append( map[1][1].terrain.render().$el )
         },
 
-        generateItem : function(x,y, monsterLevel){
+        checkDropItem : function(x,y, monsterLevel){
             if ( x >= 0 && x < mapWidth && y >= 0 && y < mapHeight ){
                 if ( Math.random() > gameStatus.dropItemPerLevel*(monsterLevel+hero.get("treasureHunting"))/100 )
                     return;
 
-                this.generateItemForSure(x,y,1);
+                this.createItem(x,y,1);
             }
         },
-        generateItemForSure:function(x,y, itemLevel){
+        createItem:function(x,y, itemLevel, type){
             var block = map[x][y];
             block.type = "item";
             block.model = new Model.Item({
-                type:getRandomItem(gameStatus.currentItemTypes),
+                type: type || getRandomItem(gameStatus.currentItemTypes),
                 position:{
                     x: x,
                     y: y
@@ -1111,7 +1111,7 @@ define(function(require,exports,module) {
             } else if (this.step == 3) {
                 this.generateOneMonster();
             } else if (this.step == 4 || this.step == 5){
-                this.generateItemForSure(2,2,1);
+                this.createItem(2,2,1);
                 this.generateOneMonster();
             } else {
                 for (var i = 0; i < this.model.get("generateMonsterPerTurn") + this.model.extraMonsterNumberWhenNagative(); i++) {

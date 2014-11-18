@@ -163,6 +163,17 @@ define(function(require,exports,module) {
 //                },TIME_SLICE)
             }
             return false;
+        },
+        checkAllDead:function(){
+            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                    var block = getMapBlock(i,j);
+                    if ( block && block.type === "monster" ) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     })
 
@@ -1058,7 +1069,7 @@ define(function(require,exports,module) {
             for ( var i = 0 ; i < window.mapWidth ; i++ ) {
                 for ( var j = 0 ; j < window.mapHeight ; j++ ) {
                     var b = getMapBlock(i,j);
-                    if ( b && b.type === "monster" && b.model.get("subType")!="boss" ) {
+                    if ( b && b.type === "monster" && b.model.get("subType")!="boss" && b.model.get("type") != "golem") {
                         types[b.model.get("type")] = 1;
                     }
                 }
@@ -1169,17 +1180,6 @@ define(function(require,exports,module) {
             }
             return total;
         },
-        checkAllDead:function(){
-            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
-                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
-                    var block = getMapBlock(i,j);
-                    if ( block && block.type === "monster" ) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        },
         getEffect:function(level){
             var l = level || this.get("level");
             return l;
@@ -1234,17 +1234,6 @@ define(function(require,exports,module) {
             if ( totalHit >= 15 && this.checkAllDead())
                 statistic.skills[this.get("name")]=true;
             this.used();
-        },
-        checkAllDead:function(){
-            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
-                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
-                    var block = getMapBlock(i,j);
-                    if ( block && block.type === "monster" ) {
-                        return false;
-                    }
-                }
-            }
-            return true;
         }
     });
 
@@ -1347,6 +1336,125 @@ define(function(require,exports,module) {
                 return range;
         }
     });
+
+    exports.ItemShiftSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.ShapeShiftSkill
+        },
+        defaults:function(){
+            return {
+                name:"item-shift",
+                type:"active",
+                displayName:"妙手空空",
+                level:1,
+                maxLevel:4,
+                currentCount:1000,
+                coolDown:40
+            }
+        },
+        generateDescription:function(){
+            var str = "将房间里所有的某1种怪物变为1种宝物(boss除外)";
+            if ( this.get("level") > 1 ) {
+                str += "，冷却时间-2"
+            }
+            return str;
+        },
+        getBasicCoolDown:function(){
+            return this.get("coolDown") - ( this.get("level") - 1 )* 2;
+        },
+        onActive:function(){
+            var totalHit = 0;
+            var types = {};
+            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                    var b = getMapBlock(i,j);
+                    if ( b && b.type === "monster" && b.model.get("subType")!="boss" && b.model.get("type") != "golem") {
+                        types[b.model.get("type")] = 1;
+                    }
+                }
+            }
+            var keys = [];
+            for ( var key in types ){
+                keys.push(key)
+            }
+            if ( keys.length >= 1 ) {
+                var fromType = getRandomItem(keys);
+                var toType = getRandomItem(gameStatus.currentItemTypes);
+                for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                    for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                        var b = getMapBlock(i,j);
+                        if ( b && b.type === "monster" ) {
+                            if (b.model.get("type") == fromType){
+                                totalHit++;
+                                var level = b.model.get("level");
+                                b.model.destroy();
+                                b.model = null;
+                                b.view = null;
+                                roomView.createItem(i, j, 1,toType);
+                            }
+                        }
+                    }
+                }
+
+                hero.getScore(totalHit);
+            }
+            this.used();
+        }
+    })
+
+    exports.ItemExplosionSkill = exports.Skill.extend({
+        initialize:function() {
+            this.modelClass = exports.ShapeShiftSkill
+        },
+        defaults:function(){
+            return {
+                name:"item-explosion",
+                type:"active",
+                displayName:"邮包炸弹",
+                level:1,
+                maxLevel:4,
+                currentCount:1000,
+                coolDown:50
+            }
+        },
+        generateDescription:function(){
+            var str = "房间里所有的所有宝物爆炸并杀死周围8个怪物";
+            if ( this.get("level") > 1 ) {
+                str += "，冷却时间-2"
+            }
+            return str;
+        },
+        getBasicCoolDown:function(){
+            return this.get("coolDown") - ( this.get("level") - 1 )* 2;
+        },
+        onActive:function(){
+            var totalHit = 0;
+            for ( var i = 0 ; i < window.mapWidth ; i++ ) {
+                for ( var j = 0 ; j < window.mapHeight ; j++ ) {
+                    var b = getMapBlock(i,j);
+                    if ( b && b.type === "item") {
+                        b.model.destroy();
+                        b.model = null;
+                        b.view = null;
+                        for ( var k = i - 1; k < i + 1; k++) {
+                            for ( var l = j - 1; l < j + 1; l++) {
+                                var ret = this.attackBlock(k,l,2,"magic skill");
+                                if ( ret )
+                                    totalHit++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            hero.getScore(totalHit);
+
+            if ( totalHit >= 15 && this.checkAllDead())
+                statistic.skills[this.get("name")]=true;
+
+            this.used();
+        }
+    })
 
     exports.initSkillPool = function(){
         initSkillConst();

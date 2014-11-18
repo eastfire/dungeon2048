@@ -712,7 +712,7 @@ define(function(require,exports,module){
         },
 
         onDropItem:function(x,y){
-            roomView.generateItem(this.model.get("position").x, this.model.get("position").y, this.model.get("level"));
+            roomView.checkDropItem(this.model.get("position").x, this.model.get("position").y, this.model.get("level"));
         },
 
         onMergeTo:function(mergeToModel, mergeToView){
@@ -855,7 +855,7 @@ define(function(require,exports,module){
 
     exports.MimicView = exports.MonsterView.extend({
         onDropItem:function(x,y){
-            roomView.generateItemForSure(x,y, Math.ceil(this.model.get("level")/2));
+            roomView.createItem(x,y, Math.ceil(this.model.get("level")/2));
         }
     })
 

@@ -1494,6 +1494,12 @@ body {
 .skill-image-telekinesis {
     background-image: url("../img/skill-telekinesis.png");
 }
+.skill-image-item-shift {
+    background-image: url("../img/skill-item-shift.png");
+}
+.skill-image-item-explosion {
+    background-image: url("../img/skill-item-explosion.png");
+}
 
 .skill-image.skill-locked {
     background-image: url("../img/status-locked.png");

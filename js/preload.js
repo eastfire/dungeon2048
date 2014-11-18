@@ -182,6 +182,8 @@ define(function(require,exports,module) {
 
         "skill-stealth.png",
         "skill-telekinesis.png",
+        "skill-item-shift.png",
+        "skill-item-explosion.png",
 
         "terrain-pillar.png",
         "terrain-trap.png",

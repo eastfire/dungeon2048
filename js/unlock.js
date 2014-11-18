@@ -350,6 +350,38 @@ define(function(require,exports,module){
         }
     })
 
+    exports.ItemShiftUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"item-shift",
+                description:"盗贼 的 妙手空空技能",
+                cost:50
+            }
+        },
+        isValid:function(){
+            return (new exports.ThiefUnlock()).isUnlocked();
+        },
+        adjustSkillPool:function(){
+            Skill.thiefBasicSkillPoolEntry.push( Skill.ItemShiftSkill )
+        }
+    })
+
+    exports.ItemExplosionUnlock = exports.Unlockable.extend({
+        defaults:function(){
+            return {
+                name:"item-shift",
+                description:"盗贼 的 邮包炸弹技能",
+                cost:50
+            }
+        },
+        isValid:function(){
+            return (new exports.ThiefUnlock()).isUnlocked();
+        },
+        adjustSkillPool:function(){
+            Skill.thiefBasicSkillPoolEntry.push( Skill.ItemExplosionSkill )
+        }
+    })
+
     exports.ThiefThirdSkillUnlock = exports.Unlockable.extend({
         defaults:function(){
             return {
@@ -412,6 +444,8 @@ define(function(require,exports,module){
         new exports.WizardFourthSkillUnlock(),
 
         new exports.ThiefUnlock(),
+        new exports.ItemShiftUnlock(),
+        new exports.ItemExplosionUnlock(),
         new exports.ThiefThirdSkillUnlock(),
         new exports.ThiefFourthSkillUnlock()
     ]
@@ -870,6 +904,23 @@ define(function(require,exports,module){
         }
     })
 
+    exports.SkillItemExplosionAchievement = exports.Achievement.extend({
+        defaults:function(){
+            return {
+                name:"skill-item-explosion",
+                displayName:"恐怖分子",
+                description:"邮包炸弹消灭所有且至少15个怪物",
+                reward:80
+            }
+        },
+        isValid:function(){
+            return (new exports.ItemExplosionUnlock()).isUnlocked();
+        },
+        isPassed:function(){
+            return statistic.skills["item-explosion"];
+        }
+    })
+
     exports.AllAchievements = [
         new exports.ArcherLevelAchievement(),
         new exports.GargoyleLevelAchievement(),
@@ -904,6 +955,8 @@ define(function(require,exports,module){
 
         new exports.SkillTeleportAchievement(),
         new exports.SkillLighteningChainAchievement(),
-        new exports.SkillMeteorShowersAchievement()
+        new exports.SkillMeteorShowersAchievement(),
+
+        new exports.SkillItemExplosionAchievement()
     ]
 });
