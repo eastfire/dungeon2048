@@ -75,6 +75,12 @@ define(function(require,exports,module) {
         "boss-hydra":"Boss九头蛇",
         "boss-lich":"Boss巫妖"
     }
+
+    exports.itemDisplayName = {
+        "potion":"恢复药水",
+        "mana-potion":"魔法药水"
+    }
+
     exports.monsterDescription = {
         "archer":{
             text:"远程攻击（射程3）<br/>攻击力：很低（等级的1/4）<br/>经验值：中",

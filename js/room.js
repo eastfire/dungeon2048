@@ -84,6 +84,17 @@ define(function(require,exports,module) {
                             str += Help.monsterDisplayName[target.monster];
                         else
                             str += "怪物";
+                    } else if (condition.type == "get") {
+                        str += "获得";
+                        var target = condition.get;
+                        str += target.count + "个"
+                        if (target.level) {
+                            str += "lv" + target.level;
+                        }
+                        if ( target.item )
+                            str += Help.itemDisplayName[target.item];
+                        else
+                            str += "宝物";
                     } else if (condition.type == "levelUp") {
                         str += "升"+condition.levelUp+"级"
                     } else if (condition.type == "death") {
@@ -126,6 +137,17 @@ define(function(require,exports,module) {
                             str += Help.monsterDisplayName[target.monster];
                         else
                             str += "怪物";
+                    } else if (condition.type == "get") {
+                        str += "获得";
+                        var target = condition.get;
+                        str += target.count + "个"
+                        if (target.level) {
+                            str += "lv" + target.level;
+                        }
+                        if ( target.item )
+                            str += Help.itemDisplayName[target.item];
+                        else
+                            str += "宝物";
                     } else if (condition.type == "levelUp") {
                         str += "英雄升"+condition.levelUp+"级"
                     } else if (condition.type == "move") {
@@ -942,7 +964,6 @@ define(function(require,exports,module) {
                             this.roomStatistic.kill[target.monster].level[target.level] > target.count ) {
                             return ture;
                         }
-                        this.roomStatistic.kill[target.monster].level[target.level];
                     } else { //任意等级
                         if ( this.roomStatistic.kill[target.monster] &&
                             this.roomStatistic.kill[target.monster].total > target.count ) {
@@ -951,6 +972,25 @@ define(function(require,exports,module) {
                     }
                 } else {//任意怪物
                     if ( this.roomStatistic.kill.total >= target.count )
+                        return true;
+                }
+            } else if ( condition.type == "get" ){
+                var target = condition.get;
+                if ( target.item ) { //指明某种宝物
+                    if ( target.level ) { //指明宝物等级
+                        if ( this.roomStatistic.item[target.item] &&
+                            this.roomStatistic.item[target.item].level[target.level] &&
+                            this.roomStatistic.item[target.item].level[target.level] > target.count ) {
+                            return ture;
+                        }
+                    } else { //任意等级
+                        if ( this.roomStatistic.item[target.item] &&
+                            this.roomStatistic.item[target.item].total > target.count ) {
+                            return true;
+                        }
+                    }
+                } else {//任意怪物
+                    if ( this.roomStatistic.item.total >= target.count )
                         return true;
                 }
             } else if ( condition.type == "move" ){
@@ -1172,4 +1212,355 @@ define(function(require,exports,module) {
             },TIME_SLICE*5/4);
         }
     })
+
+    var monsterByDifficultyLevel = [
+        [ "goblin", "kobold", "medusa", "mimic", "skeleton", "slime", "rat-man"  ],
+        [ "archer", "ghost", "mummy", "orc", "shaman", "snake"],
+        [ "gargoyle", "golem", "minotaur", "ogre", "troll", "vampire"]
+    ]
+
+    var RoomTemplate = Backbone.Model.extend({
+        generateMonsterTypesByDifficulty:function(min, max, validTypes){
+            var types = [];
+            for ( var i = min; i <= max; i++){
+                _.each( monsterByDifficultyLevel[i-1], function(monsterType){
+                    if ( isInArray(validTypes, monsterType) )
+                        types.push(monsterType);
+                },this)
+            }
+            return types;
+        },
+        defaults:function(){
+            return {
+                title:"",
+                description:"",
+                generatedCount:0,
+                minDifficulty : 1,
+                maxDifficulty : 1,
+                minMonsterDifficulty: 1,
+                maxMonsterDifficulty: 1,
+                validMonsterTypes : ["archer","gargoyle","ghost","goblin","golem","kobold","medusa","mimic","minotaur","mummy","ogre","orc","rat-man","shaman","skeleton","slime","snake","troll","vampire"],
+                monsterNumbers : [3,4],
+                monsterMinLevel:1,
+                monsterMaxLevel:1,
+                sizes:[5]
+            }
+        },
+        generateRoom : function(difficulty){
+            this.set("generatedCount",this.get("generatedCount")+1);
+            var r = new exports.Room({
+                title:this.get("title")+this.get("generatedCount"),
+                flavorDescription:this.get("description"),
+                size:window.getRandomItem(this.get("sizes"))
+            })
+            r.set({
+                monsterTypes : this.generateMonsterTypesByDifficulty(this.get("minMonsterDifficulty"), this.get("maxMonsterDifficulty"), this.get("validMonsterTypes"))
+            })
+            r.set({
+                initMonsterTypes:getRandomItems( r.get("monsterTypes"), getRandomItem(this.get("monsterNumbers")) )
+            })
+            return r;
+        }
+    })
+
+    exports.SurviveRoomTemplate = RoomTemplate.extend({
+        defaults:function(){
+            return _.extend( RoomTemplate.prototype.defaults.call(this),{
+                title:"生存"
+            } )
+        },
+        generateRoom:function(difficulty){
+            var r = RoomTemplate.prototype.generateRoom.call(this, difficulty)
+            r.set({
+                winCondition:{
+                    type:"turn",
+                    turn: 15+difficulty*5
+                }
+            })
+            return r;
+        }
+    })
+
+    exports.LevelUpRoomTemplate = RoomTemplate.extend({
+        defaults:function(){
+            return _.extend( RoomTemplate.prototype.defaults.call(this),{
+                title:"升级"
+            } )
+        },
+        generateRoom:function(difficulty){
+            var r = RoomTemplate.prototype.generateRoom.call(this, difficulty)
+            r.set({
+                winCondition:{
+                    type:"levelUp",
+                    levelUp: 1
+                }
+            })
+            return r;
+        }
+    })
+
+    exports.SlaughterRoomTemplate = RoomTemplate.extend({
+        defaults:function(){
+            return _.extend( RoomTemplate.prototype.defaults.call(this),{
+                title:"杀戮"
+            } )
+        },
+        generateRoom:function(difficulty){
+            var r = RoomTemplate.prototype.generateRoom.call(this, difficulty)
+            r.set({
+                winCondition:{
+                    type:"kill",
+                    kill: {
+                        count: 5+difficulty*10
+                    }
+                }
+            })
+            return r;
+        }
+    })
+
+    exports.roomTemplates = [
+        new exports.SurviveRoomTemplate(),
+        new exports.LevelUpRoomTemplate(),
+        new exports.SlaughterRoomTemplate()
+    ]
+
+    exports.ShapTemplate = Backbone.Model.extend({
+        defaults: function () {
+            return {
+                way: [{ direction: 0},
+                    { direction : 0 },
+                    { direction : 1 },
+                    { special:true }
+                ]
+            }
+        }
+    });
+
+    exports.shapTemplates = [
+        new exports.ShapTemplate({
+            way: [{ direction: 0},
+                { direction : 0 },
+                { direction : 0 },
+                { forks:[ 0, 1, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 0},
+                { direction : 0 },
+                { direction : 1 },
+                { forks:[ 0, 1],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 0},
+                { direction : 0 },
+                { direction : 3 },
+                { forks:[ 0, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 0},
+                { direction : 1 },
+                { direction : 1 },
+                { forks:[ 0, 1],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 0},
+                { direction : 3 },
+                { direction : 3 },
+                { forks:[ 0, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 0},
+                { direction : 1 },
+                { direction : 0 },
+                { forks:[ 0],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 0},
+                { direction : 3 },
+                { direction : 0 },
+                { forks:[ 0],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 1},
+                { direction : 1 },
+                { direction : 1 },
+                { forks:[ 0, 1, 2],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 1},
+                { direction : 1 },
+                { direction : 0 },
+                { forks:[ 0, 1],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 1},
+                { direction : 1 },
+                { direction : 2 },
+                { forks:[ 1, 2],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 1},
+                { direction : 0 },
+                { direction : 0 },
+                { forks:[ 0, 1],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 1},
+                { direction : 2 },
+                { direction : 2 },
+                { forks:[ 1, 2],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 1},
+                { direction : 2 },
+                { direction : 1 },
+                { forks:[ 1],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 1},
+                { direction : 0 },
+                { direction : 1 },
+                { forks:[ 1],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 2},
+                { direction : 2 },
+                { direction : 2 },
+                { forks:[ 1, 2, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 2},
+                { direction : 2 },
+                { direction : 3 },
+                { forks:[ 2, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 2},
+                { direction : 2 },
+                { direction : 1 },
+                { forks:[ 1, 2],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 2},
+                { direction : 1 },
+                { direction : 1 },
+                { forks:[ 1, 2],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 2},
+                { direction : 3 },
+                { direction : 3 },
+                { forks:[ 2, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 2},
+                { direction : 1 },
+                { direction : 2 },
+                { forks:[ 2],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 2},
+                { direction : 3 },
+                { direction : 2 },
+                { forks:[ 2],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 3},
+                { direction : 3 },
+                { direction : 3 },
+                { forks:[ 0, 2, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 3},
+                { direction : 3 },
+                { direction : 0 },
+                { forks:[ 0, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 3},
+                { direction : 3 },
+                { direction : 2 },
+                { forks:[ 2, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 3},
+                { direction : 2 },
+                { direction : 2 },
+                { forks:[ 2, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 3},
+                { direction : 0 },
+                { direction : 0 },
+                { forks:[ 0, 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 3},
+                { direction : 2 },
+                { direction : 3 },
+                { forks:[ 3],
+                    special:true }
+            ]
+        }),
+        new exports.ShapTemplate({
+            way: [{ direction: 3},
+                { direction : 0 },
+                { direction : 3 },
+                { forks:[ 3 ],
+                    special:true }
+            ]
+        })
+    ]
 });

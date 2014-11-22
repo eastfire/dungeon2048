@@ -51,6 +51,7 @@ define(function(require,exports,module) {
     window.basicMapHeight = 5;
     window.extraBlock = 2.75;
 
+    window.MAX_ROOM_DEPTH = 5;
 
     var calculateScreenSize = function(){
 
@@ -234,6 +235,86 @@ define(function(require,exports,module) {
         return null;
     }
 
+    window.generateRoomsFromTemplate = function(shapeTemplate, rootX, rootY, prevRoom, prevExitDirection, difficulty, deep){
+        var way = shapeTemplate.get("way");
+        var currentX = rootX;
+        var currentY = rootY;
+        for ( var i =0; i < way.length; i++) {
+            if ( getRoomByPosition(currentX,currentY) )
+                return;
+            var roomTemplate = getRandomItem(Room.roomTemplates);
+            if ( difficulty > roomTemplate.get("maxDifficulty"))
+                difficulty = roomTemplate.get("maxDifficulty");
+            if ( difficulty < roomTemplate.get("minDifficulty"))
+                difficulty = roomTemplate.get("minDifficulty");
+            var room = roomTemplate.generateRoom(difficulty);
+            room.set({
+                x:currentX,
+                y:currentY
+            })
+            if ( prevRoom ) {
+                if ( prevExitDirection == 0) {
+                    prevRoom.set({
+                        winExit0: room
+                    })
+                    room.set({
+                        normalExit2: prevRoom,
+                        winExit2: prevRoom
+                    })
+                } else if ( prevExitDirection == 1) {
+                    prevRoom.set({
+                        winExit1: room
+                    })
+                    room.set({
+                        normalExit3: prevRoom,
+                        winExit3: prevRoom
+                    })
+                } else if ( prevExitDirection == 2) {
+                    prevRoom.set({
+                        winExit2: room
+                    })
+                    room.set({
+                        normalExit0: prevRoom,
+                        winExit0: prevRoom
+                    })
+                } else if ( prevExitDirection == 3) {
+                    prevRoom.set({
+                        winExit3: room
+                    })
+                    room.set({
+                        normalExit1: prevRoom,
+                        winExit1: prevRoom
+                    })
+                }
+
+            }
+            window.rooms.push(room);
+
+            if ( way[i].forks && deep < MAX_ROOM_DEPTH ) {
+                _.each(way[i].forks, function(fork){
+                    var newx = currentX + increment[fork].x;
+                    var newy = currentY + increment[fork].y;
+                    var shapeTemplate = getRandomItem(Room.shapTemplates);
+                    generateRoomsFromTemplate( shapeTemplate , newx, newy, room, fork, Math.ceil(deep/2) , deep+1)
+                },this)
+            }
+
+            var direction = way[i].direction;
+            if ( direction != null && direction != undefined ) {
+                currentX += increment[direction].x;
+                currentY += increment[direction].y;
+            }
+
+            prevRoom = room;
+            prevExitDirection = direction
+        }
+    }
+
+    window.generateRooms = function( entryX, entryY ){
+        var shapeTemplate = getRandomItem(Room.shapTemplates);
+        generateRoomsFromTemplate( shapeTemplate , entryX, entryY, null, 0, 1 , 1)
+    }
+
     window.startGame = function(){
         renderGameWindow();
 
@@ -272,7 +353,8 @@ define(function(require,exports,module) {
             //gameModeStatus.tutorial.on = true;
             window.rooms = [];
 
-            rooms[2] = new Room.Room({
+            generateRooms(0, 0);
+           /* rooms[2] = new Room.Room({
                 x:0,
                 y:-2,
                 title:"英雄的试炼3",
@@ -338,7 +420,7 @@ define(function(require,exports,module) {
                 initMonsterTypes:["slime","skeleton","goblin"],
                 winExit0:[0,-1],
                 size:4
-            })
+            })*/
 
             var endlessRoom = new Room.Room({
                 title:"无尽地城",
