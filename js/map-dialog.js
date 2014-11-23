@@ -3,10 +3,6 @@ define(function(require,exports,module) {
         initialize:function(){
             var self = this;
             this.$el.addClass('map-dialog');
-            this.$el.on("click",function(){
-                self.remove();
-                window.showingDialog = false;
-            })
             this.$el.html("<div class='map-dialog-wrapper'></div>")
             this.wrapper = this.$(".map-dialog-wrapper");
             this.offsetX = window.roomWidth/2;
@@ -27,6 +23,8 @@ define(function(require,exports,module) {
                 direction: Hammer.DIRECTION_ALL
             });
             mc.get('pinch').set({ enable: true });
+            mc.get('tap').set({ enable: true,
+                event: "singletap"});
             mc.on("panleft",function(event){
                 self.offsetX -= self.panStep;
                 self.renderWrapper();
@@ -71,13 +69,23 @@ define(function(require,exports,module) {
                         break;
                 }
             })
+
+            this.$el.on("click",function(){
+                self.remove();
+                window.showingDialog = false;
+            })
+
+            this.$el.on("singletap",function(){
+                self.remove();
+                window.showingDialog = false;
+            })
         },
         render:function(){
             return this;
         },
         renderWrapper:function(){
             this.wrapper.css({
-                transform:"translate("+this.offsetX+"px,"+this.offsetY+"px) scale("+this.scale+")"
+                transform:"translate("+this.offsetX*this.scale+"px,"+this.offsetY*this.scale+"px) scale("+this.scale+")"
             })
         },
         renderExit:function(roomEl, direction, length){

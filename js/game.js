@@ -456,7 +456,10 @@ define(function(require,exports,module) {
             if ( gameModeStatus.tutorial.on ) {
                 window.roomView = new Room.TutorialRoomView({
                     model: window.room = new Room.TutorialRoom({
-                        winExit0:startingRoom
+                        winExit0:startRoom,
+                        specialCondition:{
+                            notInMap:true
+                        }
                     }),
                     el:$(".map")
                 });
