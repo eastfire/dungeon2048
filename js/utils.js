@@ -102,3 +102,5 @@ function relative_time_text(timestamp, local){
 
     return text + rtlang[local][' ago'];
 }
+
+window.isTouchDevice = 'ontouchstart' in document.documentElement;

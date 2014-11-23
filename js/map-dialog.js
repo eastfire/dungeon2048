@@ -5,8 +5,10 @@ define(function(require,exports,module) {
             this.$el.addClass('map-dialog');
             this.$el.html("<div class='map-dialog-wrapper'></div>")
             this.wrapper = this.$(".map-dialog-wrapper");
-            this.offsetX = window.roomWidth/2;
-            this.offsetY = window.roomHeight/2;
+            this.offsetX = 0;
+            this.offsetY = 0;
+            this.originOffsetX = window.roomWidth/2;
+            this.originOffsetY = window.roomHeight/2;
             this.scale = 1;
             this.maxScale = 2;
             this.minScale = 0.5;
@@ -18,13 +20,11 @@ define(function(require,exports,module) {
         },
         initEvent:function(){
             var self = this;
-            var mc = new Hammer($(".map-dialog")[0]);
-            mc.get("pan").set({
-                direction: Hammer.DIRECTION_ALL
-            });
-            mc.get('pinch').set({ enable: true });
-            mc.get('tap').set({ enable: true,
-                event: "singletap"});
+            var mc = new Hammer.Manager($(".map-dialog")[0]);
+            mc.add( new Hammer.Tap({ enable: true }) );
+            mc.add( new Hammer.Pan({ direction: Hammer.DIRECTION_ALL }) );
+            mc.add( new Hammer.Pinch({ enable: true }))
+
             mc.on("panleft",function(event){
                 self.offsetX -= self.panStep;
                 self.renderWrapper();
@@ -70,22 +70,25 @@ define(function(require,exports,module) {
                 }
             })
 
-            this.$el.on("click",function(){
-                self.remove();
-                window.showingDialog = false;
-            })
+            if ( isTouchDevice ) {
+                this.$el.on("tap",function(){
+                    self.remove();
+                    window.showingDialog = false;
+                })
+            } else {
+                this.$el.on("click",function(){
+                    self.remove();
+                    window.showingDialog = false;
+                })
+            }
 
-            this.$el.on("singletap",function(){
-                self.remove();
-                window.showingDialog = false;
-            })
         },
         render:function(){
             return this;
         },
         renderWrapper:function(){
             this.wrapper.css({
-                transform:"translate("+this.offsetX*this.scale+"px,"+this.offsetY*this.scale+"px) scale("+this.scale+")"
+                transform:"translate("+((this.offsetX+this.originOffsetX)*this.scale)+"px,"+((this.offsetY+this.originOffsetY)*this.scale)+"px) scale("+this.scale+")"
             })
         },
         renderExit:function(roomEl, direction, length){
