@@ -295,7 +295,7 @@ define(function(require,exports,module) {
                     var newx = currentX + increment[fork].x;
                     var newy = currentY + increment[fork].y;
                     var shapeTemplate = getRandomItem(Room.shapTemplates);
-                    generateRoomsFromTemplate( shapeTemplate , newx, newy, room, fork, Math.ceil(deep/2) , deep+1)
+                    generateRoomsFromTemplate( shapeTemplate , newx, newy, room, fork, deep , deep+1)
                 },this)
             }
 
@@ -687,7 +687,8 @@ define(function(require,exports,module) {
                 }
             }
         window.gameStatistic = {
-            turn: 0
+            turn: 0,
+            roomCount: 0
         }
     }
 

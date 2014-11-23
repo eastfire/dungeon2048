@@ -78,7 +78,7 @@ define(function(require,exports,module) {
                         var target = condition.kill;
                         str += target.count + "个"
                         if (target.level) {
-                            str += "lv" + target.level;
+                            str += "至少lv" + target.level;
                         }
                         if ( target.monster )
                             str += Help.monsterDisplayName[target.monster];
@@ -89,7 +89,7 @@ define(function(require,exports,module) {
                         var target = condition.get;
                         str += target.count + "个"
                         if (target.level) {
-                            str += "lv" + target.level;
+                            str += "至少lv" + target.level;
                         }
                         if ( target.item )
                             str += Help.itemDisplayName[target.item];
@@ -131,7 +131,7 @@ define(function(require,exports,module) {
                         var target = condition.kill;
                         str += target.count + "个"
                         if (target.level) {
-                            str += "lv" + target.level;
+                            str += "至少lv" + target.level;
                         }
                         if ( target.monster )
                             str += Help.monsterDisplayName[target.monster];
@@ -142,7 +142,7 @@ define(function(require,exports,module) {
                         var target = condition.get;
                         str += target.count + "个"
                         if (target.level) {
-                            str += "lv" + target.level;
+                            str += "至少lv" + target.level;
                         }
                         if ( target.item )
                             str += Help.itemDisplayName[target.item];
@@ -442,19 +442,7 @@ define(function(require,exports,module) {
                 self.newTurn.call(self)
             }, TIME_SLICE);
 
-//            map[1][1].terrain=new View.TerrainView({
-//                model: new Model.Terrain({
-//                    type:"trap",
-//                    position:{
-//                        x:1,
-//                        y:1
-//                    },
-//                    canPass:true,
-//                    canGenerateIn:true,
-//                    canCatch: true
-//                })
-//            })
-//            this.$el.append( map[1][1].terrain.render().$el )
+            gameStatistic.roomCount ++;
         },
 
         checkDropItem : function(x,y, monsterLevel){
@@ -950,6 +938,16 @@ define(function(require,exports,module) {
             }
         },
 
+        getStatisticAboveLevelCount:function(level, levelStatistic){
+            var total = 0;
+            for ( var key in levelStatistic ) {
+                if ( key >= level ) {
+                    total += levelStatistic[key];
+                }
+            }
+            return total;
+        },
+
         checkCondition:function(condition){
             if (condition.type=="turn") {
                 if (gameStatus.turn >= condition.turn) {
@@ -959,14 +957,13 @@ define(function(require,exports,module) {
                 var target = condition.kill;
                 if ( target.monster ) { //指明某种怪物
                     if ( target.level ) { //指明怪物等级
-                        if ( this.roomStatistic.kill[target.monster] &&
-                            this.roomStatistic.kill[target.monster].level[target.level] &&
-                            this.roomStatistic.kill[target.monster].level[target.level] > target.count ) {
-                            return ture;
+                        if ( this.roomStatistic.kill.type[target.monster] &&
+                            this.getStatisticAboveLevelCount(target.level, this.roomStatistic.kill.type[target.monster].level ) >= target.count ) {
+                            return true;
                         }
                     } else { //任意等级
                         if ( this.roomStatistic.kill[target.monster] &&
-                            this.roomStatistic.kill[target.monster].total > target.count ) {
+                            this.roomStatistic.kill[target.monster].total >= target.count ) {
                             return true;
                         }
                     }
@@ -978,14 +975,13 @@ define(function(require,exports,module) {
                 var target = condition.get;
                 if ( target.item ) { //指明某种宝物
                     if ( target.level ) { //指明宝物等级
-                        if ( this.roomStatistic.item[target.item] &&
-                            this.roomStatistic.item[target.item].level[target.level] &&
-                            this.roomStatistic.item[target.item].level[target.level] > target.count ) {
-                            return ture;
+                        if ( this.roomStatistic.item.type[target.item] &&
+                            this.getStatisticAboveLevelCount(target.level, this.roomStatistic.item.type[target.item].level ) >= target.count ) {
+                            return true;
                         }
                     } else { //任意等级
                         if ( this.roomStatistic.item[target.item] &&
-                            this.roomStatistic.item[target.item].total > target.count ) {
+                            this.roomStatistic.item[target.item].total >= target.count ) {
                             return true;
                         }
                     }
@@ -1236,7 +1232,7 @@ define(function(require,exports,module) {
                 description:"",
                 generatedCount:0,
                 minDifficulty : 1,
-                maxDifficulty : 1,
+                maxDifficulty : 5,
                 minMonsterDifficulty: 1,
                 maxMonsterDifficulty: 1,
                 validMonsterTypes : ["archer","gargoyle","ghost","goblin","golem","kobold","medusa","mimic","minotaur","mummy","ogre","orc","rat-man","shaman","skeleton","slime","snake","troll","vampire"],
@@ -1247,11 +1243,15 @@ define(function(require,exports,module) {
             }
         },
         generateRoom : function(difficulty){
+            var minMonsterDifficulty = [ 1 , 1, 2, 1, 2, 3 ];
+            var maxMonsterDifficulty = [ 1 , 2, 2, 3, 3, 3 ];
             this.set("generatedCount",this.get("generatedCount")+1);
             var r = new exports.Room({
                 title:this.get("title")+this.get("generatedCount"),
                 flavorDescription:this.get("description"),
-                size:window.getRandomItem(this.get("sizes"))
+                size:window.getRandomItem(this.get("sizes")),
+                minMonsterDifficulty: minMonsterDifficulty[difficulty >= minMonsterDifficulty.length ? minMonsterDifficulty.length-1 : difficulty],
+                maxMonsterDifficulty: maxMonsterDifficulty[difficulty >= minMonsterDifficulty.length ? maxMonsterDifficulty.length-1 : difficulty]
             })
             r.set({
                 monsterTypes : this.generateMonsterTypesByDifficulty(this.get("minMonsterDifficulty"), this.get("maxMonsterDifficulty"), this.get("validMonsterTypes"))
@@ -1319,16 +1319,40 @@ define(function(require,exports,module) {
         }
     })
 
+    exports.AssassinRoomTemplate = RoomTemplate.extend({
+        defaults:function(){
+            return _.extend( RoomTemplate.prototype.defaults.call(this),{
+                title:"刺杀"
+            } )
+        },
+        generateRoom:function(difficulty){
+            var r = RoomTemplate.prototype.generateRoom.call(this, difficulty)
+            r.set({
+                winCondition:{
+                    type:"kill",
+                    kill: {
+                        count: 1,
+                        monster: getRandomItem(r.get("initMonsterTypes")),
+                        level: 5*difficulty
+                    }
+                }
+            })
+            return r;
+        }
+    })
+
     exports.roomTemplates = [
         new exports.SurviveRoomTemplate(),
         new exports.LevelUpRoomTemplate(),
-        new exports.SlaughterRoomTemplate()
+        new exports.SlaughterRoomTemplate(),
+        new exports.AssassinRoomTemplate()
     ]
 
     exports.ShapTemplate = Backbone.Model.extend({
         defaults: function () {
             return {
                 way: [{ direction: 0},
+                    { direction: 0},
                     { direction : 0 },
                     { direction : 1 },
                     { special:true }
@@ -1342,6 +1366,7 @@ define(function(require,exports,module) {
             way: [{ direction: 0},
                 { direction : 0 },
                 { direction : 0 },
+                { direction: 0 },
                 { forks:[ 0, 1, 3],
                     special:true }
             ]
@@ -1350,6 +1375,7 @@ define(function(require,exports,module) {
             way: [{ direction: 0},
                 { direction : 0 },
                 { direction : 1 },
+                { direction: 1 },
                 { forks:[ 0, 1],
                     special:true }
             ]
@@ -1358,12 +1384,14 @@ define(function(require,exports,module) {
             way: [{ direction: 0},
                 { direction : 0 },
                 { direction : 3 },
+                { direction : 3 },
                 { forks:[ 0, 3],
                     special:true }
             ]
         }),
         new exports.ShapTemplate({
             way: [{ direction: 0},
+                { direction : 1 },
                 { direction : 1 },
                 { direction : 1 },
                 { forks:[ 0, 1],
@@ -1374,12 +1402,14 @@ define(function(require,exports,module) {
             way: [{ direction: 0},
                 { direction : 3 },
                 { direction : 3 },
+                { direction : 3 },
                 { forks:[ 0, 3],
                     special:true }
             ]
         }),
         new exports.ShapTemplate({
             way: [{ direction: 0},
+                { direction : 1 },
                 { direction : 1 },
                 { direction : 0 },
                 { forks:[ 0],
@@ -1388,6 +1418,7 @@ define(function(require,exports,module) {
         }),
         new exports.ShapTemplate({
             way: [{ direction: 0},
+                { direction : 3 },
                 { direction : 3 },
                 { direction : 0 },
                 { forks:[ 0],
@@ -1396,6 +1427,7 @@ define(function(require,exports,module) {
         }),
         new exports.ShapTemplate({
             way: [{ direction: 1},
+                { direction : 1 },
                 { direction : 1 },
                 { direction : 1 },
                 { forks:[ 0, 1, 2],
@@ -1406,6 +1438,7 @@ define(function(require,exports,module) {
             way: [{ direction: 1},
                 { direction : 1 },
                 { direction : 0 },
+                { direction : 0 },
                 { forks:[ 0, 1],
                     special:true }
             ]
@@ -1414,12 +1447,14 @@ define(function(require,exports,module) {
             way: [{ direction: 1},
                 { direction : 1 },
                 { direction : 2 },
+                { direction : 2 },
                 { forks:[ 1, 2],
                     special:true }
             ]
         }),
         new exports.ShapTemplate({
             way: [{ direction: 1},
+                { direction : 0 },
                 { direction : 0 },
                 { direction : 0 },
                 { forks:[ 0, 1],
@@ -1430,12 +1465,14 @@ define(function(require,exports,module) {
             way: [{ direction: 1},
                 { direction : 2 },
                 { direction : 2 },
+                { direction : 2 },
                 { forks:[ 1, 2],
                     special:true }
             ]
         }),
         new exports.ShapTemplate({
             way: [{ direction: 1},
+                { direction : 2 },
                 { direction : 2 },
                 { direction : 1 },
                 { forks:[ 1],
@@ -1444,6 +1481,7 @@ define(function(require,exports,module) {
         }),
         new exports.ShapTemplate({
             way: [{ direction: 1},
+                { direction : 0 },
                 { direction : 0 },
                 { direction : 1 },
                 { forks:[ 1],
@@ -1452,6 +1490,7 @@ define(function(require,exports,module) {
         }),
         new exports.ShapTemplate({
             way: [{ direction: 2},
+                { direction : 2 },
                 { direction : 2 },
                 { direction : 2 },
                 { forks:[ 1, 2, 3],
@@ -1462,6 +1501,7 @@ define(function(require,exports,module) {
             way: [{ direction: 2},
                 { direction : 2 },
                 { direction : 3 },
+                { direction : 3 },
                 { forks:[ 2, 3],
                     special:true }
             ]
@@ -1470,6 +1510,7 @@ define(function(require,exports,module) {
             way: [{ direction: 2},
                 { direction : 2 },
                 { direction : 1 },
+                { direction : 1 },
                 { forks:[ 1, 2],
                     special:true }
             ]
@@ -1478,12 +1519,14 @@ define(function(require,exports,module) {
             way: [{ direction: 2},
                 { direction : 1 },
                 { direction : 1 },
+                { direction : 1 },
                 { forks:[ 1, 2],
                     special:true }
             ]
         }),
         new exports.ShapTemplate({
             way: [{ direction: 2},
+                { direction : 3 },
                 { direction : 3 },
                 { direction : 3 },
                 { forks:[ 2, 3],
@@ -1492,6 +1535,7 @@ define(function(require,exports,module) {
         }),
         new exports.ShapTemplate({
             way: [{ direction: 2},
+                { direction : 1 },
                 { direction : 1 },
                 { direction : 2 },
                 { forks:[ 2],
@@ -1500,6 +1544,7 @@ define(function(require,exports,module) {
         }),
         new exports.ShapTemplate({
             way: [{ direction: 2},
+                { direction : 3 },
                 { direction : 3 },
                 { direction : 2 },
                 { forks:[ 2],
@@ -1508,6 +1553,7 @@ define(function(require,exports,module) {
         }),
         new exports.ShapTemplate({
             way: [{ direction: 3},
+                { direction : 3 },
                 { direction : 3 },
                 { direction : 3 },
                 { forks:[ 0, 2, 3],
@@ -1518,6 +1564,7 @@ define(function(require,exports,module) {
             way: [{ direction: 3},
                 { direction : 3 },
                 { direction : 0 },
+                { direction : 0 },
                 { forks:[ 0, 3],
                     special:true }
             ]
@@ -1526,6 +1573,7 @@ define(function(require,exports,module) {
             way: [{ direction: 3},
                 { direction : 3 },
                 { direction : 2 },
+                { direction : 2 },
                 { forks:[ 2, 3],
                     special:true }
             ]
@@ -1534,12 +1582,14 @@ define(function(require,exports,module) {
             way: [{ direction: 3},
                 { direction : 2 },
                 { direction : 2 },
+                { direction : 2 },
                 { forks:[ 2, 3],
                     special:true }
             ]
         }),
         new exports.ShapTemplate({
             way: [{ direction: 3},
+                { direction : 0 },
                 { direction : 0 },
                 { direction : 0 },
                 { forks:[ 0, 3],
@@ -1548,6 +1598,7 @@ define(function(require,exports,module) {
         }),
         new exports.ShapTemplate({
             way: [{ direction: 3},
+                { direction : 2 },
                 { direction : 2 },
                 { direction : 3 },
                 { forks:[ 3],
@@ -1556,6 +1607,7 @@ define(function(require,exports,module) {
         }),
         new exports.ShapTemplate({
             way: [{ direction: 3},
+                { direction : 0 },
                 { direction : 0 },
                 { direction : 3 },
                 { forks:[ 3 ],
