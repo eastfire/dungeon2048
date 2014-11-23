@@ -47,6 +47,9 @@ define(function(require,exports,module) {
                     self.scale += self.scaleStep;
                     self.renderWrapper();
                 }
+            }).on("tap",function(){
+                self.remove();
+                window.showingDialog = false;
             })
 
             this.$el.on("panByKey",function(event,data) {
@@ -69,18 +72,6 @@ define(function(require,exports,module) {
                         break;
                 }
             })
-
-            if ( isTouchDevice ) {
-                this.$el.on("tap",function(){
-                    self.remove();
-                    window.showingDialog = false;
-                })
-            } else {
-                this.$el.on("click",function(){
-                    self.remove();
-                    window.showingDialog = false;
-                })
-            }
 
         },
         render:function(){
