@@ -1343,11 +1343,32 @@ define(function(require,exports,module) {
         }
     })
 
+    exports.TreasureRoomTemplate = RoomTemplate.extend({
+        defaults:function(){
+            return _.extend( RoomTemplate.prototype.defaults.call(this),{
+                title:"寻宝"
+            } )
+        },
+        generateRoom:function(difficulty){
+            var r = RoomTemplate.prototype.generateRoom.call(this, difficulty)
+            r.set({
+                winCondition:{
+                    type:"get",
+                    get: {
+                        count: difficulty*2+1
+                    }
+                }
+            })
+            return r;
+        }
+    })
+
     exports.roomTemplates = [
         new exports.SurviveRoomTemplate(),
         new exports.LevelUpRoomTemplate(),
         new exports.SlaughterRoomTemplate(),
-        new exports.AssassinRoomTemplate()
+        new exports.AssassinRoomTemplate(),
+        new exports.TreasureRoomTemplate()
     ]
 
     exports.BossRoomTemplate = RoomTemplate.extend({

@@ -46,7 +46,7 @@ define(function(require,exports,module) {
         human:"每个能升级的技能的上限加1<br/>升级时可以３选１",
         "half-orc":"初始生命30<br/>每次升级或体质升级时最大生命值加15",
         "elf":"生命小于50%时，技能冷却每回合减2<br/>生命小于20%时，技能冷却每回合减3",
-        "dwarf":"每回合恢复1生命，可升级"
+        "dwarf":"房间未通过或失败时每回合恢复1<span class='hp-symbol'>♥</span>，可升级"
     }
 
     exports.monsterDisplayName = {
