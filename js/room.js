@@ -681,15 +681,15 @@ define(function(require,exports,module) {
                     if ( !curblock.terrain.canPass() ) {
                         break;
                     }
-                    if ( curblock.terrain.canCatch() ) {
-                        movement++;
-                        break;
-                    }
                 }
                 if ( curblock.type == "blank" ) {
                     movement ++;
                 } else if ( mytype == curblock.type ){
                     if ( mymodel.get("type") == curblock.model.get("type") ) {
+                        if ( curblock.terrain && curblock.terrain.canCatch() && curblock.movement!=0) {
+                            //cant merge in trap if other is moving
+                            break;
+                        }
                         //can merge
                         movement += (curblock.movement + 1);
                         if ( curblock.beTaken ) {
@@ -719,6 +719,10 @@ define(function(require,exports,module) {
                     break;
                 }else if ( mytype != curblock.type ) {
                     movement += curblock.movement;
+                    break;
+                }
+
+                if ( curblock.terrain && curblock.terrain.canCatch() ) {
                     break;
                 }
             } while ( true );
@@ -885,7 +889,7 @@ define(function(require,exports,module) {
             setTimeout(function(){
                 if ( gameStatus.phase != PHASE_GAME_OVER )
                     self.beforeTurnEnd.call(self);
-            },TIME_SLICE*2);
+            },TIME_SLICE*2+10);
         },
 
         beforeTurnEnd:function(){
@@ -903,7 +907,7 @@ define(function(require,exports,module) {
             var self = this;
             setTimeout(function(){
                 self.turnEnd.call(self);
-            },pass ? 1 : TIME_SLICE+10);
+            },pass ? 1 : 2*TIME_SLICE+10);
         },
 
         turnEnd : function(){
@@ -1363,14 +1367,6 @@ define(function(require,exports,module) {
         }
     })
 
-    exports.roomTemplates = [
-        new exports.SurviveRoomTemplate(),
-        new exports.LevelUpRoomTemplate(),
-        new exports.SlaughterRoomTemplate(),
-        new exports.AssassinRoomTemplate(),
-        new exports.TreasureRoomTemplate()
-    ]
-
     exports.BossRoomTemplate = RoomTemplate.extend({
         defaults:function(){
             return _.extend( RoomTemplate.prototype.defaults.call(this),{
@@ -1477,6 +1473,15 @@ define(function(require,exports,module) {
             return r;
         }
     })
+
+    exports.roomTemplates = [
+        new exports.TrapRoomTemplate1()
+//        new exports.SurviveRoomTemplate(),
+//        new exports.LevelUpRoomTemplate(),
+//        new exports.SlaughterRoomTemplate(),
+//        new exports.AssassinRoomTemplate(),
+//        new exports.TreasureRoomTemplate()
+    ]
 
     exports.specialRoomTemplates = [
         new exports.BossRoomTemplate(),
