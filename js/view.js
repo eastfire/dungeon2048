@@ -322,7 +322,9 @@ define(function(require,exports,module){
         },
         onNewTurn:function(){
             if ( this.model.get("regeneration") ){
-                this.getHp(REGENERATION_EFFECT*this.model.get("regeneration"));
+                if ( !gameStatus.win && !gameStatus.lose ) {
+                    this.getHp(REGENERATION_EFFECT * this.model.get("regeneration"));
+                }
             }
             if ( this.model.get("poison") ){
                 this.effecQueue.add.call(this.effecQueue,"♥-"+this.model.get("poison")*(this.model.get("curse")?2:1));

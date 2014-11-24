@@ -790,7 +790,7 @@ define(function(require,exports,module) {
                 if ( gameStatus.win )
                     status = "win"
                 else if ( gameStatus.lose )
-                    status = "lost"
+                    status = "lose"
                 else
                     status = "normal"
                 window.gotoRoom( this.model.get(status+"Exit"+direction ) , {

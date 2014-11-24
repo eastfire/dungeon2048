@@ -292,7 +292,7 @@ define(function(require,exports,module) {
                     })
                     if ( isSpecial ) {
                         room.set({
-                            failExit2: prevRoom,
+                            loseExit2: prevRoom,
                             winExit2: prevRoom
                         })
                     } else {
@@ -307,7 +307,7 @@ define(function(require,exports,module) {
                     })
                     if ( isSpecial ) {
                         room.set({
-                            failExit3: prevRoom,
+                            loseExit3: prevRoom,
                             winExit3: prevRoom
                         })
                     } else {
@@ -322,7 +322,7 @@ define(function(require,exports,module) {
                     })
                     if ( isSpecial ) {
                         room.set({
-                            failExit0: prevRoom,
+                            loseExit0: prevRoom,
                             winExit0: prevRoom
                         })
                     } else {
@@ -337,7 +337,7 @@ define(function(require,exports,module) {
                     })
                     if ( isSpecial ) {
                         room.set({
-                            failExit1: prevRoom,
+                            loseExit1: prevRoom,
                             winExit1: prevRoom
                         })
                     } else {
