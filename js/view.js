@@ -140,6 +140,9 @@ define(function(require,exports,module){
         render:function(){
             this.$el = $("<div class='hero'></div>")
             MovableView.prototype.render.call(this);
+            if ( this.model.get("poison") ) {
+                this.$el.append("<div class='status-poison'>" + this.model.get("poison") + "</div>")
+            }
             return this;
         },
         move:function(movement, direction){
