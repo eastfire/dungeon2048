@@ -247,6 +247,9 @@ define(function(require,exports,module) {
                     lvStr = "";
                 reason="被"+lvStr+Help.monsterDisplayName[score.killBy.monsterType]+"杀死";
             }
+            if ( score.roomCount > 2 ) {
+                reason= "经过"+score.roomCount+"间房间"+reason;
+            }
             if ( score.roomName ){
                 reason += "在<i><u>"+score.roomName+"</u></i>";
             }

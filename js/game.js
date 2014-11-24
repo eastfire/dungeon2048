@@ -51,7 +51,7 @@ define(function(require,exports,module) {
     window.basicMapHeight = 5;
     window.extraBlock = 2.75;
 
-    window.MAX_ROOM_DEPTH = 6;
+    window.MAX_ROOM_DEPTH = 7;
 
     var calculateScreenSize = function(){
 
@@ -380,6 +380,11 @@ define(function(require,exports,module) {
     }
 
     window.startGame = function(){
+        window.gameStatistic = {
+            turn: 0,
+            roomCount: 0
+        }
+
         renderGameWindow();
 
         initEvent();
@@ -637,6 +642,7 @@ define(function(require,exports,module) {
                 timestamp : Firebase.ServerValue.TIMESTAMP,//(new Date()).getTime(),
                 r: Math.random(),
                 version: GAME_VERSION,
+                roomCount: gameStatistic.roomCount - 1,
                 roomName : room.get("title"),
                 ".priority":window.hero.get("score")
             }
@@ -683,10 +689,6 @@ define(function(require,exports,module) {
                     total:0
                 }
             }
-        window.gameStatistic = {
-            turn: 0,
-            roomCount: 0
-        }
     }
 
     require("./preload").preload(function(){
