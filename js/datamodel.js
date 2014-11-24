@@ -508,7 +508,8 @@ define(function (require, exports, module) {
                     x: 0,
                     y: 0
                 },
-                direction: 2
+                direction: 2,
+                canBeTaken: true
             }
         },
         initialize: function (options) {

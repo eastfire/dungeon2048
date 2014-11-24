@@ -51,7 +51,7 @@ define(function(require,exports,module) {
     window.basicMapHeight = 5;
     window.extraBlock = 2.75;
 
-    window.MAX_ROOM_DEPTH = 5;
+    window.MAX_ROOM_DEPTH = 6;
 
     var calculateScreenSize = function(){
 
@@ -240,51 +240,112 @@ define(function(require,exports,module) {
         var currentX = rootX;
         var currentY = rootY;
         for ( var i =0; i < way.length; i++) {
-            if ( getRoomByPosition(currentX,currentY) )
+            var existRoom = getRoomByPosition(currentX,currentY);
+            if ( existRoom ) {
+                if ( prevExitDirection == 0) {
+                    existRoom.set({
+                        winExit2:prevRoom
+                    })
+                    prevRoom.set({
+                        winExit0:existRoom
+                    })
+                } else if ( prevExitDirection == 1) {
+                    existRoom.set({
+                        winExit3:prevRoom
+                    })
+                    prevRoom.set({
+                        winExit1:existRoom
+                    })
+                } else if ( prevExitDirection == 2) {
+                    existRoom.set({
+                        winExit0:prevRoom
+                    })
+                    prevRoom.set({
+                        winExit2:existRoom
+                    })
+                } else if ( prevExitDirection == 3) {
+                    existRoom.set({
+                        winExit1:prevRoom
+                    })
+                    prevRoom.set({
+                        winExit3:existRoom
+                    })
+                }
                 return;
-            var roomTemplate = getRandomItem(Room.roomTemplates);
+            }
+            var roomTemplate = getRandomItem( way[i].special ?  Room.specialRoomTemplates : Room.roomTemplates );
             if ( difficulty > roomTemplate.get("maxDifficulty"))
                 difficulty = roomTemplate.get("maxDifficulty");
             if ( difficulty < roomTemplate.get("minDifficulty"))
                 difficulty = roomTemplate.get("minDifficulty");
             var room = roomTemplate.generateRoom(difficulty);
+            var isSpecial = way[i].special;
             room.set({
                 x:currentX,
-                y:currentY
+                y:currentY,
+                isSpecial: isSpecial
             })
             if ( prevRoom ) {
                 if ( prevExitDirection == 0) {
                     prevRoom.set({
                         winExit0: room
                     })
-                    room.set({
-                        normalExit2: prevRoom,
-                        winExit2: prevRoom
-                    })
+                    if ( isSpecial ) {
+                        room.set({
+                            failExit2: prevRoom,
+                            winExit2: prevRoom
+                        })
+                    } else {
+                        room.set({
+                            normalExit2: prevRoom,
+                            winExit2: prevRoom
+                        })
+                    }
                 } else if ( prevExitDirection == 1) {
                     prevRoom.set({
                         winExit1: room
                     })
-                    room.set({
-                        normalExit3: prevRoom,
-                        winExit3: prevRoom
-                    })
+                    if ( isSpecial ) {
+                        room.set({
+                            failExit3: prevRoom,
+                            winExit3: prevRoom
+                        })
+                    } else {
+                        room.set({
+                            normalExit3: prevRoom,
+                            winExit3: prevRoom
+                        })
+                    }
                 } else if ( prevExitDirection == 2) {
                     prevRoom.set({
                         winExit2: room
                     })
-                    room.set({
-                        normalExit0: prevRoom,
-                        winExit0: prevRoom
-                    })
+                    if ( isSpecial ) {
+                        room.set({
+                            failExit0: prevRoom,
+                            winExit0: prevRoom
+                        })
+                    } else {
+                        room.set({
+                            normalExit0: prevRoom,
+                            winExit0: prevRoom
+                        })
+                    }
                 } else if ( prevExitDirection == 3) {
                     prevRoom.set({
                         winExit3: room
                     })
-                    room.set({
-                        normalExit1: prevRoom,
-                        winExit1: prevRoom
-                    })
+                    if ( isSpecial ) {
+                        room.set({
+                            failExit1: prevRoom,
+                            winExit1: prevRoom
+                        })
+                    } else {
+                        room.set({
+                            normalExit1: prevRoom,
+                            winExit1: prevRoom
+                        })
+                    }
                 }
 
             }
@@ -294,8 +355,11 @@ define(function(require,exports,module) {
                 _.each(way[i].forks, function(fork){
                     var newx = currentX + increment[fork].x;
                     var newy = currentY + increment[fork].y;
-                    var shapeTemplate = getRandomItem(Room.shapTemplates);
-                    generateRoomsFromTemplate( shapeTemplate , newx, newy, room, fork, deep , deep+1)
+                    var shapeTemplate;
+                    do {
+                        shapeTemplate = getRandomItem(Room.shapTemplates);
+                    } while ( shapeTemplate.get("way")[0].direction != fork );
+                    generateRoomsFromTemplate( shapeTemplate , newx, newy, room, fork, deep+1 , deep+1)
                 },this)
             }
 
@@ -354,73 +418,6 @@ define(function(require,exports,module) {
             window.rooms = [];
 
             generateRooms(0, 0);
-           /* rooms[2] = new Room.Room({
-                x:0,
-                y:-2,
-                title:"英雄的试炼3",
-                flavorDescription:"",
-                winCondition:{
-                    type:"turn",
-                    turn: 20
-                },
-                turnLimit:20,
-                initMonsterTypes:["vampire","golem","minotaur"],
-                size:6,
-                blocks:[
-                    {
-                        x:1,
-                        y:1,
-                        terrainType:"pillar"
-                    },
-                    {
-                        x:4,
-                        y:4,
-                        terrainType:"pillar"
-                    },
-                    {
-                        x:1,
-                        y:4,
-                        terrainType:"pillar"
-                    },
-                    {
-                        x:4,
-                        y:1,
-                        terrainType:"pillar"
-                    }
-                ]
-            })
-            rooms[1] = new Room.Room({
-                x:0,
-                y:-1,
-                title:"英雄的试炼２",
-                flavorDescription:"",
-                winCondition:{
-                    type:"turn",
-                    turn: 20
-                },
-                specialCondition:{
-                    hideAll:true
-                },
-                winExit0:[0,-2],
-                normalExit2:[0,0],
-                winExit2:[0,0],
-                turnLimit:20,
-                initMonsterTypes:["orc","ghost","minotaur"],
-                size:5
-            })
-            rooms[0] = new Room.Room({
-                x:0,
-                y:0,
-                title:"英雄的试炼１",
-                flavorDescription:"",
-                winCondition:{
-                    type:"levelUp",
-                    levelUp: 1
-                },
-                initMonsterTypes:["slime","skeleton","goblin"],
-                winExit0:[0,-1],
-                size:4
-            })*/
 
             var endlessRoom = new Room.Room({
                 title:"无尽地城",

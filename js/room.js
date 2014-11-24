@@ -709,8 +709,8 @@ define(function(require,exports,module) {
                         movement += curblock.movement;
                         break;
                     }
-                } else if ( (mytype == "item" && curblock.type == "hero") ||
-                    ( mytype == "hero" && curblock.type == "item")) {
+                } else if ( (mytype == "item" && mymodel.get("canBeTaken") && curblock.type == "hero") ||
+                    ( mytype == "hero" && curblock.type == "item" && curblock.model.get("canBeTaken") )) {
                     //can take
                     movement += (curblock.movement + 1);
                     if ( curblock.type == "hero" ) {
@@ -962,8 +962,8 @@ define(function(require,exports,module) {
                             return true;
                         }
                     } else { //任意等级
-                        if ( this.roomStatistic.kill[target.monster] &&
-                            this.roomStatistic.kill[target.monster].total >= target.count ) {
+                        if ( this.roomStatistic.kill.type[target.monster] &&
+                            this.roomStatistic.kill.type[target.monster].total >= target.count ) {
                             return true;
                         }
                     }
@@ -980,8 +980,8 @@ define(function(require,exports,module) {
                             return true;
                         }
                     } else { //任意等级
-                        if ( this.roomStatistic.item[target.item] &&
-                            this.roomStatistic.item[target.item].total >= target.count ) {
+                        if ( this.roomStatistic.item.type[target.item] &&
+                            this.roomStatistic.item.type[target.item].total >= target.count ) {
                             return true;
                         }
                     }
@@ -1215,6 +1215,10 @@ define(function(require,exports,module) {
         [ "gargoyle", "golem", "minotaur", "ogre", "troll", "vampire"]
     ]
 
+    var bossTypes = [
+        "boss-beholder","boss-death","boss-hydra","boss-lich"
+    ]
+
     var RoomTemplate = Backbone.Model.extend({
         generateMonsterTypesByDifficulty:function(min, max, validTypes){
             var types = [];
@@ -1233,8 +1237,8 @@ define(function(require,exports,module) {
                 generatedCount:0,
                 minDifficulty : 1,
                 maxDifficulty : 5,
-                minMonsterDifficulty: 1,
-                maxMonsterDifficulty: 1,
+                minMonsterDifficulties: [ 1 , 1, 2, 1, 2, 3 ],
+                maxMonsterDifficulties: [ 1 , 2, 2, 3, 3, 3 ],
                 validMonsterTypes : ["archer","gargoyle","ghost","goblin","golem","kobold","medusa","mimic","minotaur","mummy","ogre","orc","rat-man","shaman","skeleton","slime","snake","troll","vampire"],
                 monsterNumbers : [3,4],
                 monsterMinLevel:1,
@@ -1243,18 +1247,16 @@ define(function(require,exports,module) {
             }
         },
         generateRoom : function(difficulty){
-            var minMonsterDifficulty = [ 1 , 1, 2, 1, 2, 3 ];
-            var maxMonsterDifficulty = [ 1 , 2, 2, 3, 3, 3 ];
             this.set("generatedCount",this.get("generatedCount")+1);
             var r = new exports.Room({
-                title:this.get("title")+this.get("generatedCount"),
+                title:this.get("title")+"("+this.get("generatedCount")+")",
                 flavorDescription:this.get("description"),
                 size:window.getRandomItem(this.get("sizes")),
-                minMonsterDifficulty: minMonsterDifficulty[difficulty >= minMonsterDifficulty.length ? minMonsterDifficulty.length-1 : difficulty],
-                maxMonsterDifficulty: maxMonsterDifficulty[difficulty >= minMonsterDifficulty.length ? maxMonsterDifficulty.length-1 : difficulty]
+                minMonsterDifficulty: this.get("minMonsterDifficulties")[difficulty >= this.get("minMonsterDifficulties").length ? this.get("minMonsterDifficulties").length-1 : difficulty-1],
+                maxMonsterDifficulty: this.get("maxMonsterDifficulties")[difficulty >= this.get("maxMonsterDifficulties").length ? this.get("maxMonsterDifficulties").length-1 : difficulty-1]
             })
             r.set({
-                monsterTypes : this.generateMonsterTypesByDifficulty(this.get("minMonsterDifficulty"), this.get("maxMonsterDifficulty"), this.get("validMonsterTypes"))
+                monsterTypes : this.generateMonsterTypesByDifficulty(r.get("minMonsterDifficulty"), r.get("maxMonsterDifficulty"), this.get("validMonsterTypes"))
             })
             r.set({
                 initMonsterTypes:getRandomItems( r.get("monsterTypes"), getRandomItem(this.get("monsterNumbers")) )
@@ -1348,6 +1350,118 @@ define(function(require,exports,module) {
         new exports.AssassinRoomTemplate()
     ]
 
+    exports.BossRoomTemplate = RoomTemplate.extend({
+        defaults:function(){
+            return _.extend( RoomTemplate.prototype.defaults.call(this),{
+                title:"boss的房间"
+            } )
+        },
+        generateRoom:function(difficulty){
+            var r = RoomTemplate.prototype.generateRoom.call(this, difficulty)
+            var boss = getRandomItem(bossTypes);
+            r.set({
+                winCondition:{
+                    type:"kill",
+                    kill: {
+                        count: 1,
+                        monster: boss
+                    }
+                },
+                bossAppearEachTurn: 100,
+                bossAppearOffset: 94,
+                bossPool:[boss]
+            })
+            return r;
+        }
+    })
+
+    exports.TrapRoomTemplate1 = RoomTemplate.extend({
+        defaults:function(){
+            return _.extend( RoomTemplate.prototype.defaults.call(this),{
+                title:"It's a trap!"
+            } )
+        },
+        generateRoom:function(difficulty){
+            var r = RoomTemplate.prototype.generateRoom.call(this, difficulty)
+            r.set({
+                size: 6,
+                generateMonsterPerTurn: 4,
+                blocks:[
+                    {
+                        x:0,
+                        y:0,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:1,
+                        y:1,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:2,
+                        y:2,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:3,
+                        y:3,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:4,
+                        y:4,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:5,
+                        y:5,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:0,
+                        y:5,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:1,
+                        y:4,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:2,
+                        y:3,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:3,
+                        y:2,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:4,
+                        y:1,
+                        terrainType:"trap"
+                    },
+                    {
+                        x:5,
+                        y:0,
+                        terrainType:"trap"
+                    }
+                ],
+                winCondition:{
+                    type:"turn",
+                    turn: 10+difficulty*5
+                }
+            })
+            return r;
+        }
+    })
+
+    exports.specialRoomTemplates = [
+        new exports.BossRoomTemplate(),
+        new exports.TrapRoomTemplate1()
+    ]
+
     exports.ShapTemplate = Backbone.Model.extend({
         defaults: function () {
             return {
@@ -1412,7 +1526,7 @@ define(function(require,exports,module) {
                 { direction : 1 },
                 { direction : 1 },
                 { direction : 0 },
-                { forks:[ 0],
+                { forks:[ 0, 1],
                     special:true }
             ]
         }),
@@ -1421,7 +1535,7 @@ define(function(require,exports,module) {
                 { direction : 3 },
                 { direction : 3 },
                 { direction : 0 },
-                { forks:[ 0],
+                { forks:[ 0, 3],
                     special:true }
             ]
         }),
@@ -1475,7 +1589,7 @@ define(function(require,exports,module) {
                 { direction : 2 },
                 { direction : 2 },
                 { direction : 1 },
-                { forks:[ 1],
+                { forks:[ 1, 2],
                     special:true }
             ]
         }),
@@ -1484,7 +1598,7 @@ define(function(require,exports,module) {
                 { direction : 0 },
                 { direction : 0 },
                 { direction : 1 },
-                { forks:[ 1],
+                { forks:[ 1, 0],
                     special:true }
             ]
         }),
@@ -1538,7 +1652,7 @@ define(function(require,exports,module) {
                 { direction : 1 },
                 { direction : 1 },
                 { direction : 2 },
-                { forks:[ 2],
+                { forks:[ 1, 2],
                     special:true }
             ]
         }),
@@ -1547,7 +1661,7 @@ define(function(require,exports,module) {
                 { direction : 3 },
                 { direction : 3 },
                 { direction : 2 },
-                { forks:[ 2],
+                { forks:[ 2, 3],
                     special:true }
             ]
         }),
@@ -1601,7 +1715,7 @@ define(function(require,exports,module) {
                 { direction : 2 },
                 { direction : 2 },
                 { direction : 3 },
-                { forks:[ 3],
+                { forks:[ 2, 3],
                     special:true }
             ]
         }),
@@ -1610,7 +1724,7 @@ define(function(require,exports,module) {
                 { direction : 0 },
                 { direction : 0 },
                 { direction : 3 },
-                { forks:[ 3 ],
+                { forks:[ 0, 3 ],
                     special:true }
             ]
         })
