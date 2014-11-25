@@ -1264,8 +1264,13 @@ define(function(require,exports,module) {
             r.set({
                 monsterTypes : this.generateMonsterTypesByDifficulty(r.get("minMonsterDifficulty"), r.get("maxMonsterDifficulty"), this.get("validMonsterTypes"))
             })
+            var monsterLevelPool = [];
+            for ( var i = 0; i <= difficulty*2/3; i++ ) {
+                monsterLevelPool.push(i+1)
+            }
             r.set({
-                initMonsterTypes:getRandomItems( r.get("monsterTypes"), getRandomItem(this.get("monsterNumbers")) )
+                initMonsterTypes:getRandomItems( r.get("monsterTypes"), getRandomItem(this.get("monsterNumbers")) ),
+                initLevelPool: monsterLevelPool
             })
             return r;
         }
@@ -1341,7 +1346,7 @@ define(function(require,exports,module) {
                     kill: {
                         count: 1,
                         monster: getRandomItem(r.get("initMonsterTypes")),
-                        level: 5*difficulty
+                        level: 4*difficulty+1
                     }
                 }
             })

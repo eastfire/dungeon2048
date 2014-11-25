@@ -1213,7 +1213,7 @@ define(function(require,exports,module) {
         },
         getEffect:function(level){
             var l = level || this.get("level");
-            return l*15+5;
+            return l*10+30;
         },
         onActive:function(){
             var totalHit = 0;

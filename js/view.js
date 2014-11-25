@@ -143,6 +143,9 @@ define(function(require,exports,module){
             if ( this.model.get("poison") ) {
                 this.$el.append("<div class='status-poison'>" + this.model.get("poison") + "</div>")
             }
+            if ( this.model.get("cursed") ) {
+                this.$el.append("<div class='status-cursed'></div>")
+            }
             return this;
         },
         move:function(movement, direction){
