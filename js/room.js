@@ -912,8 +912,10 @@ define(function(require,exports,module) {
 
         turnEnd : function(){
             if ( !gameStatus.win && !gameStatus.lose ) {
-                if ( this.checkCondition(this.model.get("loseCondition")) )
+                if ( this.checkCondition(this.model.get("loseCondition")) ) {
+                    this.lose();
                     return;
+                }
                 if ( this.checkCondition(this.model.get("winCondition")) ) {
                     this.win();
                     return;
@@ -1474,18 +1476,67 @@ define(function(require,exports,module) {
         }
     })
 
+    exports.PillarRoomTemplate = RoomTemplate.extend({
+        defaults:function(){
+            return _.extend( RoomTemplate.prototype.defaults.call(this),{
+                title:"广殿总局"
+            } )
+        },
+        generateRoom:function(difficulty){
+            var r = RoomTemplate.prototype.generateRoom.call(this, difficulty)
+            r.set({
+                size: 6,
+                generateMonsterPerTurn: 2,
+                blocks:[
+                    {
+                        x:1,
+                        y:1,
+                        terrainType:"pillar"
+                    },
+                    {
+                        x:4,
+                        y:4,
+                        terrainType:"pillar"
+                    },
+                    {
+                        x:1,
+                        y:4,
+                        terrainType:"pillar"
+                    },
+                    {
+                        x:4,
+                        y:1,
+                        terrainType:"pillar"
+                    }
+                ],
+                winCondition:{
+                    type:"kill",
+                    kill: {
+                        count: 10+difficulty*5
+                    }
+                },
+                loseCondition:{
+                    type:"turn",
+                    turn: 15+difficulty*5
+                }
+            })
+            return r;
+        }
+    })
+
     exports.roomTemplates = [
-        new exports.TrapRoomTemplate1()
-//        new exports.SurviveRoomTemplate(),
-//        new exports.LevelUpRoomTemplate(),
-//        new exports.SlaughterRoomTemplate(),
-//        new exports.AssassinRoomTemplate(),
-//        new exports.TreasureRoomTemplate()
+        //new exports.TrapRoomTemplate1()
+        new exports.SurviveRoomTemplate(),
+        new exports.LevelUpRoomTemplate(),
+        new exports.SlaughterRoomTemplate(),
+        new exports.AssassinRoomTemplate(),
+        new exports.TreasureRoomTemplate()
     ]
 
     exports.specialRoomTemplates = [
         new exports.BossRoomTemplate(),
-        new exports.TrapRoomTemplate1()
+        new exports.TrapRoomTemplate1(),
+        new exports.PillarRoomTemplate()
     ]
 
     exports.ShapTemplate = Backbone.Model.extend({
